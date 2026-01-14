@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Logo } from "@/components/logo"
 
 export default function AuthLayout({
   children,
@@ -11,14 +12,12 @@ export default function AuthLayout({
       <header className="border-b border-border/40 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">T</span>
-            </div>
+            <Logo className="w-8 h-8 rounded-lg" width={32} height={32} />
             <span className="font-semibold text-lg">Taophim</span>
           </Link>
           <nav className="flex items-center gap-4">
-            <Link 
-              href="/services" 
+            <Link
+              href="/services"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Dịch vụ

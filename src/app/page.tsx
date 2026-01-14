@@ -1,12 +1,13 @@
 import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Logo } from "@/components/logo"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Sparkles, 
-  ArrowRight, 
-  Play, 
+import {
+  Sparkles,
+  ArrowRight,
+  Play,
   Zap,
   Shield,
   Clock,
@@ -48,20 +49,18 @@ export default async function LandingPage() {
       <header className="sticky top-0 z-50 border-b border-border/40 backdrop-blur-xl bg-background/80">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg shadow-primary/20">
-              <Sparkles className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <Logo className="w-9 h-9" width={36} height={36} />
             <span className="font-bold text-xl">Taophim</span>
           </Link>
           <nav className="flex items-center gap-4">
-            <Link 
-              href="#services" 
+            <Link
+              href="#services"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden md:block"
             >
               Dịch vụ
             </Link>
-            <Link 
-              href="#how-it-works" 
+            <Link
+              href="#how-it-works"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden md:block"
             >
               Cách hoạt động
@@ -95,14 +94,14 @@ export default async function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        
+
         <div className="container mx-auto px-4 py-24 md:py-32 relative">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <Badge variant="outline" className="px-4 py-1.5 text-sm border-primary/30 bg-primary/5">
               <Zap className="mr-2 h-3.5 w-3.5 text-primary" />
               Nền tảng AI Video #1 Việt Nam
             </Badge>
-            
+
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
               Tạo video AI{" "}
               <span className="bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
@@ -111,9 +110,9 @@ export default async function LandingPage() {
               <br />
               chỉ trong vài phút
             </h1>
-            
+
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Ghép mặt, tạo video từ ảnh, và nhiều hơn nữa với công nghệ AI tiên tiến. 
+              Ghép mặt, tạo video từ ảnh, và nhiều hơn nữa với công nghệ AI tiên tiến.
               Không cần kỹ năng chỉnh sửa video.
             </p>
 
@@ -215,8 +214,8 @@ export default async function LandingPage() {
           {services && services.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {services.map((service: Service) => (
-                <Card 
-                  key={service.id} 
+                <Card
+                  key={service.id}
                   className="group relative overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="aspect-video relative bg-gradient-to-br from-primary/20 to-primary/5">
@@ -345,9 +344,7 @@ export default async function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
-              </div>
+              <Logo className="w-8 h-8" width={32} height={32} />
               <span className="font-semibold">Taophim</span>
             </div>
             <p className="text-sm text-muted-foreground text-center">

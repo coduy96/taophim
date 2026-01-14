@@ -19,6 +19,12 @@ export const metadata: Metadata = {
   title: "Taophim - Dịch vụ tạo video AI",
   description: "Nền tảng tạo video AI hàng đầu Việt Nam. Ghép mặt, tạo video từ ảnh với công nghệ AI tiên tiến.",
   keywords: ["AI video", "ghép mặt", "face swap", "tạo video", "video AI Việt Nam"],
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
+  manifest: "/site.webmanifest",
+
 }
 
 export default function RootLayout({

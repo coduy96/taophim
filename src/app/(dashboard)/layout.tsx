@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { 
+import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -17,7 +17,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { 
+import { Logo } from "@/components/logo"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -27,10 +28,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-import { 
-  LayoutDashboard, 
-  ShoppingBag, 
-  Wallet, 
+import {
+  LayoutDashboard,
+  ShoppingBag,
+  Wallet,
   History,
   User,
   LogOut,
@@ -78,9 +79,7 @@ function DashboardSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60 text-primary-foreground">
-                  <span className="font-bold text-sm">T</span>
-                </div>
+                <Logo className="size-8 rounded-lg bg-transparent" width={32} height={32} />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Taophim</span>
                   <span className="truncate text-xs text-muted-foreground">Video AI Platform</span>
@@ -90,7 +89,7 @@ function DashboardSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
@@ -190,7 +189,7 @@ function DashboardSidebar() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   className="text-destructive focus:text-destructive"
                   onClick={() => logout()}
                 >
