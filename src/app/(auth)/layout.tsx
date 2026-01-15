@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Logo } from "@/components/logo"
+import { ModeToggle } from "@/components/mode-toggle"
 
 export default function AuthLayout({
   children,
@@ -22,6 +23,7 @@ export default function AuthLayout({
             >
               Dịch vụ
             </Link>
+            <ModeToggle />
           </nav>
         </div>
       </header>

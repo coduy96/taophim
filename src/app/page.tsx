@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { ModeToggle } from "@/components/mode-toggle"
 import {
   Sparkles,
   ArrowRight,
@@ -65,6 +66,7 @@ export default async function LandingPage() {
             >
               Cách hoạt động
             </Link>
+            <ModeToggle />
             {user ? (
               <Button asChild>
                 <Link href="/dashboard">
