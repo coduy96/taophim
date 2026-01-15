@@ -17,12 +17,6 @@ export default function AuthLayout({
             <span className="font-semibold text-lg">Taophim</span>
           </Link>
           <nav className="flex items-center gap-4">
-            <Link
-              href="/services"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Dịch vụ
-            </Link>
             <ModeToggle />
           </nav>
         </div>
