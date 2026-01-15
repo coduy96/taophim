@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
-import { Upload, X, FileImage, FileVideo, File } from "lucide-react"
+import { Upload, X, FileImage, FileVideo, File as FileIcon } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { Service, FormConfig, FormField } from "@/types/database.types"
 
@@ -71,7 +71,7 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
     switch (field.type) {
       case 'image': return <FileImage className="h-8 w-8 text-muted-foreground" />
       case 'video': return <FileVideo className="h-8 w-8 text-muted-foreground" />
-      default: return <File className="h-8 w-8 text-muted-foreground" />
+      default: return <FileIcon className="h-8 w-8 text-muted-foreground" />
     }
   }
 

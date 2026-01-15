@@ -87,6 +87,12 @@ export function ServiceForm({ service }: ServiceFormProps) {
       return
     }
 
+    const cost = parseInt(baseCost)
+    if (isNaN(cost)) {
+      toast.error("Chi phí phải là một số hợp lệ")
+      return
+    }
+
     setIsLoading(true)
 
     try {
@@ -98,12 +104,15 @@ export function ServiceForm({ service }: ServiceFormProps) {
         name,
         slug,
         description: description || null,
-        base_cost: parseInt(baseCost),
+        base_cost: cost,
         cover_image: coverImage || null,
         is_active: isActive,
         form_config: JSON.parse(JSON.stringify(formConfig)),
         updated_at: new Date().toISOString(),
       }
+
+      // Log the data being sent for debugging
+      console.log('Submitting service data:', serviceData)
 
       if (service) {
         // Update existing
@@ -112,7 +121,10 @@ export function ServiceForm({ service }: ServiceFormProps) {
           .update(serviceData)
           .eq('id', service.id)
 
-        if (error) throw error
+        if (error) {
+          console.error('Supabase update error:', error)
+          throw error
+        }
         toast.success("Cập nhật dịch vụ thành công!")
       } else {
         // Create new
@@ -120,15 +132,19 @@ export function ServiceForm({ service }: ServiceFormProps) {
           .from('services')
           .insert(serviceData)
 
-        if (error) throw error
+        if (error) {
+          console.error('Supabase insert error:', error)
+          throw error
+        }
         toast.success("Tạo dịch vụ thành công!")
       }
 
       router.push('/admin/services')
       router.refresh()
-    } catch (error) {
-      console.error(error)
-      toast.error(error instanceof Error ? error.message : "Có lỗi xảy ra")
+    } catch (error: any) {
+      console.error('Full error object:', error)
+      const message = error?.message || (error instanceof Error ? error.message : "Có lỗi xảy ra")
+      toast.error(message)
     } finally {
       setIsLoading(false)
     }

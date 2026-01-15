@@ -82,7 +82,7 @@ function DashboardSidebar() {
                 <Logo className="size-8 rounded-lg bg-transparent" width={32} height={32} />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Taophim</span>
-                  <span className="truncate text-xs text-muted-foreground">Video AI Platform</span>
+                  <span className="truncate text-xs text-muted-foreground">AI Video</span>
                 </div>
               </Link>
             </SidebarMenuButton>
