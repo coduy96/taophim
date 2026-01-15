@@ -221,7 +221,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 relative overflow-hidden">
+      <section id="features" className="py-24 relative overflow-hidden">
         {/* Background Gradients */}
         <div className="absolute top-0 left-0 w-full h-full bg-muted/20 -z-10" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] -z-10" />
@@ -332,10 +332,6 @@ export default async function LandingPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary mb-4 backdrop-blur-sm">
-              <Sparkles className="w-3.5 h-3.5 mr-2" />
-              Kho tàng ý tưởng
-            </div>
             <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
               Khám phá <span className="text-primary">Thế giới Video AI</span>
             </h2>
@@ -433,10 +429,6 @@ export default async function LandingPage() {
 
         <div className="container mx-auto px-4">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary mb-4 backdrop-blur-sm">
-              <Wand2 className="w-3.5 h-3.5 mr-2" />
-              Quy trình đơn giản
-            </div>
             <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
               Sáng tạo Video AI <br /> chỉ với <span className="text-primary">3 bước</span>
             </h2>
@@ -533,6 +525,7 @@ export default async function LandingPage() {
             <div className="space-y-4">
               <h4 className="font-bold text-sm uppercase tracking-wider text-foreground/80">Sản phẩm</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
+                <li><Link href="#features" className="hover:text-primary transition-colors">Tính năng</Link></li>
                 <li><Link href="#services" className="hover:text-primary transition-colors">Dịch vụ</Link></li>
                 <li><Link href="#how-it-works" className="hover:text-primary transition-colors">Cách hoạt động</Link></li>
                 <li><Link href="/pricing" className="hover:text-primary transition-colors">Bảng giá</Link></li>

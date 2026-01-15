@@ -37,6 +37,7 @@ export function Navbar({ user }: NavbarProps) {
   }, [])
 
   const navLinks = [
+    { name: "Tính năng", href: "#features" },
     { name: "Dịch vụ", href: "#services" },
     { name: "Cách hoạt động", href: "#how-it-works" },
   ]
@@ -106,7 +107,6 @@ export function Navbar({ user }: NavbarProps) {
                 className="rounded-full px-6 shadow-md hover:shadow-lg transition-all"
               >
                 <Link href="/register">
-                  <Sparkles className="mr-2 h-4 w-4" />
                   Đăng ký miễn phí
                 </Link>
               </Button>
@@ -159,7 +159,6 @@ export function Navbar({ user }: NavbarProps) {
                       </Button>
                       <Button size="lg" className="w-full rounded-full shadow-md" asChild>
                         <Link href="/register">
-                          <Sparkles className="mr-2 h-4 w-4" />
                           Đăng ký miễn phí
                         </Link>
                       </Button>
