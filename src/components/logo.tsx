@@ -15,7 +15,7 @@ export function Logo({ className, width = 32, height = 32 }: LogoProps) {
                 alt="Taophim Logo"
                 width={width}
                 height={height}
-                className="object-contain"
+                className="object-contain rounded-md"
                 priority
             />
         </div>
