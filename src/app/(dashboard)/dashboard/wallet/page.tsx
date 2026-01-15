@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { PayOSTopup } from "@/components/wallet/payos-topup"
 import { 
   Wallet, 
   ArrowUpCircle, 
@@ -138,6 +139,8 @@ export default async function WalletPage() {
           </CardContent>
         </Card>
       </div>
+
+      <PayOSTopup />
 
       {/* Top-up Instructions */}
       <Card className="border-dashed">
