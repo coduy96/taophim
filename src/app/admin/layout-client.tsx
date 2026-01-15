@@ -188,7 +188,6 @@ export function AdminLayoutClient({
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-red-50/50 dark:bg-red-950/20">
           <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
           <Badge variant="outline" className="border-red-200 text-red-600">
             <Shield className="mr-1 h-3 w-3" />
             Admin Mode
