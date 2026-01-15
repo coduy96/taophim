@@ -3,11 +3,11 @@ import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { 
-  Wallet, 
-  ShoppingBag, 
-  Clock, 
-  CheckCircle2, 
+import {
+  Wallet,
+  ShoppingBag,
+  Clock,
+  CheckCircle2,
   ArrowRight,
   Sparkles,
   TrendingUp
@@ -36,7 +36,7 @@ const statusLabels: Record<string, { label: string; color: string }> = {
 
 export default async function DashboardPage() {
   const supabase = await createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
@@ -78,16 +78,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Xin chào, {profile?.full_name || 'bạn'}! 👋
-        </h1>
-        <p className="text-muted-foreground">
-          Đây là tổng quan về tài khoản và hoạt động của bạn.
-        </p>
-      </div>
-
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
