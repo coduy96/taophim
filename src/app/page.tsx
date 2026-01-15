@@ -2,8 +2,6 @@ import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Navbar } from "@/components/layout/navbar"
 import {
   Sparkles,
@@ -499,10 +497,9 @@ export default async function LandingPage() {
       {/* Footer */}
       <footer className="border-t bg-slate-50 dark:bg-black/20 pt-16 pb-8 mt-auto">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-
-            {/* Column 1: Brand */}
-            <div className="md:col-span-1 space-y-6">
+          <div className="mb-12 max-w-md">
+            {/* Brand */}
+            <div className="space-y-6">
               <Link href="/" className="flex items-center gap-2.5">
                 <Logo className="w-9 h-9" width={36} height={36} />
                 <span className="font-bold text-xl tracking-tight">Taophim</span>
@@ -518,45 +515,6 @@ export default async function LandingPage() {
                 <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
                   <Film className="w-4 h-4" />
                 </div>
-              </div>
-            </div>
-
-            {/* Column 2: Product */}
-            <div className="space-y-4">
-              <h4 className="font-bold text-sm uppercase tracking-wider text-foreground/80">Sản phẩm</h4>
-              <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><Link href="#features" className="hover:text-primary transition-colors">Tính năng</Link></li>
-                <li><Link href="#services" className="hover:text-primary transition-colors">Dịch vụ</Link></li>
-                <li><Link href="#how-it-works" className="hover:text-primary transition-colors">Cách hoạt động</Link></li>
-                <li><Link href="/pricing" className="hover:text-primary transition-colors">Bảng giá</Link></li>
-                <li><Link href="/showcase" className="hover:text-primary transition-colors">Showcase</Link></li>
-              </ul>
-            </div>
-
-            {/* Column 3: Company */}
-            <div className="space-y-4">
-              <h4 className="font-bold text-sm uppercase tracking-wider text-foreground/80">Công ty</h4>
-              <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><Link href="/about" className="hover:text-primary transition-colors">Về chúng tôi</Link></li>
-                <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
-                <li><Link href="/contact" className="hover:text-primary transition-colors">Liên hệ</Link></li>
-                <li><Link href="/terms" className="hover:text-primary transition-colors">Điều khoản</Link></li>
-              </ul>
-            </div>
-
-            {/* Column 4: Newsletter */}
-            <div className="space-y-4">
-              <h4 className="font-bold text-sm uppercase tracking-wider text-foreground/80">Cập nhật tin tức</h4>
-              <p className="text-sm text-muted-foreground">Nhận thông báo về các tính năng AI mới nhất.</p>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Email của bạn"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                />
-                <Button size="icon" className="shrink-0">
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
               </div>
             </div>
           </div>
