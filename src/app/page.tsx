@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ModeToggle } from "@/components/mode-toggle"
+import { Navbar } from "@/components/layout/navbar"
 import {
   Sparkles,
   ArrowRight,
@@ -13,9 +13,13 @@ import {
   Shield,
   Clock,
   Users,
+  Coins,
+  Wand2,
   Star,
-  CheckCircle2,
-  Coins
+  Film,
+  QrCode,
+  Infinity,
+  CreditCard
 } from "lucide-react"
 
 function formatXu(amount: number): string {
@@ -45,107 +49,171 @@ export default async function LandingPage() {
     .limit(6)
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border/40 backdrop-blur-xl bg-background/80">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Logo className="w-9 h-9" width={36} height={36} />
-            <span className="font-bold text-xl">Taophim</span>
-          </Link>
-          <nav className="flex items-center gap-4">
-            <Link
-              href="#services"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden md:block"
-            >
-              Dịch vụ
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden md:block"
-            >
-              Cách hoạt động
-            </Link>
-            <ModeToggle />
-            {user ? (
-              <Button asChild>
-                <Link href="/dashboard">
-                  Vào Dashboard
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            ) : (
-              <>
-                <Button variant="ghost" asChild>
-                  <Link href="/login">Đăng nhập</Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/register">
-                    Đăng ký miễn phí
-                  </Link>
-                </Button>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col">
+      <Navbar user={user} />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <section className="relative min-h-[90vh] flex items-center pt-20 pb-20 overflow-hidden bg-background">
+        {/* Background Gradients & Effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background" />
+        <div className="absolute top-0 right-0 p-[20%] w-[50rem] h-[50rem] bg-primary/5 rounded-full blur-[120px] opacity-40 pointer-events-none translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 left-0 w-[50rem] h-[50rem] bg-primary/5 rounded-full blur-[120px] opacity-40 pointer-events-none -translate-x-1/2 translate-y-1/2" />
 
-        <div className="container mx-auto px-4 py-24 md:py-32 relative">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <Badge variant="outline" className="px-4 py-1.5 text-sm border-primary/30 bg-primary/5">
-              <Zap className="mr-2 h-3.5 w-3.5 text-primary" />
-              Nền tảng AI Video #1 Việt Nam
-            </Badge>
+        {/* Floating Particles (Simulated) */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
+          <div className="absolute top-[20%] left-[10%] w-2 h-2 bg-primary/20 rounded-full" />
+          <div className="absolute top-[40%] right-[20%] w-3 h-3 bg-primary/20 rounded-full" />
+          <div className="absolute bottom-[30%] left-[30%] w-2 h-2 bg-primary/20 rounded-full" />
+        </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-              Tạo video AI{" "}
-              <span className="bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
-                chuyên nghiệp
-              </span>
-              <br />
-              chỉ trong vài phút
-            </h1>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column: Content */}
+            <div className="space-y-10 text-center lg:text-left">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary hover:bg-primary/10 transition-colors cursor-default">
+                <span className="flex h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"></span>
+                Nền tảng AI Video #1 Việt Nam
+              </div>
 
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Ghép mặt, tạo video từ ảnh, và nhiều hơn nữa với công nghệ AI tiên tiến.
-              Không cần kỹ năng chỉnh sửa video.
-            </p>
+              {/* Headings */}
+              <div className="space-y-4">
+                <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
+                  Biến ý tưởng thành <br />
+                  <span className="relative inline-block">
+                    <span className="absolute -inset-1 -rotate-1 bg-primary/10 rounded-xl blur-sm" />
+                    <span className="relative text-primary">
+                      Video AI
+                    </span>
+                  </span>
+                  <br /> trong tích tắc.
+                </h1>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8 shadow-lg shadow-primary/20" asChild>
-                <Link href={user ? "/dashboard/services" : "/register"}>
-                  <Play className="mr-2 h-5 w-5" />
-                  Bắt đầu ngay
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8" asChild>
-                <Link href="#services">
-                  Xem dịch vụ
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
+                <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+                  Tạo video chuyên nghiệp từ văn bản và hình ảnh.
+                  <span className="text-foreground font-medium"> Không cần kỹ năng.</span>
+                  <br />
+                  Tiết kiệm <span className="text-primary font-bold">90%</span> thời gian và chi phí.
+                </p>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
+                <Button size="lg" className="h-16 px-8 text-lg rounded-full shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 bg-primary hover:bg-primary/90 border-0" asChild>
+                  <Link href={user ? "/dashboard/services" : "/register"}>
+                    <Wand2 className="mr-2 h-6 w-6" />
+                    Tạo video miễn phí
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="h-16 px-8 text-lg rounded-full border-2 hover:bg-muted/50 hover:text-primary transition-all duration-300 backdrop-blur-sm bg-background/50" asChild>
+                  <Link href="#how-it-works">
+                    <Play className="mr-2 h-6 w-6" />
+                    Xem demo 1 phút
+                  </Link>
+                </Button>
+              </div>
+
+              {/* Social Proof */}
+              <div className="pt-6 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 text-sm">
+                <div className="flex -space-x-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="w-10 h-10 rounded-full border-[3px] border-background bg-muted flex items-center justify-center overflow-hidden shadow-sm">
+                      {/* Placeholder avatars using gradients */}
+                      <div className={`w-full h-full bg-gradient-to-br ${i === 1 ? 'from-zinc-200 to-zinc-300' :
+                        i === 2 ? 'from-zinc-300 to-zinc-400' :
+                          i === 3 ? 'from-zinc-200 to-zinc-300' : 'from-zinc-100 to-zinc-200'
+                        }`} />
+                    </div>
+                  ))}
+                  <div className="w-10 h-10 rounded-full border-[3px] border-background bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                    +1k
+                  </div>
+                </div>
+                <div className="flex flex-col items-center sm:items-start gap-1">
+                  <div className="flex items-center gap-1 text-primary">
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <span className="text-foreground font-bold ml-1">5.0</span>
+                  </div>
+                  <span className="text-muted-foreground">Tin dùng bởi 1000+ creators Việt Nam</span>
+                </div>
+              </div>
             </div>
 
-            {/* Trust badges */}
-            <div className="flex flex-wrap items-center justify-center gap-6 pt-8 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-green-500" />
-                <span>Bảo mật tuyệt đối</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-blue-500" />
-                <span>Xử lý trong 24h</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-purple-500" />
-                <span>1000+ khách hàng</span>
+            {/* Right Column: Visuals */}
+            <div className="relative hidden lg:block h-[650px] w-full perspective-[2000px]">
+              {/* Floating Elements Animation */}
+              <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg preserve-3d">
+
+                {/* Back Glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[80px] -z-10" />
+
+                {/* 1. Main Landscape Video Card */}
+                <div className="absolute top-0 left-0 transform -translate-x-16 -translate-y-32 w-[480px] bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-float z-20 hover:scale-[1.02] transition-transform duration-500 ring-1 ring-border/20">
+                  {/* Header */}
+                  <div className="h-10 bg-muted/30 border-b border-border/50 flex items-center px-4 gap-3">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
+                      <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
+                      <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
+                    </div>
+                    <div className="ml-auto flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-border/50 text-[10px] font-medium text-muted-foreground/80">
+                      <Wand2 className="w-3 h-3" />
+                      <span>Text to Video</span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="aspect-video relative bg-zinc-900 group cursor-pointer">
+                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-zinc-900 z-0" />
+
+                    {/* Simulated Waveform/Video Content */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-60">
+                      <div className="w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+                    </div>
+
+                    {/* Controls */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                          <Play className="w-3 h-3 text-black fill-black ml-0.5" />
+                        </div>
+                        <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
+                          <div className="h-full w-1/3 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary),0.8)]" />
+                        </div>
+                        <span className="text-xs text-white/80 font-mono">00:04 / 00:10</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Floating Portrait Card */}
+                <div className="absolute top-20 right-0 transform translate-x-12 translate-y-0 w-[240px] bg-black rounded-[2rem] shadow-2xl overflow-hidden animate-float-delayed z-30 ring-4 ring-black/10 border border-border/20">
+                  <div className="relative h-[420px] bg-zinc-900">
+                    {/* Image content */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-black/80 z-10" />
+                    <div className="absolute top-[20%] left-[-20%] w-[150%] h-[50%] bg-primary/10 rotate-12 blur-3xl" />
+
+                    {/* Overlay Elements */}
+                    <div className="absolute top-6 right-6 z-20">
+                      <div className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20">
+                        <Sparkles className="w-4 h-4 text-primary" />
+                      </div>
+                    </div>
+
+                    <div className="absolute bottom-8 left-6 right-6 z-20 text-white">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-sm text-[10px] font-bold border border-white/10">VIRAL</div>
+                        <div className="text-xs opacity-80">Just now</div>
+                      </div>
+                      <p className="text-sm font-medium leading-snug">Tạo video TikTok triệu view chỉ trong 30 giây! 🚀</p>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -153,212 +221,358 @@ export default async function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-24 relative overflow-hidden">
+        {/* Background Gradients */}
+        <div className="absolute top-0 left-0 w-full h-full bg-muted/20 -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] -z-10" />
+
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Tại sao chọn Taophim?</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Chúng tôi mang đến trải nghiệm tạo video AI đơn giản và chất lượng cao nhất
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+              Tại sao <span className="text-primary">Taophim</span> khác biệt?
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Không chỉ là công cụ, chúng tôi mang đến giải pháp video AI toàn diện
+              giúp bạn bứt phá khả năng sáng tạo.
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            <Card className="border-0 shadow-lg bg-card/50 backdrop-blur">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4">
-                  <Zap className="h-6 w-6 text-white" />
+          <div className="grid gap-8 md:grid-cols-3 relative z-10">
+            {/* Feature 1 */}
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <Zap className="h-7 w-7 text-primary" />
                 </div>
-                <CardTitle>Công nghệ AI tiên tiến</CardTitle>
-                <CardDescription>
-                  Sử dụng các model AI mới nhất từ Runway, Pika, Kling để đảm bảo chất lượng video tốt nhất.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Công nghệ AI Đỉnh Cao</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Tích hợp sức mạnh từ những model AI hàng đầu thế giới như Runway Gen-2, Pika Labs và Kling. Chất lượng video 4K sắc nét.
+                </p>
+              </div>
+            </div>
 
-            <Card className="border-0 shadow-lg bg-card/50 backdrop-blur">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-4">
-                  <Clock className="h-6 w-6 text-white" />
+            {/* Feature 2 */}
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <Clock className="h-7 w-7 text-primary" />
                 </div>
-                <CardTitle>Xử lý nhanh chóng</CardTitle>
-                <CardDescription>
-                  Đội ngũ của chúng tôi cam kết xử lý đơn hàng trong vòng 24 giờ hoặc hoàn tiền.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Tốc độ & Tiện lợi</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Quy trình tự động hóa thông minh giúp xử lý đơn hàng thần tốc. Nhận kết quả chỉ trong vòng 24 giờ làm việc.
+                </p>
+              </div>
+            </div>
 
-            <Card className="border-0 shadow-lg bg-card/50 backdrop-blur">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-white" />
+            {/* Feature 3 */}
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <Shield className="h-7 w-7 text-primary" />
                 </div>
-                <CardTitle>An toàn & Bảo mật</CardTitle>
-                <CardDescription>
-                  Dữ liệu của bạn được bảo vệ tuyệt đối. Chúng tôi xóa file sau 7 ngày.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Bảo mật Tuyệt đối</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Chúng tôi cam kết bảo vệ quyền riêng tư. Dữ liệu gốc và video thành phẩm được mã hóa và tự động xóa sau 7 ngày.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 4: VietQR */}
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <QrCode className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Thanh toán VietQR</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Hỗ trợ nạp Xu tự động 24/7 qua chuyển khoản ngân hàng (VietQR). Quét mã là có Xu ngay lập tức, không cần chờ đợi.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 5: Xu Never Expires */}
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <Infinity className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Xu Không Hết Hạn</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Mua một lần, dùng trọn đời. Số dư Xu của bạn được bảo lưu vĩnh viễn cho đến khi bạn sử dụng dịch vụ.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 6: No Monthly Sub */}
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <CreditCard className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Không Phí Tháng</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Mô hình Pay-as-you-go linh hoạt. Chỉ trả phí cho đúng những gì bạn tạo ra. Không có phí duy trì, không ràng buộc.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4">Dịch vụ của chúng tôi</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Khám phá các dịch vụ AI Video</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Chọn dịch vụ phù hợp với nhu cầu của bạn
+      <section id="services" className="py-24 bg-muted/30 relative">
+        {/* Background Decoration */}
+        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary mb-4 backdrop-blur-sm">
+              <Sparkles className="w-3.5 h-3.5 mr-2" />
+              Kho tàng ý tưởng
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+              Khám phá <span className="text-primary">Thế giới Video AI</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Tuyển tập các công cụ tạo video mạnh mẽ nhất. Đơn giản hóa quy trình sáng tạo của bạn chỉ với vài cú click chuột.
             </p>
           </div>
 
           {services && services.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {services.map((service: Service) => (
-                <Card
+                <Link
+                  href={user ? `/dashboard/services/${service.slug}` : "/register"}
                   key={service.id}
-                  className="group relative overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="group relative flex flex-col h-full bg-background border border-border/50 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2"
                 >
-                  <div className="aspect-video relative bg-gradient-to-br from-primary/20 to-primary/5">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Sparkles className="h-12 w-12 text-primary/30 group-hover:scale-110 transition-transform" />
+                  {/* Image/Preview Area */}
+                  <div className="aspect-[16/10] relative overflow-hidden bg-muted">
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity" />
+
+                    {/* Image */}
+                    {service.cover_image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={service.cover_image}
+                        alt={service.name}
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
+                        <Film className="w-12 h-12 text-primary/20" />
+                      </div>
+                    )}
+
+                    {/* Floating Price Tag */}
+                    <div className="absolute top-4 right-4 z-20">
+                      <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md border border-white/10 text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg">
+                        <Coins className="w-3.5 h-3.5 text-yellow-400" />
+                        <span>{formatXu(service.base_cost)} Xu</span>
+                      </div>
                     </div>
-                    <div className="absolute bottom-3 left-3">
-                      <Badge className="bg-primary text-primary-foreground">
-                        <Coins className="mr-1 h-3 w-3" />
-                        {formatXu(service.base_cost)} Xu
-                      </Badge>
+
+                    {/* Play Button Overlay (Hover) */}
+                    <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100">
+                      <div className="w-14 h-14 rounded-full bg-primary/90 text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/20 backdrop-blur-sm">
+                        <Play className="w-6 h-6 ml-1 fill-current" />
+                      </div>
                     </div>
                   </div>
-                  <CardHeader>
-                    <CardTitle className="group-hover:text-primary transition-colors">
-                      {service.name}
-                    </CardTitle>
-                    <CardDescription className="line-clamp-2">
-                      {service.description || "Dịch vụ tạo video AI chuyên nghiệp"}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button className="w-full" asChild>
-                      <Link href={user ? `/dashboard/services/${service.slug}` : "/register"}>
-                        Sử dụng ngay
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
+
+                  {/* Content Area */}
+                  <div className="flex flex-col flex-grow p-6">
+                    <div className="mb-4">
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-1">
+                        {service.name}
+                      </h3>
+                      <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
+                        {service.description || "Tạo video chất lượng cao với công nghệ AI tiên tiến nhất hiện nay."}
+                      </p>
+                    </div>
+
+                    <div className="mt-auto pt-4 border-t border-border/50 flex items-center justify-between">
+                      <span className="text-sm font-medium text-primary flex items-center gap-1 group/btn">
+                        Bắt đầu ngay
+                        <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
+                      </span>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+                        <span>4.9/5.0</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Các dịch vụ đang được cập nhật...</p>
+            <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+                <Wand2 className="w-8 h-8 text-muted-foreground/50" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Đang cập nhật dịch vụ</h3>
+              <p className="text-muted-foreground max-w-sm mx-auto">
+                Chúng tôi đang nỗ lực bổ sung các dịch vụ mới nhất. Vui lòng quay lại sau!
+              </p>
             </div>
           )}
         </div>
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-muted/30">
+      <section id="how-it-works" className="py-24 bg-background relative overflow-hidden">
+        {/* Background Decoration */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px] -z-10" />
+
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4">Quy trình đơn giản</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Cách hoạt động</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Chỉ với 3 bước đơn giản, bạn sẽ có video AI chất lượng cao
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary mb-4 backdrop-blur-sm">
+              <Wand2 className="w-3.5 h-3.5 mr-2" />
+              Quy trình đơn giản
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+              Sáng tạo Video AI <br /> chỉ với <span className="text-primary">3 bước</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Chúng tôi đã tối ưu hóa mọi thứ để bạn có thể tập trung vào ý tưởng.
+              Phần kỹ thuật khó khăn đã có AI lo.
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                1
+          <div className="grid gap-8 md:grid-cols-3 relative max-w-6xl mx-auto">
+            {/* Connecting Line (Desktop) */}
+            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-transparent via-primary/30 to-transparent border-t border-dashed border-primary/30 z-0" />
+
+            {/* Step 1 */}
+            <div className="relative z-10 group">
+              <div className="bg-background rounded-3xl p-8 border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden h-full flex flex-col items-center text-center">
+                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 relative">
+                  <div className="absolute inset-0 bg-primary/10 rounded-full" />
+                  <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">01</div>
+                </div>
+                <h3 className="text-xl font-bold mb-3">Chọn dịch vụ</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Khám phá kho công cụ đa dạng: từ ghép mặt (Face Swap), biến ảnh thành video, đến tạo video từ văn bản.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Chọn dịch vụ</h3>
-              <p className="text-muted-foreground">
-                Chọn loại video bạn muốn tạo: ghép mặt, tạo video từ ảnh, v.v.
-              </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                2
+            {/* Step 2 */}
+            <div className="relative z-10 group">
+              <div className="bg-background rounded-3xl p-8 border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden h-full flex flex-col items-center text-center">
+                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 relative">
+                  <div className="absolute inset-0 bg-primary/10 rounded-full" />
+                  <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">02</div>
+                </div>
+                <h3 className="text-xl font-bold mb-3">Tải lên & Tùy chỉnh</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Upload file của bạn (ảnh/video) và nhập mô tả mong muốn. Hệ thống sẽ tự động tính toán chi phí.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Tải lên file</h3>
-              <p className="text-muted-foreground">
-                Upload ảnh hoặc video của bạn và điền thông tin yêu cầu.
-              </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                3
+            {/* Step 3 */}
+            <div className="relative z-10 group">
+              <div className="bg-background rounded-3xl p-8 border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden h-full flex flex-col items-center text-center">
+                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 relative">
+                  <div className="absolute inset-0 bg-primary/10 rounded-full" />
+                  <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">03</div>
+                </div>
+                <h3 className="text-xl font-bold mb-3">Nhận kết quả</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Thư giãn và đợi thông báo. Video 4K sắc nét sẽ sẵn sàng tải xuống trong vòng 24 giờ.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Nhận kết quả</h3>
-              <p className="text-muted-foreground">
-                Đợi trong 24h và tải xuống video AI chất lượng cao của bạn.
-              </p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Pricing hint */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 max-w-3xl mx-auto">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl md:text-3xl">Hệ thống Xu đơn giản</CardTitle>
-              <CardDescription className="text-base">
-                Nạp Xu một lần, sử dụng nhiều dịch vụ
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-3 text-center">
-                <div className="p-4 rounded-lg bg-background/80">
-                  <div className="text-2xl font-bold text-primary">1.000đ</div>
-                  <div className="text-sm text-muted-foreground">= 1 Xu</div>
-                </div>
-                <div className="p-4 rounded-lg bg-background/80">
-                  <div className="text-2xl font-bold text-primary">Từ 50 Xu</div>
-                  <div className="text-sm text-muted-foreground">/video</div>
-                </div>
-                <div className="p-4 rounded-lg bg-background/80">
-                  <div className="text-2xl font-bold text-green-600">Hoàn tiền</div>
-                  <div className="text-sm text-muted-foreground">nếu không hài lòng</div>
-                </div>
-              </div>
-              <div className="text-center pt-4">
-                <Button size="lg" asChild>
-                  <Link href={user ? "/dashboard" : "/register"}>
-                    <Star className="mr-2 h-5 w-5" />
-                    Bắt đầu miễn phí
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="mt-16 text-center">
+            <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1" asChild>
+              <Link href="/register">
+                Bắt đầu sáng tạo ngay
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-12 bg-muted/30">
+      <footer className="border-t bg-slate-50 dark:bg-black/20 pt-16 pb-8 mt-auto">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <Logo className="w-8 h-8" width={32} height={32} />
-              <span className="font-semibold">Taophim</span>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+
+            {/* Column 1: Brand */}
+            <div className="md:col-span-1 space-y-6">
+              <Link href="/" className="flex items-center gap-2.5">
+                <Logo className="w-9 h-9" width={36} height={36} />
+                <span className="font-bold text-xl tracking-tight">Taophim</span>
+              </Link>
+              <p className="text-muted-foreground leading-relaxed text-sm">
+                Nền tảng tạo video AI hàng đầu Việt Nam. Giúp bạn hiện thực hóa ý tưởng chỉ trong vài phút.
+              </p>
+              <div className="flex gap-4">
+                {/* Social Icons Placeholder */}
+                <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
+                  <Users className="w-4 h-4" />
+                </div>
+                <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
+                  <Film className="w-4 h-4" />
+                </div>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground text-center">
-              © 2024 Taophim. Nền tảng tạo video AI hàng đầu Việt Nam.
-            </p>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <Link href="/login" className="hover:text-foreground transition-colors">
-                Đăng nhập
-              </Link>
-              <Link href="/register" className="hover:text-foreground transition-colors">
-                Đăng ký
-              </Link>
+
+            {/* Column 2: Product */}
+            <div className="space-y-4">
+              <h4 className="font-bold text-sm uppercase tracking-wider text-foreground/80">Sản phẩm</h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li><Link href="#services" className="hover:text-primary transition-colors">Dịch vụ</Link></li>
+                <li><Link href="#how-it-works" className="hover:text-primary transition-colors">Cách hoạt động</Link></li>
+                <li><Link href="/pricing" className="hover:text-primary transition-colors">Bảng giá</Link></li>
+                <li><Link href="/showcase" className="hover:text-primary transition-colors">Showcase</Link></li>
+              </ul>
+            </div>
+
+            {/* Column 3: Company */}
+            <div className="space-y-4">
+              <h4 className="font-bold text-sm uppercase tracking-wider text-foreground/80">Công ty</h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li><Link href="/about" className="hover:text-primary transition-colors">Về chúng tôi</Link></li>
+                <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
+                <li><Link href="/contact" className="hover:text-primary transition-colors">Liên hệ</Link></li>
+                <li><Link href="/terms" className="hover:text-primary transition-colors">Điều khoản</Link></li>
+              </ul>
+            </div>
+
+            {/* Column 4: Newsletter */}
+            <div className="space-y-4">
+              <h4 className="font-bold text-sm uppercase tracking-wider text-foreground/80">Cập nhật tin tức</h4>
+              <p className="text-sm text-muted-foreground">Nhận thông báo về các tính năng AI mới nhất.</p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Email của bạn"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+                <Button size="icon" className="shrink-0">
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+            <p>© 2024 Taophim. All rights reserved.</p>
+            <div className="flex gap-6">
+              <Link href="/privacy" className="hover:text-foreground transition-colors">Chính sách bảo mật</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Điều khoản sử dụng</Link>
             </div>
           </div>
         </div>
