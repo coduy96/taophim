@@ -3,9 +3,9 @@ import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { PayOSTopup } from "@/components/wallet/payos-topup"
-import { 
-  Wallet, 
-  ArrowUpCircle, 
+import {
+  Wallet,
+  ArrowUpCircle,
   ArrowDownCircle,
   Clock,
   QrCode,
@@ -28,26 +28,26 @@ function formatDate(dateString: string): string {
 }
 
 const transactionTypeLabels: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  deposit: { 
-    label: "Nạp Xu", 
-    icon: <ArrowUpCircle className="h-4 w-4" />, 
-    color: "text-green-600 bg-green-100 dark:bg-green-900/30" 
+  deposit: {
+    label: "Nạp Xu",
+    icon: <ArrowUpCircle className="h-4 w-4" />,
+    color: "text-green-600 bg-green-100 dark:bg-green-900/30"
   },
-  expense: { 
-    label: "Chi tiêu", 
-    icon: <ArrowDownCircle className="h-4 w-4" />, 
-    color: "text-red-600 bg-red-100 dark:bg-red-900/30" 
+  expense: {
+    label: "Chi tiêu",
+    icon: <ArrowDownCircle className="h-4 w-4" />,
+    color: "text-red-600 bg-red-100 dark:bg-red-900/30"
   },
-  refund: { 
-    label: "Hoàn tiền", 
-    icon: <ArrowUpCircle className="h-4 w-4" />, 
-    color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30" 
+  refund: {
+    label: "Hoàn tiền",
+    icon: <ArrowUpCircle className="h-4 w-4" />,
+    color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30"
   },
 }
 
 export default async function WalletPage() {
   const supabase = await createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
@@ -142,79 +142,6 @@ export default async function WalletPage() {
 
       <PayOSTopup />
 
-      {/* Top-up Instructions */}
-      <Card className="border-dashed">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <QrCode className="h-5 w-5" />
-            Hướng dẫn nạp Xu
-          </CardTitle>
-          <CardDescription>
-            Làm theo các bước sau để nạp Xu vào tài khoản
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
-                  1
-                </div>
-                <div>
-                  <p className="font-medium">Chuyển khoản</p>
-                  <p className="text-sm text-muted-foreground">
-                    Chuyển tiền đến tài khoản ngân hàng của chúng tôi
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
-                  2
-                </div>
-                <div>
-                  <p className="font-medium">Nội dung chuyển khoản</p>
-                  <p className="text-sm text-muted-foreground">
-                    Ghi rõ email đăng ký: <code className="bg-muted px-1 rounded">{user.email}</code>
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
-                  3
-                </div>
-                <div>
-                  <p className="font-medium">Chờ xác nhận</p>
-                  <p className="text-sm text-muted-foreground">
-                    Admin sẽ cộng Xu trong vòng 24 giờ
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="rounded-lg border bg-muted/50 p-4">
-              <p className="text-sm font-medium mb-2">Thông tin chuyển khoản</p>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Ngân hàng:</span>
-                  <span className="font-medium">Vietcombank</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Số tài khoản:</span>
-                  <span className="font-medium">1234567890</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Chủ tài khoản:</span>
-                  <span className="font-medium">CONG TY TAOPHIM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Tỷ giá:</span>
-                  <span className="font-medium text-primary">1.000đ = 1 Xu</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Transaction History */}
       <Card>
         <CardHeader>
@@ -243,7 +170,7 @@ export default async function WalletPage() {
                       <div>
                         <p className="font-medium">{typeInfo.label}</p>
                         <p className="text-sm text-muted-foreground">
-                          {transaction.orders 
+                          {transaction.orders
                             ? `Đơn hàng: ${(transaction.orders as { services: { name: string } }).services?.name || 'N/A'}`
                             : formatDate(transaction.created_at)
                           }
