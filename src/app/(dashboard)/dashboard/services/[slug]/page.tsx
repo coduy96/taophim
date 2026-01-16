@@ -2,7 +2,6 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect, notFound } from "next/navigation"
 import { ServiceOrderForm } from "@/components/service-order-form"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -55,13 +54,7 @@ export default async function ServiceDetailPage({
     <div className="max-w-6xl mx-auto space-y-8 pb-10">
       {/* Header Section */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
-          <span>/</span>
-          <Link href="/dashboard/services" className="hover:text-foreground transition-colors">Dịch vụ</Link>
-          <span>/</span>
-          <span className="text-foreground font-medium">{service.name}</span>
-        </div>
+
         
         <div className="flex items-start justify-between">
           <div>
