@@ -12,7 +12,6 @@ import {
   AlertCircle,
   Download,
   User,
-  Coins,
   FileText
 } from "lucide-react"
 import { OrderActionForm } from "@/components/admin/order-action-form"

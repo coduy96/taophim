@@ -11,7 +11,6 @@ import {
   CheckCircle2, 
   XCircle,
   Download,
-  ExternalLink,
   AlertCircle
 } from "lucide-react"
 

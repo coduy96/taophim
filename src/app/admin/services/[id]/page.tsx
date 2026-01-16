@@ -54,7 +54,7 @@ export default async function EditServicePage({
           <CardHeader>
             <CardTitle>Chỉnh sửa dịch vụ</CardTitle>
             <CardDescription>
-              Cập nhật thông tin dịch vụ "{service.name}".
+              Cập nhật thông tin dịch vụ &ldquo;{service.name}&rdquo;.
             </CardDescription>
           </CardHeader>
           <CardContent>

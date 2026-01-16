@@ -4,12 +4,11 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { User } from "@supabase/supabase-js"
-import { Menu, ArrowRight, Sparkles } from "lucide-react"
+import { Menu, ArrowRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
-import { ModeToggle } from "@/components/mode-toggle"
 import {
   Sheet,
   SheetContent,
@@ -82,7 +81,6 @@ export function Navbar({ user }: NavbarProps) {
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
-          <ModeToggle />
           {user ? (
             <Button
               asChild
@@ -116,7 +114,6 @@ export function Navbar({ user }: NavbarProps) {
 
         {/* Mobile Menu */}
         <div className="md:hidden flex items-center gap-2">
-          <ModeToggle />
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="hover:bg-primary/10">

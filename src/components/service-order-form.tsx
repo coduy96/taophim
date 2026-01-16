@@ -132,7 +132,7 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
   )
 }
 
-export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: ServiceOrderFormProps) {
+export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<Record<string, string | boolean | File | null>>({})
@@ -182,7 +182,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
           const fileExt = value.name.split('.').pop()
           const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
           
-          const { data: uploadData, error: uploadError } = await supabase.storage
+          const { error: uploadError } = await supabase.storage
             .from('order-assets')
             .upload(`input/${fileName}`, value)
 
@@ -201,7 +201,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
       }
 
       // Create order using the stored function
-      const { data: orderId, error: orderError } = await supabase.rpc('create_order', {
+      const { error: orderError } = await supabase.rpc('create_order', {
         p_service_id: service.id,
         p_total_cost: service.base_cost,
         p_user_inputs: userInputs

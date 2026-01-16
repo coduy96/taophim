@@ -141,9 +141,9 @@ export function ServiceForm({ service }: ServiceFormProps) {
 
       router.push('/admin/services')
       router.refresh()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Full error object:', error)
-      const message = error?.message || (error instanceof Error ? error.message : "Có lỗi xảy ra")
+      const message = error instanceof Error ? error.message : "Có lỗi xảy ra"
       toast.error(message)
     } finally {
       setIsLoading(false)
@@ -308,7 +308,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
         ) : (
           <div className="text-center py-8 border-2 border-dashed rounded-lg">
             <p className="text-muted-foreground text-sm">
-              Chưa có trường nào. Click "Thêm trường" để bắt đầu.
+              Chưa có trường nào. Click &ldquo;Thêm trường&rdquo; để bắt đầu.
             </p>
           </div>
         )}

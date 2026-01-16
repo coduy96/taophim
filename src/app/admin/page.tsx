@@ -57,10 +57,6 @@ export default async function AdminDashboardPage() {
     .from('profiles')
     .select('*', { count: 'exact', head: true })
 
-  const { count: totalOrders } = await supabase
-    .from('orders')
-    .select('*', { count: 'exact', head: true })
-
   const { count: pendingOrders } = await supabase
     .from('orders')
     .select('*', { count: 'exact', head: true })

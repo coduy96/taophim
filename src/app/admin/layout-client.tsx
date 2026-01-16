@@ -26,7 +26,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { 
   LayoutDashboard, 
@@ -39,7 +38,6 @@ import {
 } from "lucide-react"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
-import { ModeToggle } from "@/components/mode-toggle"
 
 const menuItems = [
   {
@@ -192,9 +190,6 @@ export function AdminLayoutClient({
             <Shield className="mr-1 h-3 w-3" />
             Admin Mode
           </Badge>
-          <div className="ml-auto flex items-center gap-2">
-            <ModeToggle />
-          </div>
         </header>
         <main className="flex-1 p-4 md:p-6">
           {children}

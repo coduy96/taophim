@@ -27,7 +27,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -40,7 +39,6 @@ import {
 } from "lucide-react"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
-import { ModeToggle } from "@/components/mode-toggle"
 
 const menuItems = [
   {
@@ -217,9 +215,6 @@ export default function DashboardLayout({
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
-          <div className="ml-auto flex items-center gap-2">
-            <ModeToggle />
-          </div>
         </header>
         <main className="flex-1 p-4 md:p-6">
           {children}

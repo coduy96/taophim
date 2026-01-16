@@ -27,8 +27,10 @@ export async function POST(request: Request) {
     const orderCode = Number(`${Date.now()}${Math.floor(Math.random() * 1000)}`);
 
     // Create record in DB - Store Xu amount
-    const { error: dbError } = await supabase
-      .from('payment_requests' as any)
+    // Note: payment_requests table exists but isn't in generated types yet
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: dbError } = await (supabase as any)
+      .from('payment_requests')
       .insert({
         user_id: user.id,
         amount: xuAmount, // Store Xu
@@ -62,8 +64,9 @@ export async function POST(request: Request) {
       orderCode: orderCode // Return this if frontend needs it
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Payment Error:", error);
-    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Internal Server Error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

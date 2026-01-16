@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { Logo } from "@/components/logo"
-import { ModeToggle } from "@/components/mode-toggle"
 
 export default function AuthLayout({
   children,
@@ -16,9 +15,6 @@ export default function AuthLayout({
             <Logo className="w-8 h-8 rounded-lg" width={32} height={32} />
             <span className="font-semibold text-lg">Taophim</span>
           </Link>
-          <nav className="flex items-center gap-4">
-            <ModeToggle />
-          </nav>
         </div>
       </header>
 

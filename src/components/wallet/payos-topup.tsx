@@ -53,15 +53,17 @@ export function PayOSTopup() {
       // 2. Open PayOS Embedded Form
       openPayOS(data.checkoutUrl)
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error)
-      toast.error(error.message)
+      const message = error instanceof Error ? error.message : "Có lỗi xảy ra"
+      toast.error(message)
       setLoading(false) // Only stop loading on error, on success we might want to keep it or wait for close
     }
   }
 
   const openPayOS = (url: string) => {
-    if (!(window as any).PayOSCheckout) {
+    const payosWindow = window as Window & { PayOSCheckout?: { usePayOS: (config: Record<string, unknown>) => { open: () => void } } }
+    if (!payosWindow.PayOSCheckout) {
       toast.error("Lỗi thư viện thanh toán")
       setLoading(false)
       return
@@ -72,29 +74,30 @@ export function PayOSTopup() {
       ELEMENT_ID: "embedded-payment-container",
       CHECKOUT_URL: url,
       embedded: true,
-      onSuccess: (event: any) => {
+      onSuccess: () => {
         toast.success("Thanh toán thành công!")
         setLoading(false)
         setCheckoutUrl("")
         // Refresh page to show new balance
         window.location.reload()
       },
-      onExit: (event: any) => {
+      onExit: () => {
         setLoading(false)
       },
-      onCancel: (event: any) => {
+      onCancel: () => {
         toast.info("Đã hủy thanh toán")
         setLoading(false)
       }
     }
 
-    const { open } = (window as any).PayOSCheckout.usePayOS(config)
+    const { open } = payosWindow.PayOSCheckout.usePayOS(config)
     open()
   }
 
   useEffect(() => {
     // Check if PayOS is already loaded (in case of navigation/caching)
-    if ((window as any).PayOSCheckout) {
+    const payosWindow = window as Window & { PayOSCheckout?: unknown }
+    if (payosWindow.PayOSCheckout) {
       setPayosLoaded(true)
     }
   }, [])

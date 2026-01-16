@@ -1,17 +1,13 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { PayOSTopup } from "@/components/wallet/payos-topup"
 import {
   Wallet,
   ArrowUpCircle,
   ArrowDownCircle,
-  Clock,
-  QrCode,
-  Copy
+  Clock
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
