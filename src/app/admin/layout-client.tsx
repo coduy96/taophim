@@ -35,7 +35,7 @@ import {
   Logout01Icon as LogOut,
   Shield01Icon as Shield,
   ArrowUp01Icon as ChevronUp,
-  SparklesIcon as Sparkles
+  Film01Icon as Film
 } from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
@@ -54,7 +54,7 @@ const menuItems = [
   {
     title: "Dịch vụ",
     href: "/admin/services",
-    icon: Sparkles,
+    icon: Film,
   },
   {
     title: "Người dùng",

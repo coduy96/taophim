@@ -35,8 +35,9 @@ import {
   Time02Icon as History,
   UserIcon as User,
   Logout01Icon as LogOut,
-  SparklesIcon as Sparkles,
-  ArrowUp01Icon as ChevronUp
+  Film01Icon as Film,
+  ArrowUp01Icon as ChevronUp,
+  Home
 } from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
@@ -45,12 +46,12 @@ const menuItems = [
   {
     title: "Tổng quan",
     href: "/dashboard",
-    icon: LayoutDashboard,
+    icon: Home,
   },
   {
-    title: "Dịch vụ",
+    title: "Tạo phim",
     href: "/dashboard/services",
-    icon: Sparkles,
+    icon: Film,
   },
   {
     title: "Đơn hàng",
