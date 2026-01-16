@@ -20,6 +20,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Separator } from "@/components/ui/separator"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { 
   ShoppingBag01Icon as ShoppingBag, 
@@ -29,9 +30,17 @@ import {
   Download01Icon as Download,
   AlertCircleIcon as AlertCircle,
   EyeIcon as Eye,
-  Film01Icon as Film
+  Film01Icon as Film,
+  Copy01Icon as Copy,
+  Image01Icon as ImageIcon,
+  PlayCircle02Icon as PlayCircle,
+  ArrowRight01Icon as ArrowRight,
+  Tick01Icon as Check,
+  MessageEdit01Icon as MessageEdit,
+  CalendarCheckIn01Icon as Calendar,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
 
 // Reuse types from page or define shared types
 interface OrderWithService {
@@ -63,36 +72,371 @@ function formatDate(dateString: string): string {
   })
 }
 
+function formatRelativeTime(dateString: string): string {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+
+  if (diffMins < 1) return "Vừa xong"
+  if (diffMins < 60) return `${diffMins} phút trước`
+  if (diffHours < 24) return `${diffHours} giờ trước`
+  if (diffDays < 7) return `${diffDays} ngày trước`
+  return formatDate(dateString)
+}
+
 const statusConfig: Record<string, { 
   label: string
   color: string
   className: string
   icon: React.ReactNode
+  step: number
 }> = {
   pending: { 
     label: "Chờ xử lý", 
     color: "text-yellow-600", 
     className: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-200/20",
-    icon: <HugeiconsIcon icon={Clock} className="h-3.5 w-3.5" />
+    icon: <HugeiconsIcon icon={Clock} className="h-3.5 w-3.5" />,
+    step: 1
   },
   processing: { 
     label: "Đang thực hiện", 
     color: "text-blue-600",
     className: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200/20",
-    icon: <HugeiconsIcon icon={AlertCircle} className="h-3.5 w-3.5" />
+    icon: <HugeiconsIcon icon={AlertCircle} className="h-3.5 w-3.5" />,
+    step: 2
   },
   completed: { 
     label: "Hoàn thành", 
     color: "text-green-600",
     className: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-200/20",
-    icon: <HugeiconsIcon icon={CheckCircle2} className="h-3.5 w-3.5" />
+    icon: <HugeiconsIcon icon={CheckCircle2} className="h-3.5 w-3.5" />,
+    step: 3
   },
   cancelled: { 
     label: "Đã hủy", 
     color: "text-red-600",
     className: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-200/20",
-    icon: <HugeiconsIcon icon={XCircle} className="h-3.5 w-3.5" />
+    icon: <HugeiconsIcon icon={XCircle} className="h-3.5 w-3.5" />,
+    step: -1
   },
+}
+
+// Helper to detect file type from URL
+function getFileType(url: string): 'image' | 'video' | 'unknown' {
+  const lower = url.toLowerCase()
+  if (lower.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|$)/)) return 'image'
+  if (lower.match(/\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/)) return 'video'
+  return 'unknown'
+}
+
+// File Preview Component
+function FilePreview({ url, label }: { url: string; label: string }) {
+  const fileType = getFileType(url)
+  const [isExpanded, setIsExpanded] = React.useState(false)
+
+  if (fileType === 'image') {
+    return (
+      <div className="space-y-2">
+        <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70">
+          {label}
+        </span>
+        <div 
+          className={cn(
+            "relative rounded-xl overflow-hidden border bg-muted/30 cursor-pointer transition-all duration-300",
+            isExpanded ? "max-h-96" : "max-h-32"
+          )}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <img 
+            src={url} 
+            alt={label}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center pb-2">
+            <span className="text-white text-xs font-medium">
+              {isExpanded ? "Thu nhỏ" : "Phóng to"}
+            </span>
+          </div>
+        </div>
+        <a 
+          href={url} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-xs text-primary hover:underline flex items-center gap-1"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <HugeiconsIcon icon={Download} className="h-3 w-3" />
+          Tải về
+        </a>
+      </div>
+    )
+  }
+
+  if (fileType === 'video') {
+    return (
+      <div className="space-y-2">
+        <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70">
+          {label}
+        </span>
+        <div className="relative rounded-xl overflow-hidden border bg-muted/30">
+          <video 
+            src={url}
+            className="w-full max-h-40 object-cover"
+            controls={false}
+            muted
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+            <a 
+              href={url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="h-12 w-12 rounded-full bg-white/90 dark:bg-black/90 flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+            >
+              <HugeiconsIcon icon={PlayCircle} className="h-6 w-6 text-primary" />
+            </a>
+          </div>
+        </div>
+        <a 
+          href={url} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-xs text-primary hover:underline flex items-center gap-1"
+        >
+          <HugeiconsIcon icon={Download} className="h-3 w-3" />
+          Tải về
+        </a>
+      </div>
+    )
+  }
+
+  // Fallback for unknown file types
+  return (
+    <div className="space-y-2">
+      <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70">
+        {label}
+      </span>
+      <a 
+        href={url} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="flex items-center gap-3 p-3 rounded-xl border bg-muted/30 hover:bg-muted/50 transition-colors"
+      >
+        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+          <HugeiconsIcon icon={Download} className="h-5 w-5 text-primary" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium truncate">File đính kèm</p>
+          <p className="text-xs text-muted-foreground">Nhấn để tải về</p>
+        </div>
+        <HugeiconsIcon icon={ArrowRight} className="h-4 w-4 text-muted-foreground" />
+      </a>
+    </div>
+  )
+}
+
+// Order Progress Timeline
+function OrderTimeline({ status, createdAt, updatedAt }: { 
+  status: string
+  createdAt: string
+  updatedAt: string
+}) {
+  const currentStep = statusConfig[status]?.step ?? 0
+  const isCancelled = status === 'cancelled'
+
+  const steps = [
+    { 
+      label: "Đã đặt hàng", 
+      description: "Đơn hàng đã được tạo",
+      step: 1,
+      icon: ShoppingBag
+    },
+    { 
+      label: "Đang xử lý", 
+      description: "Admin đang thực hiện",
+      step: 2,
+      icon: Clock
+    },
+    { 
+      label: "Hoàn thành", 
+      description: "Video đã sẵn sàng",
+      step: 3,
+      icon: CheckCircle2
+    },
+  ]
+
+  if (isCancelled) {
+    return (
+      <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200/50 dark:border-red-800/30">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+            <HugeiconsIcon icon={XCircle} className="h-5 w-5 text-red-600 dark:text-red-400" />
+          </div>
+          <div>
+            <p className="font-medium text-red-700 dark:text-red-300">Đơn hàng đã bị hủy</p>
+            <p className="text-sm text-red-600/70 dark:text-red-400/70">
+              Xu đã được hoàn lại vào ví của bạn
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative">
+      <div className="flex justify-between items-start">
+        {steps.map((step, index) => {
+          const isCompleted = currentStep >= step.step
+          const isCurrent = currentStep === step.step
+          const isLast = index === steps.length - 1
+
+          return (
+            <div key={step.step} className="flex-1 relative">
+              <div className="flex flex-col items-center">
+                {/* Step indicator */}
+                <div 
+                  className={cn(
+                    "h-10 w-10 rounded-full flex items-center justify-center z-10 transition-all duration-300",
+                    isCompleted 
+                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
+                      : "bg-muted border-2 border-muted-foreground/20 text-muted-foreground",
+                    isCurrent && "ring-4 ring-primary/20"
+                  )}
+                >
+                  {isCompleted && !isCurrent ? (
+                    <HugeiconsIcon icon={Check} className="h-5 w-5" />
+                  ) : (
+                    <HugeiconsIcon icon={step.icon} className="h-4 w-4" />
+                  )}
+                </div>
+
+                {/* Label */}
+                <div className="mt-3 text-center">
+                  <p className={cn(
+                    "text-xs font-medium",
+                    isCompleted ? "text-foreground" : "text-muted-foreground"
+                  )}>
+                    {step.label}
+                  </p>
+                  {isCurrent && (
+                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                      {step.step === 1 ? formatRelativeTime(createdAt) : formatRelativeTime(updatedAt)}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Connector line */}
+              {!isLast && (
+                <div className="absolute top-5 left-1/2 w-full h-0.5 -translate-y-1/2">
+                  <div 
+                    className={cn(
+                      "h-full transition-all duration-500",
+                      currentStep > step.step 
+                        ? "bg-primary" 
+                        : "bg-muted-foreground/20"
+                    )}
+                  />
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// Result Preview Component
+function ResultPreview({ url }: { url: string }) {
+  const fileType = getFileType(url)
+  const [isPlaying, setIsPlaying] = React.useState(false)
+  const videoRef = React.useRef<HTMLVideoElement>(null)
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause()
+      } else {
+        videoRef.current.play()
+      }
+      setIsPlaying(!isPlaying)
+    }
+  }
+
+  if (fileType === 'video') {
+    return (
+      <div className="space-y-3">
+        <h4 className="text-sm font-semibold flex items-center gap-2">
+          <div className="h-6 w-6 rounded-lg bg-green-500/10 flex items-center justify-center">
+            <HugeiconsIcon icon={Film} className="h-3.5 w-3.5 text-green-600" />
+          </div>
+          Video kết quả
+        </h4>
+        <div className="relative rounded-2xl overflow-hidden bg-black/90 border shadow-xl">
+          <video 
+            ref={videoRef}
+            src={url}
+            className="w-full aspect-video object-contain"
+            controls
+            playsInline
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+          />
+          {!isPlaying && (
+            <div 
+              className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/60 via-transparent to-black/20 cursor-pointer"
+              onClick={handlePlayPause}
+            >
+              <div className="h-16 w-16 rounded-full bg-white/95 dark:bg-white/90 flex items-center justify-center shadow-2xl hover:scale-110 transition-transform">
+                <HugeiconsIcon icon={PlayCircle} className="h-8 w-8 text-primary ml-1" />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  if (fileType === 'image') {
+    return (
+      <div className="space-y-3">
+        <h4 className="text-sm font-semibold flex items-center gap-2">
+          <div className="h-6 w-6 rounded-lg bg-green-500/10 flex items-center justify-center">
+            <HugeiconsIcon icon={ImageIcon} className="h-3.5 w-3.5 text-green-600" />
+          </div>
+          Ảnh kết quả
+        </h4>
+        <div className="relative rounded-2xl overflow-hidden border shadow-xl">
+          <img 
+            src={url}
+            alt="Kết quả"
+            className="w-full object-cover"
+          />
+        </div>
+      </div>
+    )
+  }
+
+  // Fallback
+  return (
+    <div className="space-y-3">
+      <h4 className="text-sm font-semibold flex items-center gap-2">
+        <div className="h-6 w-6 rounded-lg bg-green-500/10 flex items-center justify-center">
+          <HugeiconsIcon icon={Download} className="h-3.5 w-3.5 text-green-600" />
+        </div>
+        Kết quả
+      </h4>
+      <div className="p-4 rounded-xl border bg-muted/30">
+        <p className="text-sm text-muted-foreground">
+          File kết quả đã sẵn sàng để tải về
+        </p>
+      </div>
+    </div>
+  )
 }
 
 interface OrderListProps {
@@ -103,6 +447,7 @@ export function OrderList({ orders }: OrderListProps) {
   const [filter, setFilter] = React.useState("all")
   const [selectedOrder, setSelectedOrder] = React.useState<OrderWithService | null>(null)
   const [isSheetOpen, setIsSheetOpen] = React.useState(false)
+  const [copiedId, setCopiedId] = React.useState(false)
 
   const filteredOrders = React.useMemo(() => {
     if (filter === "all") return orders
@@ -112,6 +457,32 @@ export function OrderList({ orders }: OrderListProps) {
   const handleViewOrder = (order: OrderWithService) => {
     setSelectedOrder(order)
     setIsSheetOpen(true)
+    setCopiedId(false)
+  }
+
+  const handleCopyOrderId = async () => {
+    if (selectedOrder) {
+      await navigator.clipboard.writeText(selectedOrder.id)
+      setCopiedId(true)
+      toast.success("Đã sao chép mã đơn hàng")
+      setTimeout(() => setCopiedId(false), 2000)
+    }
+  }
+
+  // Separate file inputs from text inputs
+  const getInputsByType = (inputs: Record<string, unknown>) => {
+    const files: { key: string; url: string }[] = []
+    const texts: { key: string; value: string }[] = []
+
+    Object.entries(inputs || {}).forEach(([key, value]) => {
+      if (typeof value === 'string' && value.startsWith('http')) {
+        files.push({ key, url: value })
+      } else if (value !== null && value !== undefined) {
+        texts.push({ key, value: String(value) })
+      }
+    })
+
+    return { files, texts }
   }
 
   return (
@@ -197,112 +568,194 @@ export function OrderList({ orders }: OrderListProps) {
       </div>
 
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+        <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-0">
           {selectedOrder && (
             <>
-              <SheetHeader className="space-y-4 pb-4 border-b">
-                <div className="flex items-center gap-3 pt-2">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                    <HugeiconsIcon icon={Film} className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <SheetTitle>{selectedOrder.services.name}</SheetTitle>
-                    <SheetDescription className="font-mono text-xs mt-1">
-                      ID: {selectedOrder.id}
-                    </SheetDescription>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <Badge 
-                    variant="secondary" 
-                    className={cn("rounded-full border px-3 py-1 font-normal", statusConfig[selectedOrder.status].className)}
-                  >
-                    <span className="mr-1.5">{statusConfig[selectedOrder.status].icon}</span>
-                    {statusConfig[selectedOrder.status].label}
-                  </Badge>
-                  <span className="text-sm font-medium">
-                    {formatDate(selectedOrder.created_at)}
-                  </span>
-                </div>
-              </SheetHeader>
-
-              <div className="space-y-6 py-6">
-                {/* Cost Section */}
-                <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30 border border-dashed">
-                  <span className="text-sm text-muted-foreground">Tổng chi phí</span>
-                  <span className="text-lg font-bold text-primary">{formatXu(selectedOrder.total_cost)} Xu</span>
-                </div>
-
-                {/* Input Details */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium flex items-center gap-2">
-                    <HugeiconsIcon icon={ShoppingBag} className="h-4 w-4 text-muted-foreground" />
-                    Thông tin yêu cầu
-                  </h4>
-                  <div className="rounded-xl border bg-card text-sm overflow-hidden">
-                    {Object.entries(selectedOrder.user_inputs || {}).map(([key, value], index) => (
-                      <div key={key} className={cn("flex flex-col p-3 gap-1", index !== 0 && "border-t")}>
-                        <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70">
-                          {key.replace(/_/g, ' ')}
-                        </span>
-                        <div className="text-foreground break-words">
-                          {typeof value === 'string' && value.startsWith('http') ? (
-                            <a 
-                              href={value} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="text-primary hover:underline flex items-center gap-1"
-                            >
-                              Xem file đính kèm <HugeiconsIcon icon={Download} className="h-3 w-3" />
-                            </a>
-                          ) : (
-                             String(value)
-                          )}
-                        </div>
+              {/* Header Section */}
+              <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
+                <SheetHeader className="p-6 pb-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary shadow-inner">
+                        <HugeiconsIcon icon={Film} className="h-6 w-6" />
                       </div>
-                    ))}
+                      <div>
+                        <SheetTitle className="text-lg">{selectedOrder.services.name}</SheetTitle>
+                        <SheetDescription className="flex items-center gap-2 mt-1">
+                          <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded-md">
+                            #{selectedOrder.id.slice(0, 8)}
+                          </span>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6"
+                            onClick={handleCopyOrderId}
+                          >
+                            <HugeiconsIcon 
+                              icon={copiedId ? Check : Copy} 
+                              className={cn("h-3.5 w-3.5", copiedId && "text-green-600")} 
+                            />
+                          </Button>
+                        </SheetDescription>
+                      </div>
+                    </div>
+                    <Badge 
+                      variant="secondary" 
+                      className={cn("rounded-full border px-3 py-1.5 font-normal", statusConfig[selectedOrder.status].className)}
+                    >
+                      <span className="mr-1.5">{statusConfig[selectedOrder.status].icon}</span>
+                      {statusConfig[selectedOrder.status].label}
+                    </Badge>
+                  </div>
+                </SheetHeader>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Result Preview - Show first for completed orders */}
+                {selectedOrder.status === 'completed' && selectedOrder.admin_output?.result_url && (
+                  <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <ResultPreview url={selectedOrder.admin_output.result_url} />
+                  </div>
+                )}
+
+                {/* Order Timeline */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-semibold flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-lg bg-muted flex items-center justify-center">
+                      <HugeiconsIcon icon={Clock} className="h-3.5 w-3.5 text-muted-foreground" />
+                    </div>
+                    Tiến độ đơn hàng
+                  </h4>
+                  <div className="p-4 rounded-xl border bg-card">
+                    <OrderTimeline 
+                      status={selectedOrder.status} 
+                      createdAt={selectedOrder.created_at}
+                      updatedAt={selectedOrder.updated_at}
+                    />
                   </div>
                 </div>
+
+                <Separator />
+
+                {/* Cost & Date Info */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+                    <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                      <HugeiconsIcon icon={ShoppingBag} className="h-4 w-4" />
+                      <span className="text-xs font-medium">Chi phí</span>
+                    </div>
+                    <span className="text-xl font-bold text-primary">
+                      {formatXu(selectedOrder.total_cost)} Xu
+                    </span>
+                  </div>
+                  <div className="p-4 rounded-xl bg-muted/30 border">
+                    <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                      <HugeiconsIcon icon={Calendar} className="h-4 w-4" />
+                      <span className="text-xs font-medium">Ngày tạo</span>
+                    </div>
+                    <span className="text-sm font-medium">
+                      {formatDate(selectedOrder.created_at)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* User Inputs Section */}
+                {(() => {
+                  const { files, texts } = getInputsByType(selectedOrder.user_inputs)
+                  
+                  if (files.length === 0 && texts.length === 0) return null
+
+                  return (
+                    <div className="space-y-4">
+                      <h4 className="text-sm font-semibold flex items-center gap-2">
+                        <div className="h-6 w-6 rounded-lg bg-muted flex items-center justify-center">
+                          <HugeiconsIcon icon={MessageEdit} className="h-3.5 w-3.5 text-muted-foreground" />
+                        </div>
+                        Thông tin yêu cầu
+                      </h4>
+                      
+                      {/* Text inputs */}
+                      {texts.length > 0 && (
+                        <div className="rounded-xl border bg-card overflow-hidden">
+                          {texts.map(({ key, value }, index) => (
+                            <div key={key} className={cn("p-4", index !== 0 && "border-t")}>
+                              <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70 block mb-1">
+                                {key.replace(/_/g, ' ')}
+                              </span>
+                              <p className="text-sm text-foreground whitespace-pre-wrap break-words">
+                                {value}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* File inputs with previews */}
+                      {files.length > 0 && (
+                        <div className="space-y-4">
+                          {files.map(({ key, url }) => (
+                            <FilePreview key={key} url={url} label={key.replace(/_/g, ' ')} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })()}
 
                 {/* Admin Note */}
                 {selectedOrder.admin_note && (
                   <div className="space-y-3">
-                    <h4 className="text-sm font-medium flex items-center gap-2">
-                      <HugeiconsIcon icon={AlertCircle} className="h-4 w-4 text-muted-foreground" />
+                    <h4 className="text-sm font-semibold flex items-center gap-2">
+                      <div className="h-6 w-6 rounded-lg bg-yellow-500/10 flex items-center justify-center">
+                        <HugeiconsIcon icon={AlertCircle} className="h-3.5 w-3.5 text-yellow-600" />
+                      </div>
                       Ghi chú từ Admin
                     </h4>
-                    <div className="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/10 text-sm border border-yellow-200/50 dark:border-yellow-800/30 text-yellow-800 dark:text-yellow-200">
-                      {selectedOrder.admin_note}
+                    <div className="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/10 text-sm border border-yellow-200/50 dark:border-yellow-800/30">
+                      <p className="text-yellow-800 dark:text-yellow-200 whitespace-pre-wrap">
+                        {selectedOrder.admin_note}
+                      </p>
                     </div>
                   </div>
                 )}
 
                 {/* Processing Message */}
                 {(selectedOrder.status === 'pending' || selectedOrder.status === 'processing') && (
-                   <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 text-sm border border-blue-200/50 dark:border-blue-800/30 text-blue-800 dark:text-blue-200">
-                    <p className="flex items-start gap-2">
-                      <HugeiconsIcon icon={Clock} className="h-4 w-4 shrink-0 mt-0.5" />
-                      {selectedOrder.status === 'pending' 
-                        ? "Đơn hàng đang chờ xử lý. Vui lòng kiên nhẫn đợi Admin duyệt." 
-                        : "Admin đang thực hiện video của bạn. Bạn sẽ nhận được thông báo khi hoàn tất."}
-                    </p>
-                   </div>
+                  <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 text-sm border border-blue-200/50 dark:border-blue-800/30">
+                    <div className="flex items-start gap-3">
+                      <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+                        <HugeiconsIcon icon={Clock} className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-blue-800 dark:text-blue-200">
+                          {selectedOrder.status === 'pending' 
+                            ? "Đơn hàng đang chờ xử lý" 
+                            : "Đang thực hiện video"}
+                        </p>
+                        <p className="text-blue-700/70 dark:text-blue-300/70 mt-1">
+                          {selectedOrder.status === 'pending' 
+                            ? "Đơn hàng sẽ được xử lý trong thời gian sớm nhất." 
+                            : "Admin đang thực hiện video của bạn. Bạn sẽ nhận được thông báo khi hoàn tất."}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
 
-              <SheetFooter className="mt-auto border-t pt-4">
+              {/* Footer */}
+              <SheetFooter className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t p-6">
                 {selectedOrder.status === 'completed' && selectedOrder.admin_output?.result_url ? (
-                  <Button className="w-full rounded-full shadow-lg shadow-primary/20" asChild>
-                    <a href={selectedOrder.admin_output.result_url} target="_blank" rel="noopener noreferrer">
-                      <HugeiconsIcon icon={Download} className="mr-2 h-4 w-4" />
+                  <Button className="w-full rounded-full shadow-lg shadow-primary/20 h-12 text-base" asChild>
+                    <a href={selectedOrder.admin_output.result_url} target="_blank" rel="noopener noreferrer" download>
+                      <HugeiconsIcon icon={Download} className="mr-2 h-5 w-5" />
                       Tải Video Kết Quả
                     </a>
                   </Button>
                 ) : (
-                   <Button variant="outline" className="w-full rounded-full" onClick={() => setIsSheetOpen(false)}>
-                     Đóng
-                   </Button>
+                  <Button variant="outline" className="w-full rounded-full h-12" onClick={() => setIsSheetOpen(false)}>
+                    Đóng
+                  </Button>
                 )}
               </SheetFooter>
             </>

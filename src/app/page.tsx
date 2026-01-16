@@ -159,10 +159,6 @@ export default async function LandingPage() {
                       <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
                       <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
                     </div>
-                    <div className="ml-auto flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-border/50 text-[10px] font-medium text-muted-foreground/80">
-                      <HugeiconsIcon icon={Wand2} className="w-3 h-3" />
-                      <span>Text to Video</span>
-                    </div>
                   </div>
 
                   {/* Content */}
