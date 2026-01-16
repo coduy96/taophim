@@ -1,13 +1,14 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { PayOSTopup } from "@/components/wallet/payos-topup"
 import {
   Wallet01Icon as Wallet,
   CircleArrowUp01Icon as ArrowUpCircle,
   CircleArrowDown01Icon as ArrowDownCircle,
-  Time01Icon as Clock
+  Time01Icon as Clock,
+  Exchange01Icon as Exchange
 } from "@hugeicons/core-free-icons"
 
 function formatXu(amount: number): string {
@@ -24,21 +25,21 @@ function formatDate(dateString: string): string {
   })
 }
 
-const transactionTypeLabels: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+const transactionTypeLabels: Record<string, { label: string; icon: React.ReactNode; className: string }> = {
   deposit: {
     label: "Nạp Xu",
     icon: <HugeiconsIcon icon={ArrowUpCircle} className="h-4 w-4" />,
-    color: "text-green-600 bg-green-100 dark:bg-green-900/30"
+    className: "bg-green-500/10 text-green-600 dark:text-green-400"
   },
   expense: {
     label: "Chi tiêu",
     icon: <HugeiconsIcon icon={ArrowDownCircle} className="h-4 w-4" />,
-    color: "text-red-600 bg-red-100 dark:bg-red-900/30"
+    className: "bg-red-500/10 text-red-600 dark:text-red-400"
   },
   refund: {
     label: "Hoàn tiền",
-    icon: <HugeiconsIcon icon={ArrowUpCircle} className="h-4 w-4" />,
-    color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30"
+    icon: <HugeiconsIcon icon={Exchange} className="h-4 w-4" />,
+    className: "bg-blue-500/10 text-blue-600 dark:text-blue-400"
   },
 }
 
@@ -78,53 +79,42 @@ export default async function WalletPage() {
     .reduce((sum, t) => sum + t.amount, 0) || 0
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <HugeiconsIcon icon={Wallet} className="h-6 w-6 text-primary" />
-          </div>
-          Ví Xu
-        </h1>
-        <p className="text-muted-foreground">
-          Quản lý số dư và lịch sử giao dịch của bạn.
+    <div className="max-w-6xl mx-auto space-y-8 pb-10">
+      {/* Header Section */}
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Ví của bạn</h1>
+        <p className="text-muted-foreground mt-1">
+          Quản lý số dư và lịch sử giao dịch.
         </p>
       </div>
 
-      {/* Balance Cards */}
-      <div className="grid gap-6 md:grid-cols-3">
-        <Card className="group md:col-span-1">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Số dư khả dụng</CardTitle>
-            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={Wallet} className="h-5 w-5 text-primary" />
-            </div>
+      {/* Stats Grid - Minimal Style */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card size="sm" className="bg-primary/5 border-primary/10 hover:border-primary/20 transition-colors">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Số dư khả dụng</CardTitle>
+            <HugeiconsIcon icon={Wallet} className="h-4 w-4 text-primary" />
           </CardHeader>
-          <CardContent className="relative">
-            <div className="text-3xl font-bold text-primary">
+          <CardContent>
+            <div className="text-2xl font-bold text-primary">
               {formatXu(profile?.xu_balance || 0)} Xu
             </div>
             {profile && profile.frozen_xu > 0 && (
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Đang giữ: {formatXu(profile.frozen_xu)} Xu
               </p>
             )}
           </CardContent>
         </Card>
 
-        <Card className="group">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tổng đã nạp</CardTitle>
-            <div className="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={ArrowUpCircle} className="h-5 w-5 text-green-500" />
-            </div>
+        <Card size="sm" className="hover:border-primary/20 transition-colors">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Tổng đã nạp</CardTitle>
+            <HugeiconsIcon icon={ArrowUpCircle} className="h-4 w-4 text-green-500" />
           </CardHeader>
-          <CardContent className="relative">
+          <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              +{formatXu(totalDeposited)} Xu
+              +{formatXu(totalDeposited)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               Từ tất cả các lần nạp
@@ -132,88 +122,86 @@ export default async function WalletPage() {
           </CardContent>
         </Card>
 
-        <Card className="group">
-          <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tổng đã chi</CardTitle>
-            <div className="w-10 h-10 rounded-2xl bg-red-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={ArrowDownCircle} className="h-5 w-5 text-red-500" />
-            </div>
+        <Card size="sm" className="hover:border-primary/20 transition-colors">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Tổng đã chi</CardTitle>
+            <HugeiconsIcon icon={ArrowDownCircle} className="h-4 w-4 text-red-500" />
           </CardHeader>
-          <CardContent className="relative">
+          <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              -{formatXu(totalSpent)} Xu
+              -{formatXu(totalSpent)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Cho các đơn hàng
+              Cho các dịch vụ
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <PayOSTopup />
-
-      {/* Transaction History */}
-      <Card className="group">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-        <CardHeader className="relative">
-          <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-            <HugeiconsIcon icon={Clock} className="h-7 w-7 text-primary" />
+      <div className="grid gap-8 md:grid-cols-7">
+        {/* Main Content: Topup & Transactions */}
+        <div className="md:col-span-4 space-y-6">
+           <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold tracking-tight">Lịch sử giao dịch</h2>
           </div>
-          <CardTitle className="group-hover:text-primary transition-colors">
-            Lịch sử giao dịch
-          </CardTitle>
-          <CardDescription>
-            Tất cả các giao dịch của bạn
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="relative">
-          {transactions && transactions.length > 0 ? (
+          
+          <Card className="border-none shadow-none bg-transparent">
             <div className="space-y-3">
-              {transactions.map((transaction) => {
-                const typeInfo = transactionTypeLabels[transaction.type]
-                return (
-                  <div
-                    key={transaction.id}
-                    className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-background hover:bg-muted/50 transition-all duration-300"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className={`p-2.5 rounded-xl ${typeInfo.color}`}>
-                        {typeInfo.icon}
+              {transactions && transactions.length > 0 ? (
+                transactions.map((transaction) => {
+                  const typeInfo = transactionTypeLabels[transaction.type]
+                  return (
+                    <div
+                      key={transaction.id}
+                      className="group flex items-center justify-between p-4 rounded-2xl border bg-card hover:border-primary/20 hover:shadow-sm transition-all duration-200"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`h-10 w-10 rounded-full flex items-center justify-center ${typeInfo.className}`}>
+                          {typeInfo.icon}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{typeInfo.label}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {transaction.orders
+                              ? `Đơn hàng: ${(transaction.orders as { services: { name: string } }).services?.name || 'N/A'}`
+                              : formatDate(transaction.created_at)
+                            }
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium">{typeInfo.label}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {transaction.orders
-                            ? `Đơn hàng: ${(transaction.orders as { services: { name: string } }).services?.name || 'N/A'}`
-                            : formatDate(transaction.created_at)
-                          }
+                      <div className="text-right">
+                        <p className={`font-bold text-sm ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {transaction.amount > 0 ? '+' : ''}{formatXu(transaction.amount)} Xu
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(transaction.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className={`font-bold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {transaction.amount > 0 ? '+' : ''}{formatXu(transaction.amount)} Xu
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDate(transaction.created_at)}
-                      </p>
-                    </div>
+                  )
+                })
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center rounded-2xl border border-dashed">
+                  <div className="h-12 w-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+                    <HugeiconsIcon icon={Clock} className="h-6 w-6 text-muted-foreground" />
                   </div>
-                )
-              })}
+                  <h3 className="font-medium">Chưa có giao dịch</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Lịch sử nạp và chi tiêu sẽ xuất hiện tại đây.
+                  </p>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="text-center py-16 text-muted-foreground">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
-                <HugeiconsIcon icon={Wallet} className="w-8 h-8 text-muted-foreground/50" />
-              </div>
-              <p>Chưa có giao dịch nào</p>
-              <p className="text-sm mt-1">Các giao dịch sẽ xuất hiện tại đây</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+          </Card>
+        </div>
+
+        {/* Sidebar: Topup */}
+        <div className="md:col-span-3 space-y-6">
+           <h2 className="text-lg font-semibold tracking-tight">Nạp thêm Xu</h2>
+           <PayOSTopup />
+        </div>
+      </div>
     </div>
   )
 }
+

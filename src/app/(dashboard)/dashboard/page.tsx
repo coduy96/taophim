@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -11,7 +11,7 @@ import {
   CheckmarkCircle02Icon as CheckCircle2,
   ArrowRight01Icon as ArrowRight,
   SparklesIcon as Sparkles,
-  AnalyticsUpIcon as TrendingUp
+  Film01Icon as Film
 } from "@hugeicons/core-free-icons"
 
 function formatXu(amount: number): string {
@@ -22,17 +22,15 @@ function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('vi-VN', {
     day: '2-digit',
     month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    year: 'numeric'
   })
 }
 
-const statusLabels: Record<string, { label: string; color: string }> = {
-  pending: { label: "Chờ xử lý", color: "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30" },
-  processing: { label: "Đang thực hiện", color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30" },
-  completed: { label: "Hoàn thành", color: "text-green-600 bg-green-100 dark:bg-green-900/30" },
-  cancelled: { label: "Đã hủy", color: "text-red-600 bg-red-100 dark:bg-red-900/30" },
+const statusLabels: Record<string, { label: string; className: string }> = {
+  pending: { label: "Chờ xử lý", className: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400" },
+  processing: { label: "Đang thực hiện", className: "bg-blue-500/10 text-blue-600 dark:text-blue-400" },
+  completed: { label: "Hoàn thành", className: "bg-green-500/10 text-green-600 dark:text-green-400" },
+  cancelled: { label: "Đã hủy", className: "bg-red-500/10 text-red-600 dark:text-red-400" },
 }
 
 export default async function DashboardPage() {
@@ -77,177 +75,182 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
     .in('status', ['pending', 'processing'])
 
+  const greeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return "Chào buổi sáng"
+    if (hour < 18) return "Chào buổi chiều"
+    return "Chào buổi tối"
+  }
+
   return (
-    <div className="space-y-6">
-      {/* Stats Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="group">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Số dư Xu</CardTitle>
-            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={Wallet} className="h-5 w-5 text-primary" />
-            </div>
+    <div className="max-w-6xl mx-auto space-y-8 pb-10">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {greeting()}, {profile?.full_name || 'bạn hiền'}! 👋
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Chào mừng trở lại với Taophim. Hôm nay bạn muốn tạo video gì?
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button asChild size="lg" className="rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
+            <Link href="/dashboard/services">
+              <HugeiconsIcon icon={Film} className="mr-2 h-5 w-5" />
+              Tạo video mới
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Stats Grid - Cleaner & Minimal */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card size="sm" className="bg-primary/5 border-primary/10 hover:border-primary/20 transition-colors">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Số dư hiện tại</CardTitle>
+            <HugeiconsIcon icon={Wallet} className="h-4 w-4 text-primary" />
           </CardHeader>
-          <CardContent className="relative">
+          <CardContent>
             <div className="text-2xl font-bold text-primary">{formatXu(profile?.xu_balance || 0)}</div>
             {profile && profile.frozen_xu > 0 && (
-              <p className="text-xs text-muted-foreground">
-                Đang giữ: {formatXu(profile.frozen_xu)} Xu
+              <p className="text-xs text-muted-foreground mt-1">
+                Đang giữ: {formatXu(profile.frozen_xu)}
               </p>
             )}
           </CardContent>
         </Card>
 
-        <Card className="group">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tổng đơn hàng</CardTitle>
-            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={ShoppingBag} className="h-5 w-5 text-primary" />
-            </div>
+        <Card size="sm" className="hover:border-primary/20 transition-colors">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Tổng đơn hàng</CardTitle>
+            <HugeiconsIcon icon={ShoppingBag} className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="relative">
+          <CardContent>
             <div className="text-2xl font-bold">{totalOrders || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Tất cả đơn hàng của bạn
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Đơn hàng đã tạo</p>
           </CardContent>
         </Card>
 
-        <Card className="group">
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Đang xử lý</CardTitle>
-            <div className="w-10 h-10 rounded-2xl bg-yellow-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={Clock} className="h-5 w-5 text-yellow-500" />
-            </div>
+        <Card size="sm" className="hover:border-primary/20 transition-colors">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Đang xử lý</CardTitle>
+            <HugeiconsIcon icon={Clock} className="h-4 w-4 text-yellow-500" />
           </CardHeader>
-          <CardContent className="relative">
+          <CardContent>
             <div className="text-2xl font-bold">{pendingOrders || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Đơn hàng chờ hoàn thành
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Đơn hàng đang chạy</p>
           </CardContent>
         </Card>
 
-        <Card className="group">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Hoàn thành</CardTitle>
-            <div className="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={CheckCircle2} className="h-5 w-5 text-green-500" />
-            </div>
+        <Card size="sm" className="hover:border-primary/20 transition-colors">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Hoàn thành</CardTitle>
+            <HugeiconsIcon icon={CheckCircle2} className="h-4 w-4 text-green-500" />
           </CardHeader>
-          <CardContent className="relative">
+          <CardContent>
             <div className="text-2xl font-bold">{completedOrders || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Đơn hàng đã xong
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Đơn hàng thành công</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card className="group">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <CardHeader className="relative">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={Sparkles} className="h-7 w-7 text-primary" />
-            </div>
-            <CardTitle className="group-hover:text-primary transition-colors">
-              Tạo video mới
-            </CardTitle>
-            <CardDescription>
-              Khám phá các dịch vụ AI video của chúng tôi
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="relative">
-            <Button asChild className="rounded-full">
-              <Link href="/dashboard/services">
-                Xem dịch vụ
-                <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
+      <div className="grid gap-8 md:grid-cols-7">
+        {/* Recent Orders Section */}
+        <div className="md:col-span-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold tracking-tight">Đơn hàng gần đây</h2>
+            <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
+              <Link href="/dashboard/orders">
+                Xem tất cả <HugeiconsIcon icon={ArrowRight} className="ml-1 h-4 w-4" />
               </Link>
             </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="group">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <CardHeader className="relative">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-              <HugeiconsIcon icon={TrendingUp} className="h-7 w-7 text-primary" />
-            </div>
-            <CardTitle className="group-hover:text-primary transition-colors">
-              Nạp thêm Xu
-            </CardTitle>
-            <CardDescription>
-              Liên hệ Admin để nạp Xu vào tài khoản
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="relative">
-            <Button variant="outline" asChild className="rounded-full">
-              <Link href="/dashboard/wallet">
-                Xem ví của bạn
-                <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Orders */}
-      <Card className="group">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <CardHeader className="relative flex flex-row items-center justify-between">
-          <div>
-            <CardTitle>Đơn hàng gần đây</CardTitle>
-            <CardDescription>Các đơn hàng mới nhất của bạn</CardDescription>
           </div>
-          <Button variant="ghost" size="sm" asChild className="rounded-full">
-            <Link href="/dashboard/orders">
-              Xem tất cả
-              <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </CardHeader>
-        <CardContent className="relative">
-          {recentOrders && recentOrders.length > 0 ? (
-            <div className="space-y-4">
-              {recentOrders.map((order) => (
-                <div
-                  key={order.id}
-                  className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-background hover:bg-muted/50 transition-all duration-300"
-                >
-                  <div className="space-y-1">
-                    <p className="font-medium">{(order.services as { name: string })?.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(order.created_at)}
-                    </p>
+
+          <Card className="border-none shadow-none bg-transparent">
+             <div className="space-y-3">
+              {recentOrders && recentOrders.length > 0 ? (
+                recentOrders.map((order) => (
+                  <div
+                    key={order.id}
+                    className="group flex items-center justify-between p-4 rounded-2xl border bg-card hover:border-primary/20 hover:shadow-sm transition-all duration-200"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <HugeiconsIcon icon={Sparkles} className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="font-medium">{(order.services as { name: string })?.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatDate(order.created_at)}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-medium text-muted-foreground hidden sm:inline-block">
+                        {formatXu(order.total_cost)} Xu
+                      </span>
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${statusLabels[order.status].className}`}>
+                        {statusLabels[order.status].label}
+                      </span>
+                      <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Link href={`/dashboard/orders/${order.id}`}>
+                           <HugeiconsIcon icon={ArrowRight} className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm font-medium">
-                      {formatXu(order.total_cost)} Xu
-                    </span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusLabels[order.status].color}`}>
-                      {statusLabels[order.status].label}
-                    </span>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center rounded-2xl border border-dashed">
+                  <div className="h-12 w-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+                    <HugeiconsIcon icon={ShoppingBag} className="h-6 w-6 text-muted-foreground" />
                   </div>
+                  <h3 className="font-medium">Chưa có đơn hàng nào</h3>
+                  <p className="text-sm text-muted-foreground max-w-[250px] mt-1 mb-4">
+                    Hãy tạo đơn hàng đầu tiên để bắt đầu trải nghiệm dịch vụ.
+                  </p>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="/dashboard/services">Khám phá dịch vụ</Link>
+                  </Button>
                 </div>
-              ))}
+              )}
             </div>
-          ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              <HugeiconsIcon icon={ShoppingBag} className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>Bạn chưa có đơn hàng nào</p>
-              <Button asChild className="mt-4 rounded-full">
-                <Link href="/dashboard/services">Tạo đơn hàng đầu tiên</Link>
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+          </Card>
+        </div>
+
+        {/* Side Actions */}
+        <div className="md:col-span-2 space-y-4">
+           <h2 className="text-lg font-semibold tracking-tight">Tiện ích</h2>
+           <Card className="p-0 overflow-hidden border-none shadow-none bg-transparent space-y-4">
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10">
+                <div className="flex items-start justify-between mb-4">
+                   <div className="h-10 w-10 rounded-xl bg-background/80 backdrop-blur flex items-center justify-center text-primary shadow-sm">
+                      <HugeiconsIcon icon={Wallet} className="h-5 w-5" />
+                   </div>
+                   <Button variant="secondary" size="sm" asChild className="h-8 text-xs bg-background/50 hover:bg-background">
+                      <Link href="/dashboard/wallet">Nạp ngay</Link>
+                   </Button>
+                </div>
+                <h3 className="font-semibold text-primary mb-1">Cần thêm Xu?</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Nạp thêm Xu để tiếp tục sử dụng các dịch vụ tạo video chất lượng cao.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl border bg-card hover:border-primary/20 transition-colors">
+                 <h3 className="font-medium mb-1">Hỗ trợ</h3>
+                 <p className="text-xs text-muted-foreground mb-3">
+                   Gặp vấn đề? Liên hệ ngay với đội ngũ hỗ trợ của chúng tôi.
+                 </p>
+                 <Button variant="outline" size="sm" className="w-full text-xs">
+                   Liên hệ Admin
+                 </Button>
+              </div>
+           </Card>
+        </div>
+      </div>
     </div>
   )
 }

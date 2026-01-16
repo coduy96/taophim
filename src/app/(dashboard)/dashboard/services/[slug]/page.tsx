@@ -10,7 +10,8 @@ import {
   ArrowLeft01Icon as ArrowLeft, 
   Coins01Icon as Coins, 
   SparklesIcon as Sparkles, 
-  InformationCircleIcon as Info 
+  InformationCircleIcon as Info,
+  CheckmarkCircle02Icon as CheckCircle
 } from "@hugeicons/core-free-icons"
 import Image from "next/image"
 
@@ -51,90 +52,112 @@ export default async function ServiceDetailPage({
   const hasEnoughBalance = (profile?.xu_balance || 0) >= service.base_cost
 
   return (
-    <div className="space-y-6">
-      {/* Back Button */}
-      <Button variant="ghost" size="sm" asChild>
-        <Link href="/dashboard/services">
-          <HugeiconsIcon icon={ArrowLeft} className="mr-2 h-4 w-4" />
-          Quay lại danh sách dịch vụ
-        </Link>
-      </Button>
+    <div className="max-w-6xl mx-auto space-y-8 pb-10">
+      {/* Header Section */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
+          <span>/</span>
+          <Link href="/dashboard/services" className="hover:text-foreground transition-colors">Dịch vụ</Link>
+          <span>/</span>
+          <span className="text-foreground font-medium">{service.name}</span>
+        </div>
+        
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">{service.name}</h1>
+            <p className="text-muted-foreground mt-2 max-w-2xl text-lg">
+              {service.description || "Dịch vụ tạo video AI chuyên nghiệp"}
+            </p>
+          </div>
+          <Button variant="outline" size="sm" asChild className="hidden md:flex">
+            <Link href="/dashboard/services">
+              <HugeiconsIcon icon={ArrowLeft} className="mr-2 h-4 w-4" />
+              Quay lại
+            </Link>
+          </Button>
+        </div>
+      </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Service Info */}
-        <div className="lg:col-span-1 space-y-4">
-          <Card className="group">
-            {/* Hover overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-            
-            {/* Cover Image */}
-            <div className="aspect-video relative bg-gradient-to-br from-primary/20 to-primary/5 overflow-hidden rounded-t-3xl">
+      <div className="grid gap-8 lg:grid-cols-3">
+        {/* Left Column: Service Info & Cost */}
+        <div className="lg:col-span-1 space-y-6">
+          <Card className="overflow-hidden border-border/50 shadow-sm">
+            <div className="aspect-video relative bg-muted/30">
               {service.cover_image ? (
                 <Image
                   src={service.cover_image}
                   alt={service.name}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform hover:scale-105 duration-500"
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <HugeiconsIcon icon={Sparkles} className="h-16 w-16 text-primary/30" />
+                  <HugeiconsIcon icon={Sparkles} className="h-12 w-12 text-muted-foreground/20" />
                 </div>
               )}
             </div>
-            <CardHeader className="relative">
-              <CardTitle className="text-2xl">{service.name}</CardTitle>
-              <CardDescription className="text-base">
-                {service.description || "Dịch vụ tạo video AI chuyên nghiệp"}
-              </CardDescription>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg">Chi phí dịch vụ</CardTitle>
             </CardHeader>
-            <CardContent className="relative space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-primary/10 border border-primary/20">
-                <span className="text-sm font-medium">Chi phí:</span>
-                <Badge className="text-lg px-3 py-1 bg-primary text-primary-foreground rounded-full">
-                  <HugeiconsIcon icon={Coins} className="mr-1 h-4 w-4" />
-                  {formatXu(service.base_cost)} Xu
-                </Badge>
-              </div>
-
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-muted/50 border border-border/50">
-                <span className="text-sm font-medium">Số dư của bạn:</span>
-                <span className={`font-bold ${hasEnoughBalance ? 'text-green-600' : 'text-red-600'}`}>
-                  {formatXu(profile?.xu_balance || 0)} Xu
-                </span>
-              </div>
-
-              {!hasEnoughBalance && (
-                <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-                  <div className="flex items-start gap-3">
-                    <HugeiconsIcon icon={Info} className="h-5 w-5 text-red-600 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-red-800 dark:text-red-300">Số dư không đủ</p>
-                      <p className="text-sm text-red-600 dark:text-red-400 mt-1">
-                        Bạn cần thêm {formatXu(service.base_cost - (profile?.xu_balance || 0))} Xu để sử dụng dịch vụ này.
-                      </p>
-                      <Button size="sm" variant="outline" className="mt-2 rounded-full" asChild>
-                        <Link href="/dashboard/wallet">Nạp Xu ngay</Link>
-                      </Button>
-                    </div>
-                  </div>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-primary/5 border border-primary/10">
+                <span className="text-sm font-medium text-muted-foreground">Giá mỗi lần tạo</span>
+                <div className="flex items-center gap-1.5">
+                  <HugeiconsIcon icon={Coins} className="h-4 w-4 text-primary" />
+                  <span className="font-bold text-lg text-foreground">{formatXu(service.base_cost)} Xu</span>
                 </div>
-              )}
+              </div>
+
+              <div className="space-y-3 pt-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Số dư hiện tại:</span>
+                  <span className="font-medium">{formatXu(profile?.xu_balance || 0)} Xu</span>
+                </div>
+                
+                {!hasEnoughBalance ? (
+                  <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 space-y-2">
+                    <div className="flex gap-2">
+                      <HugeiconsIcon icon={Info} className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
+                      <p className="text-sm text-red-600 dark:text-red-400 font-medium">Số dư không đủ</p>
+                    </div>
+                    <p className="text-xs text-red-600/80 dark:text-red-400/80 pl-6">
+                      Thiếu {formatXu(service.base_cost - (profile?.xu_balance || 0))} Xu để thực hiện.
+                    </p>
+                    <Button size="sm" variant="destructive" className="w-full mt-2" asChild>
+                      <Link href="/dashboard/wallet">Nạp Xu ngay</Link>
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-500 bg-green-50 dark:bg-green-950/30 p-2.5 rounded-lg border border-green-200 dark:border-green-900/50">
+                    <HugeiconsIcon icon={CheckCircle} className="h-4 w-4" />
+                    <span>Số dư đủ để thực hiện</span>
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
+
+          <div className="bg-muted/30 rounded-xl p-4 text-sm text-muted-foreground space-y-2">
+            <p className="font-medium text-foreground">Lưu ý:</p>
+            <ul className="list-disc list-inside space-y-1 pl-1">
+              <li>Kết quả sẽ được trả về trong vòng 24h.</li>
+              <li>Xu sẽ bị tạm giữ khi tạo đơn và trừ khi hoàn thành.</li>
+              <li>Nếu đơn hàng bị hủy, Xu sẽ được hoàn trả 100%.</li>
+            </ul>
+          </div>
         </div>
 
-        {/* Order Form */}
+        {/* Right Column: Order Form */}
         <div className="lg:col-span-2">
-          <Card className="group">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-            <CardHeader className="relative">
-              <CardTitle>Tạo đơn hàng</CardTitle>
+          <Card className="border-border/50 shadow-sm">
+            <CardHeader>
+              <CardTitle>Thông tin yêu cầu</CardTitle>
               <CardDescription>
-                Điền thông tin bên dưới để tạo đơn hàng. Admin sẽ xử lý và gửi kết quả cho bạn.
+                Điền đầy đủ thông tin bên dưới để Admin xử lý yêu cầu của bạn chính xác nhất.
               </CardDescription>
             </CardHeader>
-            <CardContent className="relative">
+            <CardContent>
               <ServiceOrderForm 
                 service={service} 
                 hasEnoughBalance={hasEnoughBalance}

@@ -178,12 +178,6 @@ function DashboardSidebar() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/profile">
-                    <HugeiconsIcon icon={User} className="mr-2 h-4 w-4" />
-                    Hồ sơ cá nhân
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
                   <Link href="/dashboard/wallet">
                     <HugeiconsIcon icon={History} className="mr-2 h-4 w-4" />
                     Lịch sử giao dịch

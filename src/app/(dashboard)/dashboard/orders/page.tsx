@@ -1,147 +1,10 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Link from "next/link"
+import { OrderList } from "./order-list"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  ShoppingBag01Icon as ShoppingBag, 
-  Time01Icon as Clock, 
-  CheckmarkCircle02Icon as CheckCircle2, 
-  CancelCircleIcon as XCircle,
-  Download01Icon as Download,
-  AlertCircleIcon as AlertCircle
-} from "@hugeicons/core-free-icons"
-
-function formatXu(amount: number): string {
-  return new Intl.NumberFormat('vi-VN').format(amount)
-}
-
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
-
-const statusConfig: Record<string, { 
-  label: string
-  color: string
-  icon: React.ReactNode
-  bgColor: string
-}> = {
-  pending: { 
-    label: "Chờ xử lý", 
-    color: "text-yellow-600", 
-    bgColor: "bg-yellow-100 dark:bg-yellow-900/30",
-    icon: <HugeiconsIcon icon={Clock} className="h-4 w-4" />
-  },
-  processing: { 
-    label: "Đang thực hiện", 
-    color: "text-blue-600",
-    bgColor: "bg-blue-100 dark:bg-blue-900/30",
-    icon: <HugeiconsIcon icon={AlertCircle} className="h-4 w-4" />
-  },
-  completed: { 
-    label: "Hoàn thành", 
-    color: "text-green-600",
-    bgColor: "bg-green-100 dark:bg-green-900/30",
-    icon: <HugeiconsIcon icon={CheckCircle2} className="h-4 w-4" />
-  },
-  cancelled: { 
-    label: "Đã hủy", 
-    color: "text-red-600",
-    bgColor: "bg-red-100 dark:bg-red-900/30",
-    icon: <HugeiconsIcon icon={XCircle} className="h-4 w-4" />
-  },
-}
-
-interface OrderWithService {
-  id: string
-  status: string
-  total_cost: number
-  user_inputs: Record<string, unknown>
-  admin_output: { result_url?: string } | null
-  admin_note: string | null
-  created_at: string
-  updated_at: string
-  services: {
-    name: string
-    slug: string
-  }
-}
-
-function OrderCard({ order }: { order: OrderWithService }) {
-  const status = statusConfig[order.status]
-  
-  return (
-    <Card className="group">
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-      
-      {/* Status indicator bar */}
-      <div className={`h-1.5 ${status.bgColor} rounded-t-3xl`} />
-      
-      <CardHeader className="relative pb-3">
-        <div className="flex items-start justify-between">
-          <div>
-            <CardTitle className="text-lg group-hover:text-primary transition-colors">{order.services.name}</CardTitle>
-            <CardDescription>
-              Mã đơn: {order.id.slice(0, 8)}...
-            </CardDescription>
-          </div>
-          <Badge className={`${status.color} ${status.bgColor} border-0 rounded-full px-3`}>
-            {status.icon}
-            <span className="ml-1">{status.label}</span>
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="relative space-y-4">
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Chi phí:</span>
-          <span className="font-medium">{formatXu(order.total_cost)} Xu</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Ngày tạo:</span>
-          <span>{formatDate(order.created_at)}</span>
-        </div>
-        
-        {order.admin_note && (
-          <div className="p-4 rounded-2xl bg-muted/50 border border-border/50 text-sm">
-            <p className="font-medium mb-1">Ghi chú từ Admin:</p>
-            <p className="text-muted-foreground">{order.admin_note}</p>
-          </div>
-        )}
-
-        {order.status === 'completed' && order.admin_output?.result_url && (
-          <Button className="w-full rounded-full" asChild>
-            <a href={order.admin_output.result_url} target="_blank" rel="noopener noreferrer">
-              <HugeiconsIcon icon={Download} className="mr-2 h-4 w-4" />
-              Tải video kết quả
-            </a>
-          </Button>
-        )}
-
-        {order.status === 'pending' && (
-          <div className="p-4 rounded-2xl bg-yellow-50 dark:bg-yellow-900/20 text-sm text-yellow-700 dark:text-yellow-300 border border-yellow-200/50 dark:border-yellow-800/50">
-            <p>Đơn hàng đang chờ Admin xử lý. Bạn sẽ được thông báo khi có kết quả.</p>
-          </div>
-        )}
-
-        {order.status === 'processing' && (
-          <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-sm text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
-            <p>Admin đang thực hiện đơn hàng của bạn. Vui lòng chờ...</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  )
-}
+import { ShoppingBag01Icon as ShoppingBag } from "@hugeicons/core-free-icons"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default async function OrdersPage() {
   const supabase = await createClient()
@@ -150,7 +13,7 @@ export default async function OrdersPage() {
   if (!user) redirect('/login')
 
   // Fetch all orders
-  const { data: orders } = await supabase
+  const { data: orders, error } = await supabase
     .from('orders')
     .select(`
       *,
@@ -159,116 +22,37 @@ export default async function OrdersPage() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  const allOrders = (orders || []) as unknown as OrderWithService[]
-  const pendingOrders = allOrders.filter(o => o.status === 'pending' || o.status === 'processing')
-  const completedOrders = allOrders.filter(o => o.status === 'completed')
-  const cancelledOrders = allOrders.filter(o => o.status === 'cancelled')
+  if (error) {
+    console.error("Error fetching orders:", error)
+    // You might want to show an error state here
+  }
+
+  // Type casting to match the interface expected by OrderList
+  // In a real app, you'd use generated types
+  const typedOrders = (orders || []) as any[] 
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <HugeiconsIcon icon={ShoppingBag} className="h-6 w-6 text-primary" />
-            </div>
-            Đơn hàng của bạn
+            Lịch sử đơn hàng
           </h1>
           <p className="text-muted-foreground mt-2">
-            Theo dõi trạng thái và tải kết quả đơn hàng.
+            Quản lý và theo dõi trạng thái các video AI của bạn.
           </p>
         </div>
-        <Button asChild className="rounded-full">
+        <Button asChild className="rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
           <Link href="/dashboard/services">
+            <HugeiconsIcon icon={ShoppingBag} className="mr-2 h-4 w-4" />
             Tạo đơn mới
           </Link>
         </Button>
       </div>
 
-      {/* Orders Tabs */}
-      <Tabs defaultValue="all" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 rounded-full p-1">
-          <TabsTrigger value="all" className="gap-2 rounded-full">
-            Tất cả
-            <Badge variant="secondary" className="ml-1 rounded-full">{allOrders.length}</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="pending" className="gap-2 rounded-full">
-            Đang xử lý
-            <Badge variant="secondary" className="ml-1 rounded-full">{pendingOrders.length}</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="completed" className="gap-2 rounded-full">
-            Hoàn thành
-            <Badge variant="secondary" className="ml-1 rounded-full">{completedOrders.length}</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="cancelled" className="gap-2 rounded-full">
-            Đã hủy
-            <Badge variant="secondary" className="ml-1 rounded-full">{cancelledOrders.length}</Badge>
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="all" className="space-y-4">
-          {allOrders.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {allOrders.map((order) => (
-                <OrderCard key={order.id} order={order} />
-              ))}
-            </div>
-          ) : (
-            <EmptyState />
-          )}
-        </TabsContent>
-
-        <TabsContent value="pending" className="space-y-4">
-          {pendingOrders.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {pendingOrders.map((order) => (
-                <OrderCard key={order.id} order={order} />
-              ))}
-            </div>
-          ) : (
-            <EmptyState message="Không có đơn hàng đang xử lý" />
-          )}
-        </TabsContent>
-
-        <TabsContent value="completed" className="space-y-4">
-          {completedOrders.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {completedOrders.map((order) => (
-                <OrderCard key={order.id} order={order} />
-              ))}
-            </div>
-          ) : (
-            <EmptyState message="Chưa có đơn hàng hoàn thành" />
-          )}
-        </TabsContent>
-
-        <TabsContent value="cancelled" className="space-y-4">
-          {cancelledOrders.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {cancelledOrders.map((order) => (
-                <OrderCard key={order.id} order={order} />
-              ))}
-            </div>
-          ) : (
-            <EmptyState message="Không có đơn hàng bị hủy" />
-          )}
-        </TabsContent>
-      </Tabs>
-    </div>
-  )
-}
-
-function EmptyState({ message = "Bạn chưa có đơn hàng nào" }: { message?: string }) {
-  return (
-    <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed border-border/50">
-      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
-        <HugeiconsIcon icon={ShoppingBag} className="w-8 h-8 text-muted-foreground/50" />
-      </div>
-      <p className="text-muted-foreground">{message}</p>
-      <Button asChild className="mt-4 rounded-full">
-        <Link href="/dashboard/services">Khám phá dịch vụ</Link>
-      </Button>
+      {/* Main Content */}
+      <OrderList orders={typedOrders} />
     </div>
   )
 }
