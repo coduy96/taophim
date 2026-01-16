@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { 

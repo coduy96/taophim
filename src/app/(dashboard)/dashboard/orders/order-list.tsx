@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import {
   Table,
   TableBody,
@@ -150,10 +151,13 @@ function FilePreview({ url, label }: { url: string; label: string }) {
           )}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <img 
+          <Image 
             src={url} 
             alt={label}
+            width={400}
+            height={300}
             className="w-full h-full object-cover"
+            unoptimized
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center pb-2">
             <span className="text-white text-xs font-medium">
@@ -411,10 +415,13 @@ function ResultPreview({ url }: { url: string }) {
           Ảnh kết quả
         </h4>
         <div className="relative rounded-2xl overflow-hidden border shadow-xl">
-          <img 
+          <Image 
             src={url}
             alt="Kết quả"
+            width={600}
+            height={400}
             className="w-full object-cover"
+            unoptimized
           />
         </div>
       </div>

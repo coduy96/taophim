@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { toast } from "sonner"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Loading03Icon as Loader2, CreditCardIcon as CreditCard } from "@hugeicons/core-free-icons"
+import { Loading03Icon as Loader2 } from "@hugeicons/core-free-icons"
 
 export function PayOSTopup() {
   const [amount, setAmount] = useState<number>(100)

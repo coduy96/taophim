@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { Profile } from "@/types/database.types"
 
@@ -8,6 +8,7 @@ export function useProfile() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const profileIdRef = useRef<string | null>(null)
 
   useEffect(() => {
     const supabase = createClient()
@@ -29,6 +30,7 @@ export function useProfile() {
 
         if (error) throw error
         setProfile(data)
+        profileIdRef.current = data?.id ?? null
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
@@ -49,7 +51,7 @@ export function useProfile() {
           table: 'profiles',
         },
         (payload) => {
-          if (payload.new && profile && (payload.new as Profile).id === profile.id) {
+          if (payload.new && profileIdRef.current && (payload.new as Profile).id === profileIdRef.current) {
             setProfile(payload.new as Profile)
           }
         }

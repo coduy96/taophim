@@ -28,8 +28,21 @@ export default async function OrdersPage() {
   }
 
   // Type casting to match the interface expected by OrderList
-  // In a real app, you'd use generated types
-  const typedOrders = (orders || []) as any[] 
+  interface OrderWithService {
+    id: string
+    status: string
+    total_cost: number
+    user_inputs: Record<string, unknown>
+    admin_output: { result_url?: string } | null
+    admin_note: string | null
+    created_at: string
+    updated_at: string
+    services: {
+      name: string
+      slug: string
+    }
+  }
+  const typedOrders = (orders || []) as OrderWithService[]
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
