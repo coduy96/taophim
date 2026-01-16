@@ -7,7 +7,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
-import { CheckCircle2, XCircle, Play, Upload } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { 
+  CheckmarkCircle02Icon as CheckCircle2, 
+  CancelCircleIcon as XCircle, 
+  PlayIcon as Play, 
+  Upload01Icon as Upload 
+} from "@hugeicons/core-free-icons"
 import { createClient } from "@/lib/supabase/client"
 
 interface OrderActionFormProps {
@@ -144,7 +150,7 @@ export function OrderActionForm({ orderId, currentStatus }: OrderActionFormProps
           {isLoading && action === 'start' ? (
             <Spinner className="mr-2 h-4 w-4" />
           ) : (
-            <Play className="mr-2 h-4 w-4" />
+            <HugeiconsIcon icon={Play} className="mr-2 h-4 w-4" />
           )}
           Bắt đầu xử lý
         </Button>
@@ -164,12 +170,12 @@ export function OrderActionForm({ orderId, currentStatus }: OrderActionFormProps
               />
               {resultFile ? (
                 <div className="flex items-center justify-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <HugeiconsIcon icon={CheckCircle2} className="h-5 w-5 text-green-500" />
                   <span className="font-medium truncate">{resultFile.name}</span>
                 </div>
               ) : (
                 <div className="space-y-1">
-                  <Upload className="h-6 w-6 mx-auto text-muted-foreground" />
+                  <HugeiconsIcon icon={Upload} className="h-6 w-6 mx-auto text-muted-foreground" />
                   <p className="text-sm text-muted-foreground">
                     Click để tải lên kết quả
                   </p>
@@ -198,7 +204,7 @@ export function OrderActionForm({ orderId, currentStatus }: OrderActionFormProps
               {isLoading && action === 'complete' ? (
                 <Spinner className="mr-2 h-4 w-4" />
               ) : (
-                <CheckCircle2 className="mr-2 h-4 w-4" />
+                <HugeiconsIcon icon={CheckCircle2} className="mr-2 h-4 w-4" />
               )}
               Hoàn thành
             </Button>
@@ -211,7 +217,7 @@ export function OrderActionForm({ orderId, currentStatus }: OrderActionFormProps
               {isLoading && action === 'cancel' ? (
                 <Spinner className="mr-2 h-4 w-4" />
               ) : (
-                <XCircle className="mr-2 h-4 w-4" />
+                <HugeiconsIcon icon={XCircle} className="mr-2 h-4 w-4" />
               )}
               Hủy đơn
             </Button>

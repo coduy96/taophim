@@ -5,14 +5,15 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { 
-  ShoppingBag, 
-  Clock, 
-  CheckCircle2, 
-  XCircle,
-  Download,
-  AlertCircle
-} from "lucide-react"
+  ShoppingBag01Icon as ShoppingBag, 
+  Time01Icon as Clock, 
+  CheckmarkCircle02Icon as CheckCircle2, 
+  CancelCircleIcon as XCircle,
+  Download01Icon as Download,
+  AlertCircleIcon as AlertCircle
+} from "@hugeicons/core-free-icons"
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -38,25 +39,25 @@ const statusConfig: Record<string, {
     label: "Chờ xử lý", 
     color: "text-yellow-600", 
     bgColor: "bg-yellow-100 dark:bg-yellow-900/30",
-    icon: <Clock className="h-4 w-4" />
+    icon: <HugeiconsIcon icon={Clock} className="h-4 w-4" />
   },
   processing: { 
     label: "Đang thực hiện", 
     color: "text-blue-600",
     bgColor: "bg-blue-100 dark:bg-blue-900/30",
-    icon: <AlertCircle className="h-4 w-4" />
+    icon: <HugeiconsIcon icon={AlertCircle} className="h-4 w-4" />
   },
   completed: { 
     label: "Hoàn thành", 
     color: "text-green-600",
     bgColor: "bg-green-100 dark:bg-green-900/30",
-    icon: <CheckCircle2 className="h-4 w-4" />
+    icon: <HugeiconsIcon icon={CheckCircle2} className="h-4 w-4" />
   },
   cancelled: { 
     label: "Đã hủy", 
     color: "text-red-600",
     bgColor: "bg-red-100 dark:bg-red-900/30",
-    icon: <XCircle className="h-4 w-4" />
+    icon: <HugeiconsIcon icon={XCircle} className="h-4 w-4" />
   },
 }
 
@@ -120,7 +121,7 @@ function OrderCard({ order }: { order: OrderWithService }) {
         {order.status === 'completed' && order.admin_output?.result_url && (
           <Button className="w-full rounded-full" asChild>
             <a href={order.admin_output.result_url} target="_blank" rel="noopener noreferrer">
-              <Download className="mr-2 h-4 w-4" />
+              <HugeiconsIcon icon={Download} className="mr-2 h-4 w-4" />
               Tải video kết quả
             </a>
           </Button>
@@ -170,7 +171,7 @@ export default async function OrdersPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <ShoppingBag className="h-6 w-6 text-primary" />
+              <HugeiconsIcon icon={ShoppingBag} className="h-6 w-6 text-primary" />
             </div>
             Đơn hàng của bạn
           </h1>
@@ -262,7 +263,7 @@ function EmptyState({ message = "Bạn chưa có đơn hàng nào" }: { message?
   return (
     <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed border-border/50">
       <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
-        <ShoppingBag className="w-8 h-8 text-muted-foreground/50" />
+        <HugeiconsIcon icon={ShoppingBag} className="w-8 h-8 text-muted-foreground/50" />
       </div>
       <p className="text-muted-foreground">{message}</p>
       <Button asChild className="mt-4 rounded-full">

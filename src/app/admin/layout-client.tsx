@@ -27,15 +27,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { 
-  LayoutDashboard, 
-  ShoppingBag, 
-  Users,
-  LogOut,
-  Shield,
-  ChevronUp,
-  Sparkles
-} from "lucide-react"
+  DashboardSquare01Icon as LayoutDashboard, 
+  ShoppingBag01Icon as ShoppingBag, 
+  UserGroupIcon as Users,
+  Logout01Icon as LogOut,
+  Shield01Icon as Shield,
+  ArrowUp01Icon as ChevronUp,
+  SparklesIcon as Sparkles
+} from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
 
@@ -74,7 +75,7 @@ function AdminSidebar() {
             <SidebarMenuButton size="lg" asChild>
               <Link href="/admin">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-red-500 text-white">
-                  <Shield className="size-4" />
+                  <HugeiconsIcon icon={Shield} className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Admin Panel</span>
@@ -95,7 +96,7 @@ function AdminSidebar() {
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton asChild isActive={pathname === item.href}>
                     <Link href={item.href}>
-                      <item.icon className="h-4 w-4" />
+                      <HugeiconsIcon icon={item.icon} className="h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -128,7 +129,7 @@ function AdminSidebar() {
                   <Badge variant="outline" className="ml-auto border-red-200 text-red-600 text-xs">
                     Admin
                   </Badge>
-                  <ChevronUp className="ml-auto size-4" />
+                  <HugeiconsIcon icon={ChevronUp} className="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -154,7 +155,7 @@ function AdminSidebar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard">
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <HugeiconsIcon icon={LayoutDashboard} className="mr-2 h-4 w-4" />
                     User Dashboard
                   </Link>
                 </DropdownMenuItem>
@@ -163,7 +164,7 @@ function AdminSidebar() {
                   className="text-destructive focus:text-destructive"
                   onClick={() => logout()}
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <HugeiconsIcon icon={LogOut} className="mr-2 h-4 w-4" />
                   Đăng xuất
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -187,7 +188,7 @@ export function AdminLayoutClient({
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-red-50/50 dark:bg-red-950/20">
           <SidebarTrigger className="-ml-1" />
           <Badge variant="outline" className="border-red-200 text-red-600">
-            <Shield className="mr-1 h-3 w-3" />
+            <HugeiconsIcon icon={Shield} className="mr-1 h-3 w-3" />
             Admin Mode
           </Badge>
         </header>

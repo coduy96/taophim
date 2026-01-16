@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono, Figtree } from "next/font/google"
+import { Geist, Geist_Mono, Inter } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
-const figtree = Figtree({ subsets: ['latin'], variable: '--font-sans' })
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="vi" className={`${figtree.variable} dark`} suppressHydrationWarning>
+    <html lang="vi" className={`${inter.variable} dark`} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background`}
       >

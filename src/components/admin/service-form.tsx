@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
-import { Plus, Trash2, GripVertical } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { PlusSignIcon as Plus, Delete02Icon as Trash2, Drag01Icon as GripVertical } from "@hugeicons/core-free-icons"
 import { createClient } from "@/lib/supabase/client"
 import { Service, FormConfig, FormField } from "@/types/database.types"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -237,7 +238,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
             </p>
           </div>
           <Button type="button" variant="outline" size="sm" onClick={addField}>
-            <Plus className="mr-2 h-4 w-4" />
+            <HugeiconsIcon icon={Plus} className="mr-2 h-4 w-4" />
             Thêm trường
           </Button>
         </div>
@@ -247,7 +248,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
             {fields.map((field, index) => (
               <div key={field.id} className="flex gap-3 p-4 rounded-lg border bg-muted/30">
                 <div className="flex items-center">
-                  <GripVertical className="h-5 w-5 text-muted-foreground" />
+                  <HugeiconsIcon icon={GripVertical} className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <div className="flex-1 grid gap-3 md:grid-cols-4">
                   <div className="space-y-1">
@@ -298,7 +299,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
                       size="icon"
                       onClick={() => removeField(index)}
                     >
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <HugeiconsIcon icon={Trash2} className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
                 </div>

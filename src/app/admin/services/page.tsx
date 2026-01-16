@@ -4,7 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Plus, Sparkles, Edit, Film } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { 
+  PlusSignIcon as Plus, 
+  SparklesIcon as Sparkles, 
+  Edit02Icon as Edit, 
+  Film01Icon as Film 
+} from "@hugeicons/core-free-icons"
 import Image from "next/image"
 
 function formatXu(amount: number): string {
@@ -59,18 +65,18 @@ export default async function AdminServicesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <Sparkles className="h-6 w-6 text-primary" />
-            </div>
-            Quản lý dịch vụ
-          </h1>
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <HugeiconsIcon icon={Sparkles} className="h-6 w-6 text-primary" />
+          </div>
+          Quản lý dịch vụ
+        </h1>
           <p className="text-muted-foreground mt-2">
             Thêm, sửa, xóa các dịch vụ AI Video.
           </p>
         </div>
         <Button asChild className="rounded-full">
           <Link href="/admin/services/new">
-            <Plus className="mr-2 h-4 w-4" />
+            <HugeiconsIcon icon={Plus} className="mr-2 h-4 w-4" />
             Thêm dịch vụ
           </Link>
         </Button>
@@ -95,7 +101,7 @@ export default async function AdminServicesPage() {
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
-                    <Film className="w-12 h-12 text-primary/20" />
+                    <HugeiconsIcon icon={Film} className="w-12 h-12 text-primary/20" />
                   </div>
                 )}
                 <div className="absolute top-4 right-4 z-10">
@@ -129,7 +135,7 @@ export default async function AdminServicesPage() {
                 <div className="flex gap-2">
                   <Button size="sm" variant="outline" className="flex-1 rounded-full" asChild>
                     <Link href={`/admin/services/${service.id}`}>
-                      <Edit className="mr-2 h-4 w-4" />
+                      <HugeiconsIcon icon={Edit} className="mr-2 h-4 w-4" />
                       Sửa
                     </Link>
                   </Button>
@@ -141,7 +147,7 @@ export default async function AdminServicesPage() {
       ) : (
         <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed border-border/50">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
-            <Sparkles className="w-8 h-8 text-muted-foreground/50" />
+            <HugeiconsIcon icon={Sparkles} className="w-8 h-8 text-muted-foreground/50" />
           </div>
           <h3 className="text-xl font-semibold mb-2">Chưa có dịch vụ nào</h3>
           <p className="text-muted-foreground max-w-sm mx-auto mb-4">
@@ -149,7 +155,7 @@ export default async function AdminServicesPage() {
           </p>
           <Button asChild className="rounded-full">
             <Link href="/admin/services/new">
-              <Plus className="mr-2 h-4 w-4" />
+              <HugeiconsIcon icon={Plus} className="mr-2 h-4 w-4" />
               Thêm dịch vụ
             </Link>
           </Button>

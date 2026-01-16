@@ -9,7 +9,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
-import { Mail, Lock, Eye, EyeOff, User } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { 
+  Mail01Icon as Mail, 
+  LockIcon as Lock, 
+  ViewIcon as Eye, 
+  ViewOffIcon as EyeOff, 
+  UserIcon as User 
+} from "@hugeicons/core-free-icons"
 import { register } from "../actions"
 
 export default function RegisterPage() {
@@ -69,7 +76,7 @@ export default function RegisterPage() {
             <div className="space-y-2">
               <Label htmlFor="fullName">Họ và tên</Label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <HugeiconsIcon icon={User} className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="fullName"
                   name="fullName"
@@ -84,7 +91,7 @@ export default function RegisterPage() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <HugeiconsIcon icon={Mail} className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   name="email"
@@ -99,7 +106,7 @@ export default function RegisterPage() {
             <div className="space-y-2">
               <Label htmlFor="password">Mật khẩu</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <HugeiconsIcon icon={Lock} className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
                   name="password"
@@ -114,14 +121,14 @@ export default function RegisterPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <HugeiconsIcon icon={EyeOff} className="h-4 w-4" /> : <HugeiconsIcon icon={Eye} className="h-4 w-4" />}
                 </button>
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <HugeiconsIcon icon={Lock} className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="confirmPassword"
                   name="confirmPassword"

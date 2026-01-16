@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
-import { Coins } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Coins01Icon as Coins } from "@hugeicons/core-free-icons"
 import { createClient } from "@/lib/supabase/client"
 
 export function TopUpUserForm() {
@@ -84,7 +85,7 @@ export function TopUpUserForm() {
         {isLoading ? (
           <Spinner className="mr-2 h-4 w-4" />
         ) : (
-          <Coins className="mr-2 h-4 w-4" />
+          <HugeiconsIcon icon={Coins} className="mr-2 h-4 w-4" />
         )}
         Nạp Xu
       </Button>

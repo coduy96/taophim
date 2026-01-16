@@ -3,15 +3,16 @@ import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
-  Wallet,
-  ShoppingBag,
-  Clock,
-  CheckCircle2,
-  ArrowRight,
-  Sparkles,
-  TrendingUp
-} from "lucide-react"
+  Wallet01Icon as Wallet,
+  ShoppingBag01Icon as ShoppingBag,
+  Time01Icon as Clock,
+  CheckmarkCircle02Icon as CheckCircle2,
+  ArrowRight01Icon as ArrowRight,
+  SparklesIcon as Sparkles,
+  AnalyticsUpIcon as TrendingUp
+} from "@hugeicons/core-free-icons"
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -85,7 +86,7 @@ export default async function DashboardPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Số dư Xu</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Wallet className="h-5 w-5 text-primary" />
+              <HugeiconsIcon icon={Wallet} className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -103,7 +104,7 @@ export default async function DashboardPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng đơn hàng</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <ShoppingBag className="h-5 w-5 text-primary" />
+              <HugeiconsIcon icon={ShoppingBag} className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -119,7 +120,7 @@ export default async function DashboardPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Đang xử lý</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-yellow-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Clock className="h-5 w-5 text-yellow-500" />
+              <HugeiconsIcon icon={Clock} className="h-5 w-5 text-yellow-500" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -135,7 +136,7 @@ export default async function DashboardPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Hoàn thành</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <CheckCircle2 className="h-5 w-5 text-green-500" />
+              <HugeiconsIcon icon={CheckCircle2} className="h-5 w-5 text-green-500" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -153,7 +154,7 @@ export default async function DashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <CardHeader className="relative">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-              <Sparkles className="h-7 w-7 text-primary" />
+              <HugeiconsIcon icon={Sparkles} className="h-7 w-7 text-primary" />
             </div>
             <CardTitle className="group-hover:text-primary transition-colors">
               Tạo video mới
@@ -166,7 +167,7 @@ export default async function DashboardPage() {
             <Button asChild className="rounded-full">
               <Link href="/dashboard/services">
                 Xem dịch vụ
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </CardContent>
@@ -176,7 +177,7 @@ export default async function DashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <CardHeader className="relative">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-              <TrendingUp className="h-7 w-7 text-primary" />
+              <HugeiconsIcon icon={TrendingUp} className="h-7 w-7 text-primary" />
             </div>
             <CardTitle className="group-hover:text-primary transition-colors">
               Nạp thêm Xu
@@ -189,7 +190,7 @@ export default async function DashboardPage() {
             <Button variant="outline" asChild className="rounded-full">
               <Link href="/dashboard/wallet">
                 Xem ví của bạn
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </CardContent>
@@ -207,7 +208,7 @@ export default async function DashboardPage() {
           <Button variant="ghost" size="sm" asChild className="rounded-full">
             <Link href="/dashboard/orders">
               Xem tất cả
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </CardHeader>
@@ -238,7 +239,7 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="text-center py-8 text-muted-foreground">
-              <ShoppingBag className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <HugeiconsIcon icon={ShoppingBag} className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Bạn chưa có đơn hàng nào</p>
               <Button asChild className="mt-4 rounded-full">
                 <Link href="/dashboard/services">Tạo đơn hàng đầu tiên</Link>

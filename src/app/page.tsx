@@ -3,22 +3,23 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
 import { Navbar } from "@/components/layout/navbar"
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
-  Sparkles,
-  ArrowRight,
-  Play,
-  Zap,
-  Shield,
-  Clock,
-  Users,
-  Coins,
-  Wand2,
-  Star,
-  Film,
-  QrCode,
-  Infinity,
-  CreditCard
-} from "lucide-react"
+  SparklesIcon as Sparkles,
+  ArrowRight01Icon as ArrowRight,
+  PlayIcon as Play,
+  FlashIcon as Zap,
+  Shield01Icon as Shield,
+  Time01Icon as Clock,
+  UserGroupIcon as Users,
+  Coins01Icon as Coins,
+  MagicWand01Icon as Wand2,
+  StarIcon as Star,
+  Film01Icon as Film,
+  QrCodeIcon as QrCode,
+  InfinityIcon as Infinity,
+  CreditCardIcon as CreditCard
+} from "@hugeicons/core-free-icons"
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -99,13 +100,13 @@ export default async function LandingPage() {
               <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
                 <Button size="lg" className="h-16 px-8 text-lg rounded-full shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 bg-primary hover:bg-primary/90 border-0" asChild>
                   <Link href={user ? "/dashboard/services" : "/register"}>
-                    <Wand2 className="mr-2 h-6 w-6" />
+                    <HugeiconsIcon icon={Wand2} className="mr-2 h-6 w-6" />
                     Tạo video miễn phí
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="h-16 px-8 text-lg rounded-full border-2 hover:bg-muted/50 hover:text-primary transition-all duration-300 backdrop-blur-sm bg-background/50" asChild>
                   <Link href="#how-it-works">
-                    <Play className="mr-2 h-6 w-6" />
+                    <HugeiconsIcon icon={Play} className="mr-2 h-6 w-6" />
                     Xem demo 1 phút
                   </Link>
                 </Button>
@@ -129,11 +130,11 @@ export default async function LandingPage() {
                 </div>
                 <div className="flex flex-col items-center sm:items-start gap-1">
                   <div className="flex items-center gap-1 text-primary">
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
+                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
+                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
+                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
+                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
+                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
                     <span className="text-foreground font-bold ml-1">5.0</span>
                   </div>
                   <span className="text-muted-foreground">Tin dùng bởi 1000+ creators Việt Nam</span>
@@ -159,7 +160,7 @@ export default async function LandingPage() {
                       <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
                     </div>
                     <div className="ml-auto flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-border/50 text-[10px] font-medium text-muted-foreground/80">
-                      <Wand2 className="w-3 h-3" />
+                      <HugeiconsIcon icon={Wand2} className="w-3 h-3" />
                       <span>Text to Video</span>
                     </div>
                   </div>
@@ -177,7 +178,7 @@ export default async function LandingPage() {
                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
-                          <Play className="w-3 h-3 text-black fill-black ml-0.5" />
+                          <HugeiconsIcon icon={Play} className="w-3 h-3 text-black fill-black ml-0.5" />
                         </div>
                         <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
                           <div className="h-full w-1/3 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary),0.8)]" />
@@ -198,7 +199,7 @@ export default async function LandingPage() {
                     {/* Overlay Elements */}
                     <div className="absolute top-6 right-6 z-20">
                       <div className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20">
-                        <Sparkles className="w-4 h-4 text-primary" />
+                        <HugeiconsIcon icon={Sparkles} className="w-4 h-4 text-primary" />
                       </div>
                     </div>
 
@@ -241,7 +242,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <Zap className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={Zap} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Công nghệ AI Đỉnh Cao</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -255,7 +256,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <Clock className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={Clock} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Tốc độ & Tiện lợi</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -269,7 +270,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <Shield className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={Shield} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Bảo mật Tuyệt đối</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -283,7 +284,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <QrCode className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={QrCode} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Thanh toán VietQR</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -297,7 +298,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <Infinity className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={Infinity} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Xu Không Hết Hạn</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -311,7 +312,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <CreditCard className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={CreditCard} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Không Phí Tháng</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -361,14 +362,14 @@ export default async function LandingPage() {
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
-                        <Film className="w-12 h-12 text-primary/20" />
+                        <HugeiconsIcon icon={Film} className="w-12 h-12 text-primary/20" />
                       </div>
                     )}
 
                     {/* Floating Price Tag */}
                     <div className="absolute top-4 right-4 z-20">
                       <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md border border-white/10 text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg">
-                        <Coins className="w-3.5 h-3.5 text-yellow-400" />
+                        <HugeiconsIcon icon={Coins} className="w-3.5 h-3.5 text-yellow-400" />
                         <span>{formatXu(service.base_cost)} Xu</span>
                       </div>
                     </div>
@@ -376,7 +377,7 @@ export default async function LandingPage() {
                     {/* Play Button Overlay (Hover) */}
                     <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100">
                       <div className="w-14 h-14 rounded-full bg-primary/90 text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/20 backdrop-blur-sm">
-                        <Play className="w-6 h-6 ml-1 fill-current" />
+                        <HugeiconsIcon icon={Play} className="w-6 h-6 ml-1 fill-current" />
                       </div>
                     </div>
                   </div>
@@ -395,10 +396,10 @@ export default async function LandingPage() {
                     <div className="mt-auto pt-4 border-t border-border/50 flex items-center justify-between">
                       <span className="text-sm font-medium text-primary flex items-center gap-1 group/btn">
                         Bắt đầu ngay
-                        <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
+                        <HugeiconsIcon icon={ArrowRight} className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
                       </span>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+                        <HugeiconsIcon icon={Star} className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
                         <span>4.9/5.0</span>
                       </div>
                     </div>
@@ -409,7 +410,7 @@ export default async function LandingPage() {
           ) : (
             <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
-                <Wand2 className="w-8 h-8 text-muted-foreground/50" />
+                <HugeiconsIcon icon={Wand2} className="w-8 h-8 text-muted-foreground/50" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Đang cập nhật dịch vụ</h3>
               <p className="text-muted-foreground max-w-sm mx-auto">
@@ -487,7 +488,7 @@ export default async function LandingPage() {
             <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1" asChild>
               <Link href="/register">
                 Bắt đầu sáng tạo ngay
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <HugeiconsIcon icon={ArrowRight} className="ml-2 w-4 h-4" />
               </Link>
             </Button>
           </div>
@@ -510,10 +511,10 @@ export default async function LandingPage() {
               <div className="flex gap-4">
                 {/* Social Icons Placeholder */}
                 <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
-                  <Users className="w-4 h-4" />
+                  <HugeiconsIcon icon={Users} className="w-4 h-4" />
                 </div>
                 <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
-                  <Film className="w-4 h-4" />
+                  <HugeiconsIcon icon={Film} className="w-4 h-4" />
                 </div>
               </div>
             </div>

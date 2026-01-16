@@ -3,7 +3,8 @@ import { redirect, notFound } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowLeft01Icon as ArrowLeft } from "@hugeicons/core-free-icons"
 import { ServiceForm } from "@/components/admin/service-form"
 
 export default async function EditServicePage({
@@ -44,7 +45,7 @@ export default async function EditServicePage({
       {/* Back Button */}
       <Button variant="ghost" size="sm" asChild>
         <Link href="/admin/services">
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <HugeiconsIcon icon={ArrowLeft} className="mr-2 h-4 w-4" />
           Quay lại danh sách
         </Link>
       </Button>

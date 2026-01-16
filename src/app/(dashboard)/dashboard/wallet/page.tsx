@@ -1,13 +1,14 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { PayOSTopup } from "@/components/wallet/payos-topup"
 import {
-  Wallet,
-  ArrowUpCircle,
-  ArrowDownCircle,
-  Clock
-} from "lucide-react"
+  Wallet01Icon as Wallet,
+  CircleArrowUp01Icon as ArrowUpCircle,
+  CircleArrowDown01Icon as ArrowDownCircle,
+  Time01Icon as Clock
+} from "@hugeicons/core-free-icons"
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -26,17 +27,17 @@ function formatDate(dateString: string): string {
 const transactionTypeLabels: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
   deposit: {
     label: "Nạp Xu",
-    icon: <ArrowUpCircle className="h-4 w-4" />,
+    icon: <HugeiconsIcon icon={ArrowUpCircle} className="h-4 w-4" />,
     color: "text-green-600 bg-green-100 dark:bg-green-900/30"
   },
   expense: {
     label: "Chi tiêu",
-    icon: <ArrowDownCircle className="h-4 w-4" />,
+    icon: <HugeiconsIcon icon={ArrowDownCircle} className="h-4 w-4" />,
     color: "text-red-600 bg-red-100 dark:bg-red-900/30"
   },
   refund: {
     label: "Hoàn tiền",
-    icon: <ArrowUpCircle className="h-4 w-4" />,
+    icon: <HugeiconsIcon icon={ArrowUpCircle} className="h-4 w-4" />,
     color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30"
   },
 }
@@ -82,7 +83,7 @@ export default async function WalletPage() {
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <Wallet className="h-6 w-6 text-primary" />
+            <HugeiconsIcon icon={Wallet} className="h-6 w-6 text-primary" />
           </div>
           Ví Xu
         </h1>
@@ -98,7 +99,7 @@ export default async function WalletPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Số dư khả dụng</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Wallet className="h-5 w-5 text-primary" />
+              <HugeiconsIcon icon={Wallet} className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -118,7 +119,7 @@ export default async function WalletPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng đã nạp</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <ArrowUpCircle className="h-5 w-5 text-green-500" />
+              <HugeiconsIcon icon={ArrowUpCircle} className="h-5 w-5 text-green-500" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -136,7 +137,7 @@ export default async function WalletPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng đã chi</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-red-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <ArrowDownCircle className="h-5 w-5 text-red-500" />
+              <HugeiconsIcon icon={ArrowDownCircle} className="h-5 w-5 text-red-500" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -157,7 +158,7 @@ export default async function WalletPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
         <CardHeader className="relative">
           <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-            <Clock className="h-7 w-7 text-primary" />
+            <HugeiconsIcon icon={Clock} className="h-7 w-7 text-primary" />
           </div>
           <CardTitle className="group-hover:text-primary transition-colors">
             Lịch sử giao dịch
@@ -205,7 +206,7 @@ export default async function WalletPage() {
           ) : (
             <div className="text-center py-16 text-muted-foreground">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
-                <Wallet className="w-8 h-8 text-muted-foreground/50" />
+                <HugeiconsIcon icon={Wallet} className="w-8 h-8 text-muted-foreground/50" />
               </div>
               <p>Chưa có giao dịch nào</p>
               <p className="text-sm mt-1">Các giao dịch sẽ xuất hiện tại đây</p>

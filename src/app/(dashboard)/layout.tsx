@@ -27,16 +27,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
-  LayoutDashboard,
-  ShoppingBag,
-  Wallet,
-  History,
-  User,
-  LogOut,
-  Sparkles,
-  ChevronUp
-} from "lucide-react"
+  DashboardSquare01Icon as LayoutDashboard,
+  ShoppingBag01Icon as ShoppingBag,
+  Wallet01Icon as Wallet,
+  Time02Icon as History,
+  UserIcon as User,
+  Logout01Icon as LogOut,
+  SparklesIcon as Sparkles,
+  ArrowUp01Icon as ChevronUp
+} from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
 
@@ -98,7 +99,7 @@ function DashboardSidebar() {
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton asChild isActive={pathname === item.href}>
                     <Link href={item.href}>
-                      <item.icon className="h-4 w-4" />
+                      <HugeiconsIcon icon={item.icon} className="h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -115,7 +116,7 @@ function DashboardSidebar() {
             <div className="px-2 py-3">
               <div className="rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 p-4">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                  <Wallet className="h-4 w-4" />
+                  <HugeiconsIcon icon={Wallet} className="h-4 w-4" />
                   <span>Khả dụng</span>
                 </div>
                 <div className="text-2xl font-bold text-primary">
@@ -151,7 +152,7 @@ function DashboardSidebar() {
                     <span className="truncate font-semibold">{profile?.full_name || "Người dùng"}</span>
                     <span className="truncate text-xs text-muted-foreground">{profile?.email}</span>
                   </div>
-                  <ChevronUp className="ml-auto size-4" />
+                  <HugeiconsIcon icon={ChevronUp} className="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -177,13 +178,13 @@ function DashboardSidebar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard/profile">
-                    <User className="mr-2 h-4 w-4" />
+                    <HugeiconsIcon icon={User} className="mr-2 h-4 w-4" />
                     Hồ sơ cá nhân
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard/wallet">
-                    <History className="mr-2 h-4 w-4" />
+                    <HugeiconsIcon icon={History} className="mr-2 h-4 w-4" />
                     Lịch sử giao dịch
                   </Link>
                 </DropdownMenuItem>
@@ -192,7 +193,7 @@ function DashboardSidebar() {
                   className="text-destructive focus:text-destructive"
                   onClick={() => logout()}
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <HugeiconsIcon icon={LogOut} className="mr-2 h-4 w-4" />
                   Đăng xuất
                 </DropdownMenuItem>
               </DropdownMenuContent>

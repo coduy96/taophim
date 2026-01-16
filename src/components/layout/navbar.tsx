@@ -4,7 +4,8 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { User } from "@supabase/supabase-js"
-import { Menu, ArrowRight } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Menu01Icon as Menu, ArrowRight01Icon as ArrowRight } from "@hugeicons/core-free-icons"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -88,7 +89,7 @@ export function Navbar({ user }: NavbarProps) {
             >
               <Link href="/dashboard">
                 Vào Dashboard
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           ) : (
@@ -117,7 +118,7 @@ export function Navbar({ user }: NavbarProps) {
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="hover:bg-primary/10">
-                <Menu className="h-6 w-6" />
+                <HugeiconsIcon icon={Menu} className="h-6 w-6" />
                 <span className="sr-only">Menu</span>
               </Button>
             </SheetTrigger>
@@ -146,7 +147,7 @@ export function Navbar({ user }: NavbarProps) {
                     <Button asChild size="lg" className="w-full rounded-full shadow-lg shadow-primary/20">
                       <Link href="/dashboard">
                         Vào Dashboard
-                        <ArrowRight className="ml-2 h-4 w-4" />
+                        <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
                   ) : (

@@ -2,7 +2,13 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Users, Coins, Mail, Calendar } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { 
+  UserGroupIcon as Users, 
+  Coins01Icon as Coins, 
+  Mail01Icon as Mail, 
+  Calendar01Icon as Calendar 
+} from "@hugeicons/core-free-icons"
 import { TopUpUserForm } from "@/components/admin/topup-user-form"
 
 function formatXu(amount: number): string {
@@ -59,7 +65,7 @@ export default async function AdminUsersPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <Users className="h-6 w-6 text-primary" />
+            <HugeiconsIcon icon={Users} className="h-6 w-6 text-primary" />
           </div>
           Quản lý người dùng
         </h1>
@@ -75,7 +81,7 @@ export default async function AdminUsersPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng người dùng</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Users className="h-5 w-5 text-primary" />
+              <HugeiconsIcon icon={Users} className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -88,7 +94,7 @@ export default async function AdminUsersPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng Xu trong hệ thống</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Coins className="h-5 w-5 text-primary" />
+              <HugeiconsIcon icon={Coins} className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -139,7 +145,7 @@ export default async function AdminUsersPage() {
                         )}
                       </p>
                       <p className="text-sm text-muted-foreground flex items-center gap-1">
-                        <Mail className="h-3 w-3" />
+                        <HugeiconsIcon icon={Mail} className="h-3 w-3" />
                         {u.email}
                       </p>
                     </div>
@@ -155,7 +161,7 @@ export default async function AdminUsersPage() {
                     </div>
                     <div className="text-right text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
+                        <HugeiconsIcon icon={Calendar} className="h-3 w-3" />
                         {formatDate(u.created_at)}
                       </div>
                     </div>
@@ -166,7 +172,7 @@ export default async function AdminUsersPage() {
           ) : (
             <div className="text-center py-16 text-muted-foreground">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
-                <Users className="w-8 h-8 text-muted-foreground/50" />
+                <HugeiconsIcon icon={Users} className="w-8 h-8 text-muted-foreground/50" />
               </div>
               <p>Chưa có người dùng nào</p>
             </div>

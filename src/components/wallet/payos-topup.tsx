@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "sonner"
-import { Loader2, CreditCard } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Loading03Icon as Loader2, CreditCardIcon as CreditCard } from "@hugeicons/core-free-icons"
 
 export function PayOSTopup() {
   const [amount, setAmount] = useState<number>(100)
@@ -112,7 +113,7 @@ export function PayOSTopup() {
       
       <CardHeader className="relative">
         <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-          <CreditCard className="h-7 w-7 text-primary" />
+          <HugeiconsIcon icon={CreditCard} className="h-7 w-7 text-primary" />
         </div>
         <CardTitle className="group-hover:text-primary transition-colors">
           Nạp Xu Online (PayOS)
@@ -138,7 +139,7 @@ export function PayOSTopup() {
               className="rounded-xl"
             />
             <Button onClick={handleCreatePayment} disabled={loading || !payosLoaded} className="rounded-full">
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Nạp ngay"}
+              {loading ? <HugeiconsIcon icon={Loader2} className="h-4 w-4 animate-spin" /> : "Nạp ngay"}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">

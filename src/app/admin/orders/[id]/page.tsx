@@ -4,16 +4,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { 
-  ArrowLeft, 
-  Clock, 
-  CheckCircle2, 
-  XCircle,
-  AlertCircle,
-  Download,
-  User,
-  FileText
-} from "lucide-react"
+  ArrowLeft01Icon as ArrowLeft, 
+  Time01Icon as Clock, 
+  CheckmarkCircle02Icon as CheckCircle2, 
+  CancelCircleIcon as XCircle,
+  AlertCircleIcon as AlertCircle,
+  Download01Icon as Download,
+  UserIcon as User,
+  File02Icon as FileText
+} from "@hugeicons/core-free-icons"
 import { OrderActionForm } from "@/components/admin/order-action-form"
 
 function formatXu(amount: number): string {
@@ -40,25 +41,25 @@ const statusConfig: Record<string, {
     label: "Chờ xử lý", 
     color: "text-yellow-600", 
     bgColor: "bg-yellow-100 dark:bg-yellow-900/30",
-    icon: <Clock className="h-4 w-4" />
+    icon: <HugeiconsIcon icon={Clock} className="h-4 w-4" />
   },
   processing: { 
     label: "Đang thực hiện", 
-    color: "text-blue-600",
+    color: "text-blue-600", 
     bgColor: "bg-blue-100 dark:bg-blue-900/30",
-    icon: <AlertCircle className="h-4 w-4" />
+    icon: <HugeiconsIcon icon={AlertCircle} className="h-4 w-4" />
   },
   completed: { 
     label: "Hoàn thành", 
-    color: "text-green-600",
+    color: "text-green-600", 
     bgColor: "bg-green-100 dark:bg-green-900/30",
-    icon: <CheckCircle2 className="h-4 w-4" />
+    icon: <HugeiconsIcon icon={CheckCircle2} className="h-4 w-4" />
   },
   cancelled: { 
     label: "Đã hủy", 
-    color: "text-red-600",
+    color: "text-red-600", 
     bgColor: "bg-red-100 dark:bg-red-900/30",
-    icon: <XCircle className="h-4 w-4" />
+    icon: <HugeiconsIcon icon={XCircle} className="h-4 w-4" />
   },
 }
 
@@ -108,7 +109,7 @@ export default async function AdminOrderDetailPage({
       {/* Back Button */}
       <Button variant="ghost" size="sm" asChild className="rounded-full">
         <Link href="/admin/orders">
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <HugeiconsIcon icon={ArrowLeft} className="mr-2 h-4 w-4" />
           Quay lại danh sách
         </Link>
       </Button>
@@ -118,7 +119,7 @@ export default async function AdminOrderDetailPage({
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <FileText className="h-6 w-6 text-primary" />
+              <HugeiconsIcon icon={FileText} className="h-6 w-6 text-primary" />
             </div>
             Chi tiết đơn hàng
           </h1>
@@ -140,7 +141,7 @@ export default async function AdminOrderDetailPage({
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
             <CardHeader className="relative">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                <FileText className="h-7 w-7 text-primary" />
+                <HugeiconsIcon icon={FileText} className="h-7 w-7 text-primary" />
               </div>
               <CardTitle className="group-hover:text-primary transition-colors">
                 Thông tin dịch vụ
@@ -183,7 +184,7 @@ export default async function AdminOrderDetailPage({
                     {typeof value === 'string' && value.startsWith('http') ? (
                       <Button variant="outline" asChild className="w-fit rounded-full">
                         <a href={value} target="_blank" rel="noopener noreferrer">
-                          <Download className="mr-2 h-4 w-4" />
+                          <HugeiconsIcon icon={Download} className="mr-2 h-4 w-4" />
                           Tải xuống file
                         </a>
                       </Button>
@@ -213,7 +214,7 @@ export default async function AdminOrderDetailPage({
               <CardContent className="relative">
                 <Button asChild className="rounded-full">
                   <a href={adminOutput.result_url} target="_blank" rel="noopener noreferrer">
-                    <Download className="mr-2 h-4 w-4" />
+                    <HugeiconsIcon icon={Download} className="mr-2 h-4 w-4" />
                     Xem kết quả
                   </a>
                 </Button>
@@ -241,7 +242,7 @@ export default async function AdminOrderDetailPage({
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
             <CardHeader className="relative">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                <User className="h-7 w-7 text-primary" />
+                <HugeiconsIcon icon={User} className="h-7 w-7 text-primary" />
               </div>
               <CardTitle className="group-hover:text-primary transition-colors">
                 Thông tin khách hàng

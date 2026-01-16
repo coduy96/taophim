@@ -5,7 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowLeft, Coins, Sparkles, Info } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { 
+  ArrowLeft01Icon as ArrowLeft, 
+  Coins01Icon as Coins, 
+  SparklesIcon as Sparkles, 
+  InformationCircleIcon as Info 
+} from "@hugeicons/core-free-icons"
 import Image from "next/image"
 
 function formatXu(amount: number): string {
@@ -49,7 +55,7 @@ export default async function ServiceDetailPage({
       {/* Back Button */}
       <Button variant="ghost" size="sm" asChild>
         <Link href="/dashboard/services">
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <HugeiconsIcon icon={ArrowLeft} className="mr-2 h-4 w-4" />
           Quay lại danh sách dịch vụ
         </Link>
       </Button>
@@ -72,7 +78,7 @@ export default async function ServiceDetailPage({
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Sparkles className="h-16 w-16 text-primary/30" />
+                  <HugeiconsIcon icon={Sparkles} className="h-16 w-16 text-primary/30" />
                 </div>
               )}
             </div>
@@ -86,7 +92,7 @@ export default async function ServiceDetailPage({
               <div className="flex items-center justify-between p-4 rounded-2xl bg-primary/10 border border-primary/20">
                 <span className="text-sm font-medium">Chi phí:</span>
                 <Badge className="text-lg px-3 py-1 bg-primary text-primary-foreground rounded-full">
-                  <Coins className="mr-1 h-4 w-4" />
+                  <HugeiconsIcon icon={Coins} className="mr-1 h-4 w-4" />
                   {formatXu(service.base_cost)} Xu
                 </Badge>
               </div>
@@ -101,7 +107,7 @@ export default async function ServiceDetailPage({
               {!hasEnoughBalance && (
                 <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
                   <div className="flex items-start gap-3">
-                    <Info className="h-5 w-5 text-red-600 mt-0.5" />
+                    <HugeiconsIcon icon={Info} className="h-5 w-5 text-red-600 mt-0.5" />
                     <div>
                       <p className="font-medium text-red-800 dark:text-red-300">Số dư không đủ</p>
                       <p className="text-sm text-red-600 dark:text-red-400 mt-1">

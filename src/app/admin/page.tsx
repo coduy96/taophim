@@ -3,16 +3,17 @@ import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { 
-  ShoppingBag, 
-  Clock, 
-  CheckCircle2, 
-  Users,
-  TrendingUp,
-  Coins,
-  ArrowRight,
-  AlertCircle
-} from "lucide-react"
+  ShoppingBag01Icon as ShoppingBag, 
+  Time01Icon as Clock, 
+  CheckmarkCircle02Icon as CheckCircle2, 
+  UserGroupIcon as Users,
+  AnalyticsUpIcon as TrendingUp,
+  Coins01Icon as Coins,
+  ArrowRight01Icon as ArrowRight,
+  AlertCircleIcon as AlertCircle
+} from "@hugeicons/core-free-icons"
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -93,7 +94,7 @@ export default async function AdminDashboardPage() {
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <TrendingUp className="h-6 w-6 text-primary" />
+            <HugeiconsIcon icon={TrendingUp} className="h-6 w-6 text-primary" />
           </div>
           Admin Dashboard
         </h1>
@@ -109,7 +110,7 @@ export default async function AdminDashboardPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Đơn chờ xử lý</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-yellow-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Clock className="h-5 w-5 text-yellow-500" />
+              <HugeiconsIcon icon={Clock} className="h-5 w-5 text-yellow-500" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -125,7 +126,7 @@ export default async function AdminDashboardPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Đang thực hiện</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <AlertCircle className="h-5 w-5 text-blue-500" />
+              <HugeiconsIcon icon={AlertCircle} className="h-5 w-5 text-blue-500" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -141,7 +142,7 @@ export default async function AdminDashboardPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng người dùng</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Users className="h-5 w-5 text-primary" />
+              <HugeiconsIcon icon={Users} className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -157,7 +158,7 @@ export default async function AdminDashboardPage() {
           <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Doanh thu</CardTitle>
             <div className="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Coins className="h-5 w-5 text-green-500" />
+              <HugeiconsIcon icon={Coins} className="h-5 w-5 text-green-500" />
             </div>
           </CardHeader>
           <CardContent className="relative">
@@ -175,7 +176,7 @@ export default async function AdminDashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
           <CardHeader className="relative pb-3">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-              <ShoppingBag className="h-7 w-7 text-primary" />
+              <HugeiconsIcon icon={ShoppingBag} className="h-7 w-7 text-primary" />
             </div>
             <CardTitle className="text-lg group-hover:text-primary transition-colors">Xử lý đơn hàng</CardTitle>
             <CardDescription>
@@ -186,7 +187,7 @@ export default async function AdminDashboardPage() {
             <Button asChild className="w-full rounded-full">
               <Link href="/admin/orders">
                 Xem đơn hàng
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </CardContent>
@@ -196,7 +197,7 @@ export default async function AdminDashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
           <CardHeader className="relative pb-3">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-              <TrendingUp className="h-7 w-7 text-primary" />
+              <HugeiconsIcon icon={TrendingUp} className="h-7 w-7 text-primary" />
             </div>
             <CardTitle className="text-lg group-hover:text-primary transition-colors">Quản lý dịch vụ</CardTitle>
             <CardDescription>
@@ -207,7 +208,7 @@ export default async function AdminDashboardPage() {
             <Button variant="outline" asChild className="w-full rounded-full">
               <Link href="/admin/services">
                 Quản lý dịch vụ
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </CardContent>
@@ -217,7 +218,7 @@ export default async function AdminDashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
           <CardHeader className="relative pb-3">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-              <Users className="h-7 w-7 text-primary" />
+              <HugeiconsIcon icon={Users} className="h-7 w-7 text-primary" />
             </div>
             <CardTitle className="text-lg group-hover:text-primary transition-colors">Nạp Xu cho user</CardTitle>
             <CardDescription>
@@ -228,7 +229,7 @@ export default async function AdminDashboardPage() {
             <Button variant="outline" asChild className="w-full rounded-full">
               <Link href="/admin/users">
                 Quản lý người dùng
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </CardContent>
@@ -246,7 +247,7 @@ export default async function AdminDashboardPage() {
           <Button variant="ghost" size="sm" asChild className="rounded-full">
             <Link href="/admin/orders">
               Xem tất cả
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </CardHeader>
@@ -283,7 +284,7 @@ export default async function AdminDashboardPage() {
           ) : (
             <div className="text-center py-12 text-muted-foreground">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4">
-                <CheckCircle2 className="w-8 h-8 text-green-500" />
+                <HugeiconsIcon icon={CheckCircle2} className="w-8 h-8 text-green-500" />
               </div>
               <p>Không có đơn hàng nào cần xử lý</p>
             </div>

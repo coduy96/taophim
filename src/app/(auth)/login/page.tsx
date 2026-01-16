@@ -10,7 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
-import { Mail, Lock, Eye, EyeOff } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Mail01Icon as Mail, LockIcon as Lock, ViewIcon as Eye, ViewOffIcon as EyeOff } from "@hugeicons/core-free-icons"
 import { login } from "../actions"
 
 function LoginForm() {
@@ -64,7 +65,7 @@ function LoginForm() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <HugeiconsIcon icon={Mail} className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   name="email"
@@ -79,7 +80,7 @@ function LoginForm() {
             <div className="space-y-2">
               <Label htmlFor="password">Mật khẩu</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <HugeiconsIcon icon={Lock} className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
                   name="password"
@@ -94,7 +95,7 @@ function LoginForm() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <HugeiconsIcon icon={EyeOff} className="h-4 w-4" /> : <HugeiconsIcon icon={Eye} className="h-4 w-4" />}
                 </button>
               </div>
             </div>

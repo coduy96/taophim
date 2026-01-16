@@ -10,7 +10,14 @@ import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
-import { Upload, X, FileImage, FileVideo, File as FileIcon } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { 
+  Upload01Icon as Upload, 
+  Cancel01Icon as X, 
+  Image01Icon as FileImage, 
+  Video01Icon as FileVideo, 
+  File01Icon as FileIcon 
+} from "@hugeicons/core-free-icons"
 import { createClient } from "@/lib/supabase/client"
 import { Service, FormConfig, FormField } from "@/types/database.types"
 
@@ -69,9 +76,9 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
 
   const getIcon = () => {
     switch (field.type) {
-      case 'image': return <FileImage className="h-8 w-8 text-muted-foreground" />
-      case 'video': return <FileVideo className="h-8 w-8 text-muted-foreground" />
-      default: return <FileIcon className="h-8 w-8 text-muted-foreground" />
+      case 'image': return <HugeiconsIcon icon={FileImage} className="h-8 w-8 text-muted-foreground" />
+      case 'video': return <HugeiconsIcon icon={FileVideo} className="h-8 w-8 text-muted-foreground" />
+      default: return <HugeiconsIcon icon={FileIcon} className="h-8 w-8 text-muted-foreground" />
     }
   }
 
@@ -113,12 +120,12 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
             }}
             disabled={disabled}
           >
-            <X className="h-4 w-4" />
+            <HugeiconsIcon icon={X} className="h-4 w-4" />
           </Button>
         </div>
       ) : (
         <div className="space-y-2">
-          <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+          <HugeiconsIcon icon={Upload} className="h-8 w-8 mx-auto text-muted-foreground" />
           <div>
             <p className="font-medium">Kéo thả hoặc click để tải lên</p>
             <p className="text-sm text-muted-foreground">
