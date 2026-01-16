@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
 import { Navbar } from "@/components/layout/navbar"
@@ -162,11 +163,19 @@ export default async function LandingPage() {
                   </div>
 
                   {/* Content */}
-                  <div className="aspect-video relative bg-zinc-900 group cursor-pointer">
-                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-zinc-900 z-0" />
+                  <div className="aspect-video relative bg-zinc-900 group cursor-pointer overflow-hidden">
+                    <Image
+                      src="/images/landing/long-form-bg.png"
+                      alt="AI Video Editor Interface"
+                      fill
+                      className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      quality={90}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-900/40 to-black/60 z-10" />
 
                     {/* Simulated Waveform/Video Content */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-60">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-60 z-20">
                       <div className="w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
                     </div>
 
@@ -189,8 +198,15 @@ export default async function LandingPage() {
                 <div className="absolute top-20 right-0 transform translate-x-12 translate-y-0 w-[240px] bg-black rounded-[2rem] shadow-2xl overflow-hidden animate-float-delayed z-30 ring-4 ring-black/10 border border-border/20">
                   <div className="relative h-[420px] bg-zinc-900">
                     {/* Image content */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-black/80 z-10" />
-                    <div className="absolute top-[20%] left-[-20%] w-[150%] h-[50%] bg-primary/10 rotate-12 blur-3xl" />
+                    <Image
+                      src="/images/landing/short-form-bg.png"
+                      alt="Viral Short Form Video"
+                      fill
+                      className="object-cover opacity-90"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                      quality={90}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-black/90 z-10" />
 
                     {/* Overlay Elements */}
                     <div className="absolute top-6 right-6 z-20">
@@ -256,7 +272,7 @@ export default async function LandingPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Tốc độ & Tiện lợi</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Quy trình tự động hóa thông minh giúp xử lý đơn hàng thần tốc. Nhận kết quả chỉ trong vòng 24 giờ làm việc.
+                  Hệ thống AI xử lý tự động 24/7 với tốc độ nhanh chóng. Nhận kết quả video 4K chất lượng cao chỉ trong vài giờ.
                 </p>
               </div>
             </div>
@@ -474,7 +490,7 @@ export default async function LandingPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Nhận kết quả</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Thư giãn và đợi thông báo. Video 4K sắc nét sẽ sẵn sàng tải xuống trong vòng 24 giờ.
+                  AI sẽ tự động xử lý và gửi thông báo khi hoàn tất. Video 4K sắc nét sẽ sẵn sàng tải xuống ngay sau khi xử lý xong.
                 </p>
               </div>
             </div>

@@ -245,8 +245,8 @@ export default async function DashboardPage() {
                    Gặp vấn đề? Liên hệ ngay với đội ngũ hỗ trợ của chúng tôi.
                  </p>
                  <Button variant="outline" size="sm" className="w-full text-xs">
-                   Liên hệ Admin
-                 </Button>
+                    Liên hệ Hỗ trợ
+                  </Button>
               </div>
            </Card>
         </div>

@@ -134,7 +134,7 @@ export default async function ServiceDetailPage({
           <div className="bg-muted/30 rounded-xl p-4 text-sm text-muted-foreground space-y-2">
             <p className="font-medium text-foreground">Lưu ý:</p>
             <ul className="list-disc list-inside space-y-1 pl-1">
-              <li>Kết quả sẽ được trả về trong vòng 24h.</li>
+              <li>Kết quả sẽ được AI tạo trong vòng 1-24h.</li>
               <li>Xu sẽ bị tạm giữ khi tạo đơn và trừ khi hoàn thành.</li>
               <li>Nếu đơn hàng bị hủy, Xu sẽ được hoàn trả 100%.</li>
             </ul>
@@ -147,7 +147,7 @@ export default async function ServiceDetailPage({
             <CardHeader>
               <CardTitle>Thông tin yêu cầu</CardTitle>
               <CardDescription>
-                Điền đầy đủ thông tin bên dưới để Admin xử lý yêu cầu của bạn chính xác nhất.
+                Điền đầy đủ thông tin bên dưới để hệ thống AI xử lý yêu cầu của bạn chính xác nhất.
               </CardDescription>
             </CardHeader>
             <CardContent>

@@ -259,7 +259,7 @@ function OrderTimeline({ status, createdAt, updatedAt }: {
     },
     { 
       label: "Đang xử lý", 
-      description: "Admin đang thực hiện",
+      description: "AI đang tạo video",
       step: 2,
       icon: Clock
     },
@@ -728,7 +728,7 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
                       <div className="h-6 w-6 rounded-lg bg-yellow-500/10 flex items-center justify-center">
                         <HugeiconsIcon icon={AlertCircle} className="h-3.5 w-3.5 text-yellow-600" />
                       </div>
-                      Ghi chú từ Admin
+                      Ghi chú từ Hệ thống
                     </h4>
                     <div className="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/10 text-sm border border-yellow-200/50 dark:border-yellow-800/30">
                       <p className="text-yellow-800 dark:text-yellow-200 whitespace-pre-wrap">
@@ -749,12 +749,12 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
                         <p className="font-medium text-blue-800 dark:text-blue-200">
                           {selectedOrder.status === 'pending' 
                             ? "Đơn hàng đang chờ xử lý" 
-                            : "Đang thực hiện video"}
+                            : "AI đang tạo video của bạn"}
                         </p>
                         <p className="text-blue-700/70 dark:text-blue-300/70 mt-1">
                           {selectedOrder.status === 'pending' 
-                            ? "Đơn hàng sẽ được xử lý trong thời gian sớm nhất." 
-                            : "Admin đang thực hiện video của bạn. Bạn sẽ nhận được thông báo khi hoàn tất."}
+                            ? "Hệ thống AI đang xếp hàng yêu cầu của bạn. Thời gian xử lý thường từ 1-24 giờ." 
+                            : "Hệ thống AI đang xử lý video của bạn. Bạn sẽ nhận được thông báo khi hoàn tất."}
                         </p>
                       </div>
                     </div>
