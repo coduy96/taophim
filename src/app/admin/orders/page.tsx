@@ -74,9 +74,9 @@ function OrderRow({ order }: { order: OrderWithDetails }) {
   const status = statusConfig[order.status]
   
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+    <div className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-background hover:bg-muted/50 transition-all duration-300">
       <div className="flex items-center gap-4">
-        <div className={`p-2 rounded-full ${status.bgColor}`}>
+        <div className={`p-2.5 rounded-xl ${status.bgColor}`}>
           {status.icon}
         </div>
         <div>
@@ -91,10 +91,10 @@ function OrderRow({ order }: { order: OrderWithDetails }) {
           <p className="font-medium">{formatXu(order.total_cost)} Xu</p>
           <p className="text-xs text-muted-foreground">{formatDate(order.created_at)}</p>
         </div>
-        <Badge className={`${status.color} ${status.bgColor} border-0`}>
+        <Badge className={`${status.color} ${status.bgColor} border-0 rounded-full px-3`}>
           {status.label}
         </Badge>
-        <Button size="sm" asChild>
+        <Button size="sm" asChild className="rounded-full">
           <Link href={`/admin/orders/${order.id}`}>
             <Eye className="mr-2 h-4 w-4" />
             Xem
@@ -142,36 +142,41 @@ export default async function AdminOrdersPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Quản lý đơn hàng</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <ShoppingBag className="h-6 w-6 text-primary" />
+          </div>
+          Quản lý đơn hàng
+        </h1>
+        <p className="text-muted-foreground mt-2">
           Xem và xử lý tất cả đơn hàng từ người dùng.
         </p>
       </div>
 
       {/* Orders Tabs */}
-      <Tabs defaultValue="pending" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="pending" className="gap-2">
+      <Tabs defaultValue="pending" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5 rounded-full p-1">
+          <TabsTrigger value="pending" className="gap-2 rounded-full">
             Chờ xử lý
             {pendingOrders.length > 0 && (
-              <Badge variant="destructive" className="ml-1">{pendingOrders.length}</Badge>
+              <Badge variant="destructive" className="ml-1 rounded-full">{pendingOrders.length}</Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="processing" className="gap-2">
+          <TabsTrigger value="processing" className="gap-2 rounded-full">
             Đang thực hiện
-            <Badge variant="secondary" className="ml-1">{processingOrders.length}</Badge>
+            <Badge variant="secondary" className="ml-1 rounded-full">{processingOrders.length}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="completed" className="gap-2">
+          <TabsTrigger value="completed" className="gap-2 rounded-full">
             Hoàn thành
-            <Badge variant="secondary" className="ml-1">{completedOrders.length}</Badge>
+            <Badge variant="secondary" className="ml-1 rounded-full">{completedOrders.length}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="cancelled" className="gap-2">
+          <TabsTrigger value="cancelled" className="gap-2 rounded-full">
             Đã hủy
-            <Badge variant="secondary" className="ml-1">{cancelledOrders.length}</Badge>
+            <Badge variant="secondary" className="ml-1 rounded-full">{cancelledOrders.length}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="all" className="gap-2">
+          <TabsTrigger value="all" className="gap-2 rounded-full">
             Tất cả
-            <Badge variant="secondary" className="ml-1">{allOrders.length}</Badge>
+            <Badge variant="secondary" className="ml-1 rounded-full">{allOrders.length}</Badge>
           </TabsTrigger>
         </TabsList>
 
@@ -241,8 +246,10 @@ export default async function AdminOrdersPage() {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="text-center py-12">
-      <ShoppingBag className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
+    <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed border-border/50">
+      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+        <ShoppingBag className="w-8 h-8 text-muted-foreground/50" />
+      </div>
       <p className="text-muted-foreground">{message}</p>
     </div>
   )

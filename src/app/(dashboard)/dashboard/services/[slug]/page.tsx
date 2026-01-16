@@ -57,9 +57,12 @@ export default async function ServiceDetailPage({
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Service Info */}
         <div className="lg:col-span-1 space-y-4">
-          <Card>
+          <Card className="group">
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+            
             {/* Cover Image */}
-            <div className="aspect-video relative bg-gradient-to-br from-primary/20 to-primary/5 overflow-hidden rounded-t-lg">
+            <div className="aspect-video relative bg-gradient-to-br from-primary/20 to-primary/5 overflow-hidden rounded-t-3xl">
               {service.cover_image ? (
                 <Image
                   src={service.cover_image}
@@ -73,22 +76,22 @@ export default async function ServiceDetailPage({
                 </div>
               )}
             </div>
-            <CardHeader>
+            <CardHeader className="relative">
               <CardTitle className="text-2xl">{service.name}</CardTitle>
               <CardDescription className="text-base">
                 {service.description || "Dịch vụ tạo video AI chuyên nghiệp"}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-lg bg-primary/10 border border-primary/20">
+            <CardContent className="relative space-y-4">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-primary/10 border border-primary/20">
                 <span className="text-sm font-medium">Chi phí:</span>
-                <Badge className="text-lg px-3 py-1 bg-primary text-primary-foreground">
+                <Badge className="text-lg px-3 py-1 bg-primary text-primary-foreground rounded-full">
                   <Coins className="mr-1 h-4 w-4" />
                   {formatXu(service.base_cost)} Xu
                 </Badge>
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-lg bg-muted">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-muted/50 border border-border/50">
                 <span className="text-sm font-medium">Số dư của bạn:</span>
                 <span className={`font-bold ${hasEnoughBalance ? 'text-green-600' : 'text-red-600'}`}>
                   {formatXu(profile?.xu_balance || 0)} Xu
@@ -96,7 +99,7 @@ export default async function ServiceDetailPage({
               </div>
 
               {!hasEnoughBalance && (
-                <div className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
                   <div className="flex items-start gap-3">
                     <Info className="h-5 w-5 text-red-600 mt-0.5" />
                     <div>
@@ -104,7 +107,7 @@ export default async function ServiceDetailPage({
                       <p className="text-sm text-red-600 dark:text-red-400 mt-1">
                         Bạn cần thêm {formatXu(service.base_cost - (profile?.xu_balance || 0))} Xu để sử dụng dịch vụ này.
                       </p>
-                      <Button size="sm" variant="outline" className="mt-2" asChild>
+                      <Button size="sm" variant="outline" className="mt-2 rounded-full" asChild>
                         <Link href="/dashboard/wallet">Nạp Xu ngay</Link>
                       </Button>
                     </div>
@@ -117,14 +120,15 @@ export default async function ServiceDetailPage({
 
         {/* Order Form */}
         <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
+          <Card className="group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+            <CardHeader className="relative">
               <CardTitle>Tạo đơn hàng</CardTitle>
               <CardDescription>
                 Điền thông tin bên dưới để tạo đơn hàng. Admin sẽ xử lý và gửi kết quả cho bạn.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative">
               <ServiceOrderForm 
                 service={service} 
                 hasEnoughBalance={hasEnoughBalance}

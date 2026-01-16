@@ -79,13 +79,16 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Số dư Xu</CardTitle>
-            <Wallet className="h-4 w-4 text-primary" />
+            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Wallet className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold text-primary">{formatXu(profile?.xu_balance || 0)}</div>
             {profile && profile.frozen_xu > 0 && (
               <p className="text-xs text-muted-foreground">
@@ -95,12 +98,15 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng đơn hàng</CardTitle>
-            <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <ShoppingBag className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold">{totalOrders || 0}</div>
             <p className="text-xs text-muted-foreground">
               Tất cả đơn hàng của bạn
@@ -108,12 +114,15 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Đang xử lý</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-500" />
+            <div className="w-10 h-10 rounded-2xl bg-yellow-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Clock className="h-5 w-5 text-yellow-500" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold">{pendingOrders || 0}</div>
             <p className="text-xs text-muted-foreground">
               Đơn hàng chờ hoàn thành
@@ -121,12 +130,15 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Hoàn thành</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
+            <div className="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <CheckCircle2 className="h-5 w-5 text-green-500" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold">{completedOrders || 0}</div>
             <p className="text-xs text-muted-foreground">
               Đơn hàng đã xong
@@ -136,12 +148,14 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent" />
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <CardHeader className="relative">
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" />
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+              <Sparkles className="h-7 w-7 text-primary" />
+            </div>
+            <CardTitle className="group-hover:text-primary transition-colors">
               Tạo video mới
             </CardTitle>
             <CardDescription>
@@ -149,7 +163,7 @@ export default async function DashboardPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="relative">
-            <Button asChild>
+            <Button asChild className="rounded-full">
               <Link href="/dashboard/services">
                 Xem dịch vụ
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -158,18 +172,21 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="relative">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+              <TrendingUp className="h-7 w-7 text-primary" />
+            </div>
+            <CardTitle className="group-hover:text-primary transition-colors">
               Nạp thêm Xu
             </CardTitle>
             <CardDescription>
               Liên hệ Admin để nạp Xu vào tài khoản
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button variant="outline" asChild>
+          <CardContent className="relative">
+            <Button variant="outline" asChild className="rounded-full">
               <Link href="/dashboard/wallet">
                 Xem ví của bạn
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -180,26 +197,27 @@ export default async function DashboardPage() {
       </div>
 
       {/* Recent Orders */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <CardHeader className="relative flex flex-row items-center justify-between">
           <div>
             <CardTitle>Đơn hàng gần đây</CardTitle>
             <CardDescription>Các đơn hàng mới nhất của bạn</CardDescription>
           </div>
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" asChild className="rounded-full">
             <Link href="/dashboard/orders">
               Xem tất cả
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           {recentOrders && recentOrders.length > 0 ? (
             <div className="space-y-4">
               {recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                  className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-background hover:bg-muted/50 transition-all duration-300"
                 >
                   <div className="space-y-1">
                     <p className="font-medium">{(order.services as { name: string })?.name}</p>
@@ -211,7 +229,7 @@ export default async function DashboardPage() {
                     <span className="text-sm font-medium">
                       {formatXu(order.total_cost)} Xu
                     </span>
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${statusLabels[order.status].color}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusLabels[order.status].color}`}>
                       {statusLabels[order.status].label}
                     </span>
                   </div>
@@ -222,7 +240,7 @@ export default async function DashboardPage() {
             <div className="text-center py-8 text-muted-foreground">
               <ShoppingBag className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Bạn chưa có đơn hàng nào</p>
-              <Button asChild className="mt-4">
+              <Button asChild className="mt-4 rounded-full">
                 <Link href="/dashboard/services">Tạo đơn hàng đầu tiên</Link>
               </Button>
             </div>

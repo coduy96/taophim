@@ -107,7 +107,7 @@ export default async function AdminOrderDetailPage({
   return (
     <div className="space-y-6">
       {/* Back Button */}
-      <Button variant="ghost" size="sm" asChild>
+      <Button variant="ghost" size="sm" asChild className="rounded-full">
         <Link href="/admin/orders">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Quay lại danh sách
@@ -117,12 +117,17 @@ export default async function AdminOrderDetailPage({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Chi tiết đơn hàng</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+              <FileText className="h-6 w-6 text-primary" />
+            </div>
+            Chi tiết đơn hàng
+          </h1>
+          <p className="text-muted-foreground mt-2">
             Mã đơn: {order.id}
           </p>
         </div>
-        <Badge className={`${status.color} ${status.bgColor} border-0 text-base px-4 py-2`}>
+        <Badge className={`${status.color} ${status.bgColor} border-0 text-base px-4 py-2 rounded-full`}>
           {status.icon}
           <span className="ml-2">{status.label}</span>
         </Badge>
@@ -132,14 +137,17 @@ export default async function AdminOrderDetailPage({
         {/* Order Info */}
         <div className="space-y-6 lg:col-span-2">
           {/* Service Info */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
+          <Card className="group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+            <CardHeader className="relative">
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                <FileText className="h-7 w-7 text-primary" />
+              </div>
+              <CardTitle className="group-hover:text-primary transition-colors">
                 Thông tin dịch vụ
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="relative space-y-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Dịch vụ:</span>
                 <span className="font-medium">{(order.services as { name: string })?.name}</span>
@@ -160,20 +168,21 @@ export default async function AdminOrderDetailPage({
           </Card>
 
           {/* User Inputs */}
-          <Card>
-            <CardHeader>
+          <Card className="group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+            <CardHeader className="relative">
               <CardTitle>Dữ liệu từ khách hàng</CardTitle>
               <CardDescription>
                 Các file và thông tin khách hàng đã gửi
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative">
               <div className="space-y-4">
                 {Object.entries(userInputs).map(([key, value]) => (
-                  <div key={key} className="flex flex-col gap-2 p-4 rounded-lg border bg-muted/50">
+                  <div key={key} className="flex flex-col gap-2 p-4 rounded-2xl border border-border/50 bg-muted/30">
                     <span className="text-sm font-medium capitalize">{key.replace(/_/g, ' ')}</span>
                     {typeof value === 'string' && value.startsWith('http') ? (
-                      <Button variant="outline" asChild className="w-fit">
+                      <Button variant="outline" asChild className="w-fit rounded-full">
                         <a href={value} target="_blank" rel="noopener noreferrer">
                           <Download className="mr-2 h-4 w-4" />
                           Tải xuống file
@@ -197,12 +206,13 @@ export default async function AdminOrderDetailPage({
 
           {/* Admin Output (if exists) */}
           {adminOutput?.result_url && (
-            <Card className="border-green-200 dark:border-green-800">
-              <CardHeader>
+            <Card className="group">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+              <CardHeader className="relative">
                 <CardTitle className="text-green-600">Kết quả đã tải lên</CardTitle>
               </CardHeader>
-              <CardContent>
-                <Button asChild>
+              <CardContent className="relative">
+                <Button asChild className="rounded-full">
                   <a href={adminOutput.result_url} target="_blank" rel="noopener noreferrer">
                     <Download className="mr-2 h-4 w-4" />
                     Xem kết quả
@@ -213,11 +223,12 @@ export default async function AdminOrderDetailPage({
           )}
 
           {order.admin_note && (
-            <Card>
-              <CardHeader>
+            <Card className="group">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+              <CardHeader className="relative">
                 <CardTitle>Ghi chú Admin</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <p className="text-muted-foreground">{order.admin_note}</p>
               </CardContent>
             </Card>
@@ -227,14 +238,17 @@ export default async function AdminOrderDetailPage({
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Customer Info */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
+          <Card className="group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+            <CardHeader className="relative">
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                <User className="h-7 w-7 text-primary" />
+              </div>
+              <CardTitle className="group-hover:text-primary transition-colors">
                 Thông tin khách hàng
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="relative space-y-3">
               <div>
                 <p className="text-sm text-muted-foreground">Họ tên</p>
                 <p className="font-medium">
@@ -256,14 +270,15 @@ export default async function AdminOrderDetailPage({
 
           {/* Actions */}
           {(order.status === 'pending' || order.status === 'processing') && (
-            <Card className="border-primary/20">
-              <CardHeader>
+            <Card className="group">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+              <CardHeader className="relative">
                 <CardTitle>Hành động</CardTitle>
                 <CardDescription>
                   Xử lý đơn hàng này
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <OrderActionForm 
                   orderId={order.id} 
                   currentStatus={order.status}

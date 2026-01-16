@@ -84,20 +84,28 @@ export default async function WalletPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Ví Xu</h1>
+        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <Wallet className="h-6 w-6 text-primary" />
+          </div>
+          Ví Xu
+        </h1>
         <p className="text-muted-foreground">
           Quản lý số dư và lịch sử giao dịch của bạn.
         </p>
       </div>
 
       {/* Balance Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card className="md:col-span-1 border-primary/20 bg-gradient-to-br from-primary/10 to-transparent">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="group md:col-span-1">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Số dư khả dụng</CardTitle>
-            <Wallet className="h-4 w-4 text-primary" />
+            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Wallet className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-3xl font-bold text-primary">
               {formatXu(profile?.xu_balance || 0)} Xu
             </div>
@@ -109,12 +117,15 @@ export default async function WalletPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng đã nạp</CardTitle>
-            <ArrowUpCircle className="h-4 w-4 text-green-500" />
+            <div className="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <ArrowUpCircle className="h-5 w-5 text-green-500" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold text-green-600">
               +{formatXu(totalDeposited)} Xu
             </div>
@@ -124,12 +135,15 @@ export default async function WalletPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng đã chi</CardTitle>
-            <ArrowDownCircle className="h-4 w-4 text-red-500" />
+            <div className="w-10 h-10 rounded-2xl bg-red-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <ArrowDownCircle className="h-5 w-5 text-red-500" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold text-red-600">
               -{formatXu(totalSpent)} Xu
             </div>
@@ -143,17 +157,20 @@ export default async function WalletPage() {
       <PayOSTopup />
 
       {/* Transaction History */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5" />
+      <Card className="group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+        <CardHeader className="relative">
+          <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+            <Clock className="h-7 w-7 text-primary" />
+          </div>
+          <CardTitle className="group-hover:text-primary transition-colors">
             Lịch sử giao dịch
           </CardTitle>
           <CardDescription>
             Tất cả các giao dịch của bạn
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           {transactions && transactions.length > 0 ? (
             <div className="space-y-3">
               {transactions.map((transaction) => {
@@ -161,10 +178,10 @@ export default async function WalletPage() {
                 return (
                   <div
                     key={transaction.id}
-                    className="flex items-center justify-between p-4 rounded-lg border bg-card"
+                    className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-background hover:bg-muted/50 transition-all duration-300"
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`p-2 rounded-full ${typeInfo.color}`}>
+                      <div className={`p-2.5 rounded-xl ${typeInfo.color}`}>
                         {typeInfo.icon}
                       </div>
                       <div>
@@ -190,8 +207,10 @@ export default async function WalletPage() {
               })}
             </div>
           ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              <Wallet className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <div className="text-center py-16 text-muted-foreground">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+                <Wallet className="w-8 h-8 text-muted-foreground/50" />
+              </div>
               <p>Chưa có giao dịch nào</p>
               <p className="text-sm mt-1">Các giao dịch sẽ xuất hiện tại đây</p>
             </div>

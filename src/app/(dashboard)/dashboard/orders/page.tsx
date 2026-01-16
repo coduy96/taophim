@@ -80,23 +80,28 @@ function OrderCard({ order }: { order: OrderWithService }) {
   const status = statusConfig[order.status]
   
   return (
-    <Card className="overflow-hidden">
-      <div className={`h-1 ${status.bgColor}`} />
-      <CardHeader className="pb-3">
+    <Card className="group">
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+      
+      {/* Status indicator bar */}
+      <div className={`h-1.5 ${status.bgColor} rounded-t-3xl`} />
+      
+      <CardHeader className="relative pb-3">
         <div className="flex items-start justify-between">
           <div>
-            <CardTitle className="text-lg">{order.services.name}</CardTitle>
+            <CardTitle className="text-lg group-hover:text-primary transition-colors">{order.services.name}</CardTitle>
             <CardDescription>
               Mã đơn: {order.id.slice(0, 8)}...
             </CardDescription>
           </div>
-          <Badge className={`${status.color} ${status.bgColor} border-0`}>
+          <Badge className={`${status.color} ${status.bgColor} border-0 rounded-full px-3`}>
             {status.icon}
             <span className="ml-1">{status.label}</span>
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="relative space-y-4">
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Chi phí:</span>
           <span className="font-medium">{formatXu(order.total_cost)} Xu</span>
@@ -107,14 +112,14 @@ function OrderCard({ order }: { order: OrderWithService }) {
         </div>
         
         {order.admin_note && (
-          <div className="p-3 rounded-lg bg-muted/50 text-sm">
+          <div className="p-4 rounded-2xl bg-muted/50 border border-border/50 text-sm">
             <p className="font-medium mb-1">Ghi chú từ Admin:</p>
             <p className="text-muted-foreground">{order.admin_note}</p>
           </div>
         )}
 
         {order.status === 'completed' && order.admin_output?.result_url && (
-          <Button className="w-full" asChild>
+          <Button className="w-full rounded-full" asChild>
             <a href={order.admin_output.result_url} target="_blank" rel="noopener noreferrer">
               <Download className="mr-2 h-4 w-4" />
               Tải video kết quả
@@ -123,13 +128,13 @@ function OrderCard({ order }: { order: OrderWithService }) {
         )}
 
         {order.status === 'pending' && (
-          <div className="p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 text-sm text-yellow-700 dark:text-yellow-300">
+          <div className="p-4 rounded-2xl bg-yellow-50 dark:bg-yellow-900/20 text-sm text-yellow-700 dark:text-yellow-300 border border-yellow-200/50 dark:border-yellow-800/50">
             <p>Đơn hàng đang chờ Admin xử lý. Bạn sẽ được thông báo khi có kết quả.</p>
           </div>
         )}
 
         {order.status === 'processing' && (
-          <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-sm text-blue-700 dark:text-blue-300">
+          <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-sm text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
             <p>Admin đang thực hiện đơn hàng của bạn. Vui lòng chờ...</p>
           </div>
         )}
@@ -164,12 +169,17 @@ export default async function OrdersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Đơn hàng của bạn</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+              <ShoppingBag className="h-6 w-6 text-primary" />
+            </div>
+            Đơn hàng của bạn
+          </h1>
+          <p className="text-muted-foreground mt-2">
             Theo dõi trạng thái và tải kết quả đơn hàng.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="rounded-full">
           <Link href="/dashboard/services">
             Tạo đơn mới
           </Link>
@@ -177,29 +187,29 @@ export default async function OrdersPage() {
       </div>
 
       {/* Orders Tabs */}
-      <Tabs defaultValue="all" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="all" className="gap-2">
+      <Tabs defaultValue="all" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4 rounded-full p-1">
+          <TabsTrigger value="all" className="gap-2 rounded-full">
             Tất cả
-            <Badge variant="secondary" className="ml-1">{allOrders.length}</Badge>
+            <Badge variant="secondary" className="ml-1 rounded-full">{allOrders.length}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="pending" className="gap-2">
+          <TabsTrigger value="pending" className="gap-2 rounded-full">
             Đang xử lý
-            <Badge variant="secondary" className="ml-1">{pendingOrders.length}</Badge>
+            <Badge variant="secondary" className="ml-1 rounded-full">{pendingOrders.length}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="completed" className="gap-2">
+          <TabsTrigger value="completed" className="gap-2 rounded-full">
             Hoàn thành
-            <Badge variant="secondary" className="ml-1">{completedOrders.length}</Badge>
+            <Badge variant="secondary" className="ml-1 rounded-full">{completedOrders.length}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="cancelled" className="gap-2">
+          <TabsTrigger value="cancelled" className="gap-2 rounded-full">
             Đã hủy
-            <Badge variant="secondary" className="ml-1">{cancelledOrders.length}</Badge>
+            <Badge variant="secondary" className="ml-1 rounded-full">{cancelledOrders.length}</Badge>
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="space-y-4">
           {allOrders.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {allOrders.map((order) => (
                 <OrderCard key={order.id} order={order} />
               ))}
@@ -211,7 +221,7 @@ export default async function OrdersPage() {
 
         <TabsContent value="pending" className="space-y-4">
           {pendingOrders.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {pendingOrders.map((order) => (
                 <OrderCard key={order.id} order={order} />
               ))}
@@ -223,7 +233,7 @@ export default async function OrdersPage() {
 
         <TabsContent value="completed" className="space-y-4">
           {completedOrders.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {completedOrders.map((order) => (
                 <OrderCard key={order.id} order={order} />
               ))}
@@ -235,7 +245,7 @@ export default async function OrdersPage() {
 
         <TabsContent value="cancelled" className="space-y-4">
           {cancelledOrders.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {cancelledOrders.map((order) => (
                 <OrderCard key={order.id} order={order} />
               ))}
@@ -251,10 +261,12 @@ export default async function OrdersPage() {
 
 function EmptyState({ message = "Bạn chưa có đơn hàng nào" }: { message?: string }) {
   return (
-    <div className="text-center py-12">
-      <ShoppingBag className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
+    <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed border-border/50">
+      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+        <ShoppingBag className="w-8 h-8 text-muted-foreground/50" />
+      </div>
       <p className="text-muted-foreground">{message}</p>
-      <Button asChild className="mt-4">
+      <Button asChild className="mt-4 rounded-full">
         <Link href="/dashboard/services">Khám phá dịch vụ</Link>
       </Button>
     </div>

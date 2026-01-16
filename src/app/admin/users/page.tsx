@@ -57,60 +57,73 @@ export default async function AdminUsersPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Quản lý người dùng</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <Users className="h-6 w-6 text-primary" />
+          </div>
+          Quản lý người dùng
+        </h1>
+        <p className="text-muted-foreground mt-2">
           Xem danh sách và nạp Xu cho người dùng.
         </p>
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng người dùng</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Users className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold">{users?.length || 0}</div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng Xu trong hệ thống</CardTitle>
-            <Coins className="h-4 w-4 text-primary" />
+            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Coins className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold text-primary">{formatXu(totalXu)}</div>
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-          <CardHeader>
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative">
             <CardTitle className="text-sm font-medium">Nạp Xu nhanh</CardTitle>
             <CardDescription>Cộng Xu cho người dùng theo email</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <TopUpUserForm />
           </CardContent>
         </Card>
       </div>
 
       {/* Users List */}
-      <Card>
-        <CardHeader>
+      <Card className="group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+        <CardHeader className="relative">
           <CardTitle>Danh sách người dùng</CardTitle>
           <CardDescription>
             Tất cả người dùng đã đăng ký
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           {users && users.length > 0 ? (
             <div className="space-y-3">
               {users.map((u: Profile) => (
                 <div
                   key={u.id}
-                  className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                  className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-background hover:bg-muted/50 transition-all duration-300"
                 >
                   <div className="flex items-center gap-4">
                     <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -122,7 +135,7 @@ export default async function AdminUsersPage() {
                       <p className="font-medium flex items-center gap-2">
                         {u.full_name || 'Chưa cập nhật'}
                         {u.role === 'admin' && (
-                          <Badge variant="outline" className="text-xs border-red-200 text-red-600">Admin</Badge>
+                          <Badge variant="outline" className="text-xs border-red-200 text-red-600 rounded-full">Admin</Badge>
                         )}
                       </p>
                       <p className="text-sm text-muted-foreground flex items-center gap-1">
@@ -151,8 +164,10 @@ export default async function AdminUsersPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <div className="text-center py-16 text-muted-foreground">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+                <Users className="w-8 h-8 text-muted-foreground/50" />
+              </div>
               <p>Chưa có người dùng nào</p>
             </div>
           )}

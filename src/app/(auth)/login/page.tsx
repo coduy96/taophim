@@ -46,19 +46,20 @@ function LoginForm() {
       </div>
 
       {error && (
-        <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+        <div className="p-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm">
           Đã xảy ra lỗi trong quá trình xác thực. Vui lòng thử lại.
         </div>
       )}
 
-      <Card className="border-border/50 shadow-lg">
-        <CardHeader className="space-y-1 pb-4">
+      <Card className="group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+        <CardHeader className="relative space-y-1 pb-4">
           <CardTitle className="text-xl">Đăng nhập</CardTitle>
           <CardDescription>
             Nhập email và mật khẩu để đăng nhập
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="relative space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -69,7 +70,7 @@ function LoginForm() {
                   name="email"
                   type="email"
                   placeholder="email@example.com"
-                  className="pl-10"
+                  className="pl-10 rounded-xl"
                   required
                   disabled={isLoading}
                 />
@@ -84,7 +85,7 @@ function LoginForm() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="pl-10 pr-10"
+                  className="pl-10 pr-10 rounded-xl"
                   required
                   disabled={isLoading}
                 />
@@ -97,7 +98,7 @@ function LoginForm() {
                 </button>
               </div>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Spinner className="mr-2 h-4 w-4" />
@@ -114,7 +115,7 @@ function LoginForm() {
               <Separator className="w-full" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
+              <span className="bg-background px-2 text-muted-foreground">
                 Hoặc
               </span>
             </div>
@@ -122,7 +123,7 @@ function LoginForm() {
 
           <Button 
             variant="outline" 
-            className="w-full" 
+            className="w-full rounded-full" 
             disabled={isLoading}
             onClick={() => {
               // Google OAuth will be handled here

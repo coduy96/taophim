@@ -100,15 +100,18 @@ export function PayOSTopup() {
   }, [])
 
   return (
-    <Card className="border-primary/20 shadow-md">
+    <Card className="group">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
       <Script 
         src="https://cdn.payos.vn/payos-checkout/v1/stable/payos-initialize.js"
         onLoad={() => setPayosLoaded(true)}
       />
       
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CreditCard className="h-5 w-5 text-primary" />
+      <CardHeader className="relative">
+        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+          <CreditCard className="h-7 w-7 text-primary" />
+        </div>
+        <CardTitle className="group-hover:text-primary transition-colors">
           Nạp Xu Online (PayOS)
         </CardTitle>
         <CardDescription>
@@ -116,7 +119,7 @@ export function PayOSTopup() {
         </CardDescription>
       </CardHeader>
       
-      <CardContent className="space-y-4">
+      <CardContent className="relative space-y-4">
         <div className="space-y-2">
           <Label htmlFor="amount">Số Xu muốn nạp</Label>
           <div className="flex gap-2">
@@ -129,8 +132,9 @@ export function PayOSTopup() {
               onChange={(e) => setAmount(Number(e.target.value))}
               placeholder="Nhập số Xu (min 99)"
               disabled={loading}
+              className="rounded-xl"
             />
-            <Button onClick={handleCreatePayment} disabled={loading || !payosLoaded}>
+            <Button onClick={handleCreatePayment} disabled={loading || !payosLoaded} className="rounded-full">
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Nạp ngay"}
             </Button>
           </div>
@@ -142,7 +146,7 @@ export function PayOSTopup() {
         {/* Embedded Container */}
         <div 
           id="embedded-payment-container" 
-          className="w-full h-[500px] transition-all"
+          className="w-full h-[500px] transition-all rounded-2xl overflow-hidden"
           style={{ display: checkoutUrl ? 'block' : 'none' }}
         >
         </div>

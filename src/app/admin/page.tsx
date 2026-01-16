@@ -95,20 +95,28 @@ export default async function AdminDashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <TrendingUp className="h-6 w-6 text-primary" />
+          </div>
+          Admin Dashboard
+        </h1>
         <p className="text-muted-foreground">
           Tổng quan về hoạt động của hệ thống.
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-yellow-200 dark:border-yellow-800">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Đơn chờ xử lý</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-500" />
+            <div className="w-10 h-10 rounded-2xl bg-yellow-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Clock className="h-5 w-5 text-yellow-500" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold text-yellow-600">{pendingOrders || 0}</div>
             <p className="text-xs text-muted-foreground">
               Cần xử lý ngay
@@ -116,12 +124,15 @@ export default async function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Đang thực hiện</CardTitle>
-            <AlertCircle className="h-4 w-4 text-blue-500" />
+            <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <AlertCircle className="h-5 w-5 text-blue-500" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold text-blue-600">{processingOrders || 0}</div>
             <p className="text-xs text-muted-foreground">
               Đang trong quá trình
@@ -129,12 +140,15 @@ export default async function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng người dùng</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Users className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold">{totalUsers || 0}</div>
             <p className="text-xs text-muted-foreground">
               Người dùng đăng ký
@@ -142,12 +156,15 @@ export default async function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-green-200 dark:border-green-800">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Doanh thu</CardTitle>
-            <Coins className="h-4 w-4 text-green-500" />
+            <div className="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Coins className="h-5 w-5 text-green-500" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
             <div className="text-2xl font-bold text-green-600">{formatXu(totalRevenue)} Xu</div>
             <p className="text-xs text-muted-foreground">
               Từ {completedOrders?.length || 0} đơn hoàn thành
@@ -157,16 +174,20 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Xử lý đơn hàng</CardTitle>
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative pb-3">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+              <ShoppingBag className="h-7 w-7 text-primary" />
+            </div>
+            <CardTitle className="text-lg group-hover:text-primary transition-colors">Xử lý đơn hàng</CardTitle>
             <CardDescription>
               Có {pendingOrders || 0} đơn đang chờ xử lý
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full">
+          <CardContent className="relative">
+            <Button asChild className="w-full rounded-full">
               <Link href="/admin/orders">
                 Xem đơn hàng
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -175,15 +196,19 @@ export default async function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Quản lý dịch vụ</CardTitle>
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative pb-3">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+              <TrendingUp className="h-7 w-7 text-primary" />
+            </div>
+            <CardTitle className="text-lg group-hover:text-primary transition-colors">Quản lý dịch vụ</CardTitle>
             <CardDescription>
               Thêm, sửa, xóa các dịch vụ
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button variant="outline" asChild className="w-full">
+          <CardContent className="relative">
+            <Button variant="outline" asChild className="w-full rounded-full">
               <Link href="/admin/services">
                 Quản lý dịch vụ
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -192,15 +217,19 @@ export default async function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Nạp Xu cho user</CardTitle>
+        <Card className="group">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+          <CardHeader className="relative pb-3">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+              <Users className="h-7 w-7 text-primary" />
+            </div>
+            <CardTitle className="text-lg group-hover:text-primary transition-colors">Nạp Xu cho user</CardTitle>
             <CardDescription>
               Cộng Xu sau khi nhận thanh toán
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button variant="outline" asChild className="w-full">
+          <CardContent className="relative">
+            <Button variant="outline" asChild className="w-full rounded-full">
               <Link href="/admin/users">
                 Quản lý người dùng
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -211,26 +240,27 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Recent Pending Orders */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+        <CardHeader className="relative flex flex-row items-center justify-between">
           <div>
             <CardTitle>Đơn hàng cần xử lý</CardTitle>
             <CardDescription>Các đơn hàng đang chờ hoặc đang thực hiện</CardDescription>
           </div>
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" asChild className="rounded-full">
             <Link href="/admin/orders">
               Xem tất cả
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           {recentPendingOrders && recentPendingOrders.length > 0 ? (
             <div className="space-y-4">
               {recentPendingOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                  className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-background hover:bg-muted/50 transition-all duration-300"
                 >
                   <div className="space-y-1">
                     <p className="font-medium">{(order.services as { name: string })?.name}</p>
@@ -242,10 +272,10 @@ export default async function AdminDashboardPage() {
                     <span className="text-sm font-medium">
                       {formatXu(order.total_cost)} Xu
                     </span>
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${statusLabels[order.status].color}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusLabels[order.status].color}`}>
                       {statusLabels[order.status].label}
                     </span>
-                    <Button size="sm" asChild>
+                    <Button size="sm" asChild className="rounded-full">
                       <Link href={`/admin/orders/${order.id}`}>
                         Xử lý
                       </Link>
@@ -255,8 +285,10 @@ export default async function AdminDashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              <CheckCircle2 className="h-12 w-12 mx-auto mb-4 text-green-500" />
+            <div className="text-center py-12 text-muted-foreground">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4">
+                <CheckCircle2 className="w-8 h-8 text-green-500" />
+              </div>
               <p>Không có đơn hàng nào cần xử lý</p>
             </div>
           )}

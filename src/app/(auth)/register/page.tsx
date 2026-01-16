@@ -56,14 +56,15 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      <Card className="border-border/50 shadow-lg">
-        <CardHeader className="space-y-1 pb-4">
+      <Card className="group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+        <CardHeader className="relative space-y-1 pb-4">
           <CardTitle className="text-xl">Đăng ký</CardTitle>
           <CardDescription>
             Nhập thông tin để tạo tài khoản mới
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="relative space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="fullName">Họ và tên</Label>
@@ -74,7 +75,7 @@ export default function RegisterPage() {
                   name="fullName"
                   type="text"
                   placeholder="Nguyễn Văn A"
-                  className="pl-10"
+                  className="pl-10 rounded-xl"
                   required
                   disabled={isLoading}
                 />
@@ -89,7 +90,7 @@ export default function RegisterPage() {
                   name="email"
                   type="email"
                   placeholder="email@example.com"
-                  className="pl-10"
+                  className="pl-10 rounded-xl"
                   required
                   disabled={isLoading}
                 />
@@ -104,7 +105,7 @@ export default function RegisterPage() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="pl-10 pr-10"
+                  className="pl-10 pr-10 rounded-xl"
                   required
                   disabled={isLoading}
                 />
@@ -126,13 +127,13 @@ export default function RegisterPage() {
                   name="confirmPassword"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="pl-10"
+                  className="pl-10 rounded-xl"
                   required
                   disabled={isLoading}
                 />
               </div>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Spinner className="mr-2 h-4 w-4" />
@@ -149,7 +150,7 @@ export default function RegisterPage() {
               <Separator className="w-full" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
+              <span className="bg-background px-2 text-muted-foreground">
                 Hoặc
               </span>
             </div>
@@ -157,7 +158,7 @@ export default function RegisterPage() {
 
           <Button 
             variant="outline" 
-            className="w-full" 
+            className="w-full rounded-full" 
             disabled={isLoading}
             onClick={() => {
               toast.info("Tính năng đăng nhập Google sẽ được bật sớm!")

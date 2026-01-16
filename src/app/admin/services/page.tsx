@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Plus, Sparkles, Edit, Trash2 } from "lucide-react"
+import { Plus, Sparkles, Edit, Film } from "lucide-react"
 import Image from "next/image"
 
 function formatXu(amount: number): string {
@@ -54,16 +54,21 @@ export default async function AdminServicesPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Quản lý dịch vụ</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+              <Sparkles className="h-6 w-6 text-primary" />
+            </div>
+            Quản lý dịch vụ
+          </h1>
+          <p className="text-muted-foreground mt-2">
             Thêm, sửa, xóa các dịch vụ AI Video.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="rounded-full">
           <Link href="/admin/services/new">
             <Plus className="mr-2 h-4 w-4" />
             Thêm dịch vụ
@@ -73,50 +78,56 @@ export default async function AdminServicesPage() {
 
       {/* Services List */}
       {services && services.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service: Service) => (
-            <Card key={service.id} className="overflow-hidden">
+            <Card key={service.id} className="group">
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+              
               {/* Cover */}
-              <div className="aspect-video relative bg-gradient-to-br from-primary/20 to-primary/5">
+              <div className="aspect-[16/10] relative overflow-hidden rounded-t-3xl">
                 {service.cover_image ? (
                   <Image
                     src={service.cover_image}
                     alt={service.name}
                     fill
-                    className="object-cover"
+                    className="object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Sparkles className="h-12 w-12 text-primary/30" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
+                    <Film className="w-12 h-12 text-primary/20" />
                   </div>
                 )}
-                <div className="absolute top-2 right-2">
-                  <Badge variant={service.is_active ? "default" : "secondary"}>
+                <div className="absolute top-4 right-4 z-10">
+                  <Badge 
+                    variant={service.is_active ? "default" : "secondary"}
+                    className="rounded-full px-3"
+                  >
                     {service.is_active ? "Hoạt động" : "Tạm dừng"}
                   </Badge>
                 </div>
               </div>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">{service.name}</CardTitle>
+              <CardHeader className="relative pb-2">
+                <CardTitle className="text-lg group-hover:text-primary transition-colors">{service.name}</CardTitle>
                 <CardDescription className="line-clamp-2">
                   {service.description || "Không có mô tả"}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="relative space-y-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Giá:</span>
                   <span className="font-medium text-primary">{formatXu(service.base_cost)} Xu</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Slug:</span>
-                  <code className="text-xs bg-muted px-1 rounded">{service.slug}</code>
+                  <code className="text-xs bg-muted px-2 py-0.5 rounded-full">{service.slug}</code>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Ngày tạo:</span>
                   <span>{formatDate(service.created_at)}</span>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" className="flex-1" asChild>
+                  <Button size="sm" variant="outline" className="flex-1 rounded-full" asChild>
                     <Link href={`/admin/services/${service.id}`}>
                       <Edit className="mr-2 h-4 w-4" />
                       Sửa
@@ -128,13 +139,15 @@ export default async function AdminServicesPage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16">
-          <Sparkles className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
-          <h3 className="text-lg font-medium">Chưa có dịch vụ nào</h3>
-          <p className="text-muted-foreground mt-1 mb-4">
+        <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed border-border/50">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+            <Sparkles className="w-8 h-8 text-muted-foreground/50" />
+          </div>
+          <h3 className="text-xl font-semibold mb-2">Chưa có dịch vụ nào</h3>
+          <p className="text-muted-foreground max-w-sm mx-auto mb-4">
             Tạo dịch vụ đầu tiên để bắt đầu nhận đơn hàng.
           </p>
-          <Button asChild>
+          <Button asChild className="rounded-full">
             <Link href="/admin/services/new">
               <Plus className="mr-2 h-4 w-4" />
               Thêm dịch vụ
