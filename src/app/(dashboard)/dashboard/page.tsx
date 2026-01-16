@@ -195,7 +195,7 @@ export default async function DashboardPage() {
                         {statusLabels[order.status].label}
                       </span>
                       <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Link href={`/dashboard/orders/${order.id}`}>
+                        <Link href={`/dashboard/orders?order=${order.id}`}>
                            <HugeiconsIcon icon={ArrowRight} className="h-4 w-4" />
                         </Link>
                       </Button>

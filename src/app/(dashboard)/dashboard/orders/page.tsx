@@ -6,7 +6,12 @@ import { ShoppingBag01Icon as ShoppingBag } from "@hugeicons/core-free-icons"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-export default async function OrdersPage() {
+export default async function OrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ order?: string }>
+}) {
+  const { order: selectedOrderId } = await searchParams
   const supabase = await createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
@@ -65,7 +70,7 @@ export default async function OrdersPage() {
       </div>
 
       {/* Main Content */}
-      <OrderList orders={typedOrders} />
+      <OrderList orders={typedOrders} initialOrderId={selectedOrderId} />
     </div>
   )
 }

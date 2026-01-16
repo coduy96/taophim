@@ -448,13 +448,25 @@ function ResultPreview({ url }: { url: string }) {
 
 interface OrderListProps {
   orders: OrderWithService[]
+  initialOrderId?: string
 }
 
-export function OrderList({ orders }: OrderListProps) {
+export function OrderList({ orders, initialOrderId }: OrderListProps) {
   const [filter, setFilter] = React.useState("all")
   const [selectedOrder, setSelectedOrder] = React.useState<OrderWithService | null>(null)
   const [isSheetOpen, setIsSheetOpen] = React.useState(false)
   const [copiedId, setCopiedId] = React.useState(false)
+
+  // Auto-open sheet if initialOrderId is provided
+  React.useEffect(() => {
+    if (initialOrderId) {
+      const order = orders.find(o => o.id === initialOrderId)
+      if (order) {
+        setSelectedOrder(order)
+        setIsSheetOpen(true)
+      }
+    }
+  }, [initialOrderId, orders])
 
   const filteredOrders = React.useMemo(() => {
     if (filter === "all") return orders
