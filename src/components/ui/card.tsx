@@ -18,8 +18,6 @@ function Card({
         "rounded-3xl border border-border shadow-md",
         // Spacing
         "gap-6 py-6 text-sm",
-        // Hover animation - matching landing page with enhanced shadow
-        "transition-all duration-500 hover:-translate-y-1 hover:shadow-xl",
         // Group for child hover effects
         "group/card flex flex-col",
         // Size variants

@@ -238,7 +238,7 @@ export default async function LandingPage() {
 
           <div className="grid gap-8 md:grid-cols-3 relative z-10">
             {/* Feature 1 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -252,7 +252,7 @@ export default async function LandingPage() {
             </div>
 
             {/* Feature 2 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -266,7 +266,7 @@ export default async function LandingPage() {
             </div>
 
             {/* Feature 3 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -280,7 +280,7 @@ export default async function LandingPage() {
             </div>
 
             {/* Feature 4: VietQR */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -294,7 +294,7 @@ export default async function LandingPage() {
             </div>
 
             {/* Feature 5: Xu Never Expires */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -308,7 +308,7 @@ export default async function LandingPage() {
             </div>
 
             {/* Feature 6: No Monthly Sub */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -345,7 +345,7 @@ export default async function LandingPage() {
                 <Link
                   href={user ? `/dashboard/services/${service.slug}` : "/register"}
                   key={service.id}
-                  className="group relative flex flex-col h-full bg-background border border-border/50 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2"
+                  className="group relative flex flex-col h-full bg-background border border-border/50 rounded-3xl overflow-hidden"
                 >
                   {/* Image/Preview Area */}
                   <div className="aspect-[16/10] relative overflow-hidden bg-muted">
@@ -443,7 +443,7 @@ export default async function LandingPage() {
 
             {/* Step 1 */}
             <div className="relative z-10 group">
-              <div className="bg-background rounded-3xl p-8 border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden h-full flex flex-col items-center text-center">
+              <div className="bg-background rounded-3xl p-8 border border-border/50 overflow-hidden h-full flex flex-col items-center text-center">
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 relative">
                   <div className="absolute inset-0 bg-primary/10 rounded-full" />
                   <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">01</div>
@@ -457,7 +457,7 @@ export default async function LandingPage() {
 
             {/* Step 2 */}
             <div className="relative z-10 group">
-              <div className="bg-background rounded-3xl p-8 border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden h-full flex flex-col items-center text-center">
+              <div className="bg-background rounded-3xl p-8 border border-border/50 overflow-hidden h-full flex flex-col items-center text-center">
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 relative">
                   <div className="absolute inset-0 bg-primary/10 rounded-full" />
                   <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">02</div>
@@ -471,7 +471,7 @@ export default async function LandingPage() {
 
             {/* Step 3 */}
             <div className="relative z-10 group">
-              <div className="bg-background rounded-3xl p-8 border border-border/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden h-full flex flex-col items-center text-center">
+              <div className="bg-background rounded-3xl p-8 border border-border/50 overflow-hidden h-full flex flex-col items-center text-center">
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 relative">
                   <div className="absolute inset-0 bg-primary/10 rounded-full" />
                   <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">03</div>
