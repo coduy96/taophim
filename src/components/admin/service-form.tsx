@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,10 +10,142 @@ import { Switch } from "@/components/ui/switch"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { PlusSignIcon as Plus, Delete02Icon as Trash2, Drag01Icon as GripVertical } from "@hugeicons/core-free-icons"
+import { 
+  PlusSignIcon as Plus, 
+  Delete02Icon as Trash2, 
+  Drag01Icon as GripVertical,
+  Upload01Icon as Upload,
+  Cancel01Icon as X
+} from "@hugeicons/core-free-icons"
 import { createClient } from "@/lib/supabase/client"
 import { Service, FormConfig, FormField } from "@/types/database.types"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import Image from "next/image"
+
+// Image Upload Component for Cover Image
+interface ImageUploadFieldProps {
+  value: string | null
+  onChange: (url: string | null) => void
+  onFileSelect: (file: File | null) => void
+  selectedFile: File | null
+  disabled?: boolean
+}
+
+function ImageUploadField({ value, onChange, onFileSelect, selectedFile, disabled }: ImageUploadFieldProps) {
+  const [dragActive, setDragActive] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true)
+    } else if (e.type === "dragleave") {
+      setDragActive(false)
+    }
+  }, [])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragActive(false)
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0]
+      if (file.type.startsWith('image/')) {
+        onFileSelect(file)
+        setPreviewUrl(URL.createObjectURL(file))
+      } else {
+        toast.error("Vui lòng chọn file hình ảnh")
+      }
+    }
+  }, [onFileSelect])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      if (file.type.startsWith('image/')) {
+        onFileSelect(file)
+        setPreviewUrl(URL.createObjectURL(file))
+      } else {
+        toast.error("Vui lòng chọn file hình ảnh")
+      }
+    }
+  }
+
+  const handleRemove = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onFileSelect(null)
+    onChange(null)
+    setPreviewUrl(null)
+  }
+
+  // Display priority: selectedFile preview > existing URL
+  const displayUrl = previewUrl || value
+
+  return (
+    <div className="space-y-2">
+      <div
+        className={`relative border-2 border-dashed rounded-lg overflow-hidden transition-colors
+          ${dragActive ? 'border-primary bg-primary/5' : 'border-border'}
+          ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-primary/50'}`}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+      >
+        <input
+          type="file"
+          id="coverImageUpload"
+          accept="image/*"
+          onChange={handleChange}
+          disabled={disabled}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+        />
+        
+        {displayUrl ? (
+          <div className="relative aspect-video w-full">
+            <Image
+              src={displayUrl}
+              alt="Cover preview"
+              fill
+              className="object-cover"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={handleRemove}
+                disabled={disabled}
+                className="z-20"
+              >
+                <HugeiconsIcon icon={X} className="h-4 w-4 mr-1" />
+                Xóa ảnh
+              </Button>
+            </div>
+            {selectedFile && (
+              <div className="absolute bottom-2 left-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="p-8 text-center space-y-3">
+            <HugeiconsIcon icon={Upload} className="h-10 w-10 mx-auto text-muted-foreground" />
+            <div>
+              <p className="font-medium text-sm">Kéo thả hoặc click để tải ảnh lên</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                PNG, JPG, GIF, WEBP (tối đa 5MB)
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 interface ServiceFormProps {
   service?: Service
@@ -38,7 +170,9 @@ export function ServiceForm({ service }: ServiceFormProps) {
   const [slug, setSlug] = useState(service?.slug || "")
   const [description, setDescription] = useState(service?.description || "")
   const [baseCost, setBaseCost] = useState(service?.base_cost?.toString() || "")
-  const [coverImage, setCoverImage] = useState(service?.cover_image || "")
+  const [coverImage, setCoverImage] = useState<string | null>(service?.cover_image || null)
+  const [coverImageFile, setCoverImageFile] = useState<File | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
   const [isActive, setIsActive] = useState(service?.is_active ?? true)
   
   // Form fields
@@ -99,6 +233,49 @@ export function ServiceForm({ service }: ServiceFormProps) {
     try {
       const supabase = createClient()
       
+      let finalCoverImageUrl = coverImage
+
+      // Upload cover image if a new file is selected
+      if (coverImageFile) {
+        setIsUploading(true)
+        
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024
+        if (coverImageFile.size > maxSize) {
+          toast.error("Ảnh không được vượt quá 5MB")
+          setIsLoading(false)
+          setIsUploading(false)
+          return
+        }
+
+        // Generate unique filename
+        const fileExt = coverImageFile.name.split('.').pop()?.toLowerCase() || 'jpg'
+        const timestamp = Date.now()
+        const randomStr = Math.random().toString(36).substring(2, 8)
+        const fileName = `covers/${timestamp}-${randomStr}.${fileExt}`
+
+        // Upload to Supabase storage (service-media bucket)
+        const { error: uploadError } = await supabase.storage
+          .from('service-media')
+          .upload(fileName, coverImageFile, {
+            cacheControl: '3600',
+            upsert: false
+          })
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError)
+          throw new Error("Không thể tải ảnh lên. Vui lòng thử lại.")
+        }
+
+        // Get public URL
+        const { data: urlData } = supabase.storage
+          .from('service-media')
+          .getPublicUrl(fileName)
+        
+        finalCoverImageUrl = urlData.publicUrl
+        setIsUploading(false)
+      }
+      
       const formConfig: FormConfig = { fields }
       
       const serviceData = {
@@ -106,7 +283,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
         slug,
         description: description || null,
         base_cost: cost,
-        cover_image: coverImage || null,
+        cover_image: finalCoverImageUrl || null,
         is_active: isActive,
         form_config: JSON.parse(JSON.stringify(formConfig)),
         updated_at: new Date().toISOString(),
@@ -148,6 +325,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
       toast.error(message)
     } finally {
       setIsLoading(false)
+      setIsUploading(false)
     }
   }
 
@@ -190,7 +368,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
           />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="baseCost">Chi phí (Xu) *</Label>
             <Input
@@ -204,14 +382,20 @@ export function ServiceForm({ service }: ServiceFormProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="coverImage">URL ảnh bìa</Label>
-            <Input
-              id="coverImage"
-              placeholder="https://..."
+            <Label>Ảnh bìa</Label>
+            <ImageUploadField
               value={coverImage}
-              onChange={(e) => setCoverImage(e.target.value)}
-              disabled={isLoading}
+              onChange={setCoverImage}
+              onFileSelect={setCoverImageFile}
+              selectedFile={coverImageFile}
+              disabled={isLoading || isUploading}
             />
+            {isUploading && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Spinner className="h-4 w-4" />
+                Đang tải ảnh lên...
+              </div>
+            )}
           </div>
         </div>
 
