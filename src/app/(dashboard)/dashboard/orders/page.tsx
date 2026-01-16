@@ -22,7 +22,7 @@ export default async function OrdersPage({
     .from('orders')
     .select(`
       *,
-      services (name, slug)
+      services (name, slug, form_config)
     `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
@@ -33,6 +33,14 @@ export default async function OrdersPage({
   }
 
   // Type casting to match the interface expected by OrderList
+  interface FormField {
+    id: string
+    label: string
+    type: string
+  }
+  interface FormConfig {
+    fields: FormField[]
+  }
   interface OrderWithService {
     id: string
     status: string
@@ -45,6 +53,7 @@ export default async function OrdersPage({
     services: {
       name: string
       slug: string
+      form_config: FormConfig | null
     }
   }
   const typedOrders = (orders || []) as OrderWithService[]

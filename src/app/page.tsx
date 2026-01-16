@@ -168,11 +168,11 @@ export default async function LandingPage() {
                       src="/images/landing/long-form-bg.png"
                       alt="AI Video Editor Interface"
                       fill
-                      className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 50vw"
-                      quality={90}
+                      quality={100}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-900/40 to-black/60 z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/20 z-10" />
 
                     {/* Simulated Waveform/Video Content */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-60 z-20">

@@ -44,6 +44,14 @@ import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
 // Reuse types from page or define shared types
+interface FormField {
+  id: string
+  label: string
+  type: string
+}
+interface FormConfig {
+  fields: FormField[]
+}
 interface OrderWithService {
   id: string
   status: string
@@ -56,6 +64,7 @@ interface OrderWithService {
   services: {
     name: string
     slug: string
+    form_config: FormConfig | null
   }
 }
 
@@ -488,16 +497,24 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
     }
   }
 
+  // Helper function to get field label from form_config by ID
+  const getFieldLabel = (fieldId: string, formConfig: FormConfig | null): string => {
+    if (!formConfig?.fields) return fieldId.replace(/_/g, ' ')
+    const field = formConfig.fields.find(f => f.id === fieldId)
+    return field?.label || fieldId.replace(/_/g, ' ')
+  }
+
   // Separate file inputs from text inputs
-  const getInputsByType = (inputs: Record<string, unknown>) => {
-    const files: { key: string; url: string }[] = []
-    const texts: { key: string; value: string }[] = []
+  const getInputsByType = (inputs: Record<string, unknown>, formConfig: FormConfig | null) => {
+    const files: { key: string; label: string; url: string }[] = []
+    const texts: { key: string; label: string; value: string }[] = []
 
     Object.entries(inputs || {}).forEach(([key, value]) => {
+      const label = getFieldLabel(key, formConfig)
       if (typeof value === 'string' && value.startsWith('http')) {
-        files.push({ key, url: value })
+        files.push({ key, label, url: value })
       } else if (value !== null && value !== undefined) {
-        texts.push({ key, value: String(value) })
+        texts.push({ key, label, value: String(value) })
       }
     })
 
@@ -680,7 +697,7 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
 
                 {/* User Inputs Section */}
                 {(() => {
-                  const { files, texts } = getInputsByType(selectedOrder.user_inputs)
+                  const { files, texts } = getInputsByType(selectedOrder.user_inputs, selectedOrder.services.form_config)
                   
                   if (files.length === 0 && texts.length === 0) return null
 
@@ -696,10 +713,10 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
                       {/* Text inputs */}
                       {texts.length > 0 && (
                         <div className="rounded-xl border bg-card overflow-hidden">
-                          {texts.map(({ key, value }, index) => (
+                          {texts.map(({ key, label, value }, index) => (
                             <div key={key} className={cn("p-4", index !== 0 && "border-t")}>
                               <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70 block mb-1">
-                                {key.replace(/_/g, ' ')}
+                                {label}
                               </span>
                               <p className="text-sm text-foreground whitespace-pre-wrap break-words">
                                 {value}
@@ -712,8 +729,8 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
                       {/* File inputs with previews */}
                       {files.length > 0 && (
                         <div className="space-y-4">
-                          {files.map(({ key, url }) => (
-                            <FilePreview key={key} url={url} label={key.replace(/_/g, ' ')} />
+                          {files.map(({ key, label, url }) => (
+                            <FilePreview key={key} url={url} label={label} />
                           ))}
                         </div>
                       )}

@@ -103,6 +103,24 @@ export default async function AdminOrderDetailPage({
   const status = statusConfig[order.status]
   const userInputs = order.user_inputs as Record<string, string | boolean>
   const adminOutput = order.admin_output as { result_url?: string } | null
+  
+  // Get form_config from service to resolve field IDs to labels
+  interface FormField {
+    id: string
+    label: string
+    type: string
+  }
+  interface FormConfig {
+    fields: FormField[]
+  }
+  const formConfig = (order.services as { form_config: FormConfig | null })?.form_config
+  
+  // Helper function to get field label by ID
+  const getFieldLabel = (fieldId: string): string => {
+    if (!formConfig?.fields) return fieldId.replace(/_/g, ' ')
+    const field = formConfig.fields.find(f => f.id === fieldId)
+    return field?.label || fieldId.replace(/_/g, ' ')
+  }
 
   return (
     <div className="space-y-6">
@@ -180,7 +198,7 @@ export default async function AdminOrderDetailPage({
               <div className="space-y-4">
                 {Object.entries(userInputs).map(([key, value]) => (
                   <div key={key} className="flex flex-col gap-2 p-4 rounded-2xl border border-border/50 bg-muted/30">
-                    <span className="text-sm font-medium capitalize">{key.replace(/_/g, ' ')}</span>
+                    <span className="text-sm font-medium capitalize">{getFieldLabel(key)}</span>
                     {typeof value === 'string' && value.startsWith('http') ? (
                       <Button variant="outline" asChild className="w-fit rounded-full">
                         <a href={value} target="_blank" rel="noopener noreferrer">
