@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@/components/ui/avatar"
 import { Logo } from "@/components/logo"
 import { Navbar } from "@/components/layout/navbar"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -21,6 +22,26 @@ import {
   InfinityIcon as Infinity,
   CreditCardIcon as CreditCard
 } from "@hugeicons/core-free-icons"
+
+// User avatars for social proof - local images
+const userAvatars = [
+  {
+    src: "/images/avatars/avatar-1.jpg",
+    name: "Lan Anh"
+  },
+  {
+    src: "/images/avatars/avatar-2.jpg",
+    name: "Minh Tuấn"
+  },
+  {
+    src: "/images/avatars/avatar-3.jpg",
+    name: "Thu Hà"
+  },
+  {
+    src: "/images/avatars/avatar-4.jpg",
+    name: "Văn Hùng"
+  }
+]
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -115,17 +136,18 @@ export default async function LandingPage() {
 
               {/* Social Proof */}
               <div className="pt-6 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 text-sm">
-                <div className="flex -space-x-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-10 h-10 rounded-full border-[3px] border-background bg-muted flex items-center justify-center overflow-hidden shadow-sm">
-                      {/* Placeholder avatars using gradients */}
-                      <div className={`w-full h-full bg-gradient-to-br ${i === 1 ? 'from-zinc-200 to-zinc-300' :
-                        i === 2 ? 'from-zinc-300 to-zinc-400' :
-                          i === 3 ? 'from-zinc-200 to-zinc-300' : 'from-zinc-100 to-zinc-200'
-                        }`} />
-                    </div>
-                  ))}
-                  <div className="w-10 h-10 rounded-full border-[3px] border-background bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                <div className="flex items-center">
+                  <AvatarGroup className="-space-x-3">
+                    {userAvatars.map((user, i) => (
+                      <Avatar key={i} size="lg" className="ring-[3px] ring-background shadow-md hover:scale-110 hover:z-10 transition-transform duration-200">
+                        <AvatarImage src={user.src} alt={user.name} />
+                        <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-primary font-medium">
+                          {user.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                    ))}
+                  </AvatarGroup>
+                  <div className="w-10 h-10 rounded-full border-[3px] border-background bg-gradient-to-br from-primary/20 to-primary/30 flex items-center justify-center text-xs font-bold text-primary shadow-md -ml-3">
                     +1k
                   </div>
                 </div>
@@ -138,7 +160,7 @@ export default async function LandingPage() {
                     <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
                     <span className="text-foreground font-bold ml-1">5.0</span>
                   </div>
-                  <span className="text-muted-foreground">Tin dùng bởi 1000+ creators Việt Nam</span>
+                  <span className="text-muted-foreground">Tin dùng bởi 1000+ creators</span>
                 </div>
               </div>
             </div>
