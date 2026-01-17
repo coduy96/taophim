@@ -26,23 +26,27 @@ export default async function ServiceDetailPage({
   const { slug } = await params
   const supabase = await createClient()
   
-  const { data: { user } } = await supabase.auth.getUser()
+  const [userResult, serviceResult] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase
+      .from('services')
+      .select('*')
+      .eq('slug', slug)
+      .is('deleted_at', null)
+      .eq('is_active', true)
+      .single()
+  ])
+
+  const { data: { user } } = userResult
   if (!user) redirect('/login')
 
-  // Fetch service
-  const { data: service } = await supabase
-    .from('services')
-    .select('*')
-    .eq('slug', slug)
-    .is('deleted_at', null)
-    .eq('is_active', true)
-    .single()
+  const { data: service } = serviceResult
 
   if (!service) {
     notFound()
   }
 
-  // Fetch user profile
+  // Fetch user profile (dependent on user)
   const { data: profile } = await supabase
     .from('profiles')
     .select('xu_balance, frozen_xu')

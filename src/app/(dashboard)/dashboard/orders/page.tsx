@@ -22,45 +22,33 @@ export default async function OrdersPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Build query with optional status filter
-  let countQuery = supabase
-    .from('orders')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', user.id)
+  const offset = (Math.min(currentPage, 1000) - 1) * ITEMS_PER_PAGE // Safety cap
 
-  if (statusFilter !== "all" && ["pending", "processing", "completed", "cancelled"].includes(statusFilter)) {
-    countQuery = countQuery.eq('status', statusFilter as "pending" | "processing" | "completed" | "cancelled")
-  }
-
-  const { count: totalCount } = await countQuery
-
-  const totalItems = totalCount || 0
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
-  
-  // Ensure currentPage is within valid range
-  const validPage = Math.min(currentPage, Math.max(1, totalPages))
-  const offset = (validPage - 1) * ITEMS_PER_PAGE
-
-  // Fetch paginated orders
-  let dataQuery = supabase
+  // Build query
+  let query = supabase
     .from('orders')
     .select(`
       *,
       services (name, slug, form_config, cover_image)
-    `)
+    `, { count: 'exact' })
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
     .range(offset, offset + ITEMS_PER_PAGE - 1)
 
   if (statusFilter !== "all" && ["pending", "processing", "completed", "cancelled"].includes(statusFilter)) {
-    dataQuery = dataQuery.eq('status', statusFilter as "pending" | "processing" | "completed" | "cancelled")
+    query = query.eq('status', statusFilter as "pending" | "processing" | "completed" | "cancelled")
   }
 
-  const { data: orders, error } = await dataQuery
+  const { data: orders, count: totalCount, error } = await query
+
+  const totalItems = totalCount || 0
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
+  const validPage = Math.min(currentPage, Math.max(1, totalPages)) // Correct page for pagination UI
 
   if (error) {
     console.error("Error fetching orders:", error)
   }
+
 
   // Type casting to match the interface expected by OrderList
   interface FormField {

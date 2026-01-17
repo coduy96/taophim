@@ -40,6 +40,8 @@ import {
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
 import { cn } from "@/lib/utils"
+import { Profile } from "@/types/database.types"
+import { User } from "@supabase/supabase-js"
 
 // Menu items configuration
 const mainNavItems = [
@@ -69,9 +71,9 @@ function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ user, profile: initialProfile, ...props }: React.ComponentProps<typeof Sidebar> & { user?: User | null, profile?: Profile | null }) {
   const pathname = usePathname()
-  const { profile, isLoading } = useProfile()
+  const { profile, isLoading } = useProfile(initialProfile)
 
   return (
     <Sidebar collapsible="icon" {...props}>

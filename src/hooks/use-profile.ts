@@ -4,16 +4,24 @@ import { useEffect, useState, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { Profile } from "@/types/database.types"
 
-export function useProfile() {
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+export function useProfile(initialProfile?: Profile | null) {
+  const [profile, setProfile] = useState<Profile | null>(initialProfile || null)
+  const [isLoading, setIsLoading] = useState(!initialProfile)
   const [error, setError] = useState<string | null>(null)
-  const profileIdRef = useRef<string | null>(null)
+  const profileIdRef = useRef<string | null>(initialProfile?.id || null)
 
   useEffect(() => {
     const supabase = createClient()
 
     async function fetchProfile() {
+      if (initialProfile) {
+        // If we have initial profile, we might still want to refresh it or just rely on it.
+        // But for subscription we need the ID.
+        // If initialProfile is provided, we can skip initial fetch IF we trust it.
+        // But `initialProfile` prop might change? No, usually passed from server once.
+        return
+      }
+      
       try {
         const { data: { user } } = await supabase.auth.getUser()
         

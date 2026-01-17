@@ -39,31 +39,41 @@ export default async function ServicesPage({
   const currentPage = Math.max(1, parseInt(page || "1", 10) || 1)
   const supabase = await createClient()
   
-  const { data: { user } } = await supabase.auth.getUser()
+  // Parallel fetch: User check + Data with Count
+  const [userResult, servicesResult] = await Promise.all([
+    supabase.auth.getUser(),
+    (async () => {
+      // We can't easily do offset pagination with unknown total count to validate range before fetching.
+      // But we can fetch count and data in one go if we trust the page param or handle empty data gracefully.
+      // Or we fetch count first then data. But let's try to combine if possible.
+      // Actually, Supabase .range() works fine even if out of bounds (returns empty).
+      // So let's fetch data and count together.
+      
+      // Calculate offset based on assumed page
+      const offset = (currentPage - 1) * ITEMS_PER_PAGE
+      
+      return supabase
+        .from('services')
+        .select('*', { count: 'exact' })
+        .is('deleted_at', null)
+        .eq('is_active', true)
+        .order('created_at', { ascending: true })
+        .range(offset, offset + ITEMS_PER_PAGE - 1)
+    })()
+  ])
+
+  const { data: { user } } = userResult
   if (!user) redirect('/login')
 
-  // Fetch total count first
-  const { count: totalCount } = await supabase
-    .from('services')
-    .select('*', { count: 'exact', head: true })
-    .is('deleted_at', null)
-    .eq('is_active', true)
-
+  const { data: services, count: totalCount } = servicesResult
   const totalItems = totalCount || 0
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
+  const validPage = currentPage // We used this for fetching, so it's the current page context
   
-  // Ensure currentPage is within valid range
-  const validPage = Math.min(currentPage, Math.max(1, totalPages))
-  const offset = (validPage - 1) * ITEMS_PER_PAGE
+  // Recalculate pagination info
+  // If user requested page 10 but there are only 5 pages, 'services' will be empty.
+  // The UI handles empty services gracefully.
+  // Ideally, we should redirect to the last page if page > totalPages, but just showing empty is faster/simpler.
 
-  // Fetch paginated services
-  const { data: services } = await supabase
-    .from('services')
-    .select('*')
-    .is('deleted_at', null)
-    .eq('is_active', true)
-    .order('created_at', { ascending: true })
-    .range(offset, offset + ITEMS_PER_PAGE - 1)
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-10">
