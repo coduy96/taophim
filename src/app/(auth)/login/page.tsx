@@ -12,7 +12,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Mail01Icon as Mail, LockIcon as Lock, ViewIcon as Eye, ViewOffIcon as EyeOff } from "@hugeicons/core-free-icons"
-import { login } from "../actions"
+import { login, loginWithGoogle } from "../actions"
 
 function LoginForm() {
   const searchParams = useSearchParams()
@@ -27,6 +27,17 @@ function LoginForm() {
     
     const formData = new FormData(e.currentTarget)
     const result = await login(formData)
+    
+    if (result?.error) {
+      toast.error(result.error)
+      setIsLoading(false)
+    }
+  }
+
+  async function handleGoogleLogin() {
+    // Trigger Google OAuth flow
+    setIsLoading(true)
+    const result = await loginWithGoogle()
     
     if (result?.error) {
       toast.error(result.error)
@@ -126,10 +137,7 @@ function LoginForm() {
             variant="outline" 
             className="w-full rounded-full" 
             disabled={isLoading}
-            onClick={() => {
-              // Google OAuth will be handled here
-              toast.info("Tính năng đăng nhập Google sẽ được bật sớm!")
-            }}
+            onClick={handleGoogleLogin}
           >
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path

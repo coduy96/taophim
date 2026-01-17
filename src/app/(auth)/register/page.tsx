@@ -17,7 +17,7 @@ import {
   ViewOffIcon as EyeOff, 
   UserIcon as User 
 } from "@hugeicons/core-free-icons"
-import { register } from "../actions"
+import { register, loginWithGoogle } from "../actions"
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -44,6 +44,17 @@ export default function RegisterPage() {
     }
 
     const result = await register(formData)
+    
+    if (result?.error) {
+      toast.error(result.error)
+      setIsLoading(false)
+    }
+  }
+
+  async function handleGoogleLogin() {
+    // Trigger Google OAuth flow
+    setIsLoading(true)
+    const result = await loginWithGoogle()
     
     if (result?.error) {
       toast.error(result.error)
@@ -167,9 +178,7 @@ export default function RegisterPage() {
             variant="outline" 
             className="w-full rounded-full" 
             disabled={isLoading}
-            onClick={() => {
-              toast.info("Tính năng đăng nhập Google sẽ được bật sớm!")
-            }}
+            onClick={handleGoogleLogin}
           >
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path

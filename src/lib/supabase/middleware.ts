@@ -33,7 +33,8 @@ export async function updateSession(request: NextRequest) {
   const publicPaths = ['/', '/login', '/register', '/services']
   const isPublicPath = publicPaths.some(path => 
     request.nextUrl.pathname === path || 
-    request.nextUrl.pathname.startsWith('/services/')
+    request.nextUrl.pathname.startsWith('/services/') ||
+    request.nextUrl.pathname.startsWith('/auth/')
   )
   const isAuthPath = request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register'
 
