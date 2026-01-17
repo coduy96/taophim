@@ -65,6 +65,7 @@ interface OrderWithService {
     name: string
     slug: string
     form_config: FormConfig | null
+    cover_image: string | null
   }
 }
 
@@ -140,6 +141,38 @@ function getFileType(url: string): 'image' | 'video' | 'unknown' {
   if (lower.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|$)/)) return 'image'
   if (lower.match(/\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/)) return 'video'
   return 'unknown'
+}
+
+function getOrderPreview(order: OrderWithService) {
+  // 1. Try to find input image/video
+  const inputs = order.user_inputs || {}
+  for (const value of Object.values(inputs)) {
+    if (typeof value === 'string') {
+      const type = getFileType(value)
+      if (type !== 'unknown') {
+        return { url: value, type }
+      }
+    }
+  }
+
+  // 2. Fallback to service cover image
+  if (order.services.cover_image) {
+    return { url: order.services.cover_image, type: 'image' as const }
+  }
+
+  return null
+}
+
+function getOrderSummary(order: OrderWithService) {
+  const inputs = order.user_inputs || {}
+  // Find first text input that isn't a URL
+  for (const value of Object.values(inputs)) {
+    if (typeof value === 'string' && getFileType(value) === 'unknown' && value.length > 0) {
+      // Truncate if too long
+      return value.length > 60 ? value.substring(0, 60) + '...' : value
+    }
+  }
+  return null
 }
 
 // File Preview Component
@@ -546,8 +579,8 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow className="hover:bg-muted/30">
-              <TableHead className="w-[100px]">Mã đơn</TableHead>
-              <TableHead>Dịch vụ</TableHead>
+              <TableHead className="w-[100px] hidden sm:table-cell">Mã đơn</TableHead>
+              <TableHead>Thông tin dịch vụ</TableHead>
               <TableHead>Trạng thái</TableHead>
               <TableHead className="text-right">Chi phí</TableHead>
               <TableHead className="w-[50px]"></TableHead>
@@ -557,31 +590,79 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
             {filteredOrders.length > 0 ? (
               filteredOrders.map((order) => {
                 const status = statusConfig[order.status]
+                const preview = getOrderPreview(order)
+                const summary = getOrderSummary(order)
+
                 return (
                   <TableRow 
                     key={order.id} 
                     className="cursor-pointer hover:bg-muted/40 transition-colors"
                     onClick={() => handleViewOrder(order)}
                   >
-                    <TableCell className="font-medium font-mono text-xs text-muted-foreground">
+                    <TableCell className="font-medium font-mono text-xs text-muted-foreground hidden sm:table-cell">
                       #{order.id.slice(0, 8)}
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-col gap-0.5">
-                        <span className="font-medium">{order.services.name}</span>
-                        <span className="text-xs text-muted-foreground">{formatDate(order.created_at)}</span>
+                      <div className="flex items-start gap-3">
+                        {/* Thumbnail */}
+                        <div className="h-12 w-12 shrink-0 rounded-lg bg-muted border overflow-hidden relative">
+                          {preview ? (
+                            preview.type === 'video' ? (
+                              <video 
+                                src={preview.url} 
+                                className="h-full w-full object-cover" 
+                                muted 
+                                loop 
+                                playsInline
+                              />
+                            ) : (
+                              <Image 
+                                src={preview.url} 
+                                alt={order.services.name}
+                                fill
+                                className="object-cover"
+                                unoptimized
+                              />
+                            )
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center text-muted-foreground">
+                              <HugeiconsIcon icon={Film} className="h-5 w-5 opacity-20" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Content */}
+                        <div className="flex flex-col gap-0.5 min-w-0">
+                          <span className="font-medium truncate">{order.services.name}</span>
+                          {summary && (
+                            <p className="text-xs text-muted-foreground line-clamp-1 italic">
+                              "{summary}"
+                            </p>
+                          )}
+                          <div className="flex items-center gap-2 mt-0.5 sm:hidden">
+                            <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1 rounded">
+                              #{order.id.slice(0, 8)}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground">
+                              {formatDate(order.created_at)}
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-muted-foreground hidden sm:inline-block">
+                            {formatDate(order.created_at)}
+                          </span>
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <Badge 
                         variant="secondary" 
-                        className={cn("rounded-full border px-2.5 py-0.5 font-normal", status.className)}
+                        className={cn("rounded-full border px-2.5 py-0.5 font-normal whitespace-nowrap", status.className)}
                       >
                         <span className="mr-1.5">{status.icon}</span>
                         {status.label}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right font-medium">
+                    <TableCell className="text-right font-medium whitespace-nowrap">
                       {formatXu(order.total_cost)} Xu
                     </TableCell>
                     <TableCell>

@@ -22,7 +22,7 @@ export default async function OrdersPage({
     .from('orders')
     .select(`
       *,
-      services (name, slug, form_config)
+      services (name, slug, form_config, cover_image)
     `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
@@ -54,6 +54,7 @@ export default async function OrdersPage({
       name: string
       slug: string
       form_config: FormConfig | null
+      cover_image: string | null
     }
   }
   const typedOrders = (orders || []) as OrderWithService[]
