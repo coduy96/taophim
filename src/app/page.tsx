@@ -27,20 +27,19 @@ import {
 // User avatars for social proof - local images
 const userAvatars = [
   {
-    src: "/images/avatars/avatar-1.jpg",
-    name: "Lan Anh"
-  },
-  {
-    src: "/images/avatars/avatar-2.jpg",
-    name: "Minh Tuấn"
-  },
-  {
-    src: "/images/avatars/avatar-3.jpg",
+    src: "/images/avatars/avatar-3.png",
     name: "Thu Hà"
   },
   {
-    src: "/images/avatars/avatar-4.jpg",
+    src: "/images/avatars/avatar-2.png",
+    name: "Minh Tuấn"
+  },
+  {
+    src: "/images/avatars/avatar-4.png",
     name: "Văn Hùng"
+  }, {
+    src: "/images/avatars/avatar-1.png",
+    name: "Lan Anh"
   }
 ]
 
@@ -226,30 +225,14 @@ export default async function LandingPage() {
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-10" />
 
                     {/* Overlay Elements */}
-                    <div className="absolute top-4 right-4 z-20">
-                      <div className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg">
-                        <HugeiconsIcon icon={Sparkles} className="w-4 h-4 text-primary" />
-                      </div>
-                    </div>
 
                     <div className="absolute bottom-6 left-4 right-4 z-20 text-white">
                       <div className="flex items-center gap-2 mb-2">
                         <div className="px-2 py-0.5 rounded-full bg-primary/90 text-[10px] font-bold shadow-lg shadow-primary/20">VIRAL</div>
                         <div className="text-[10px] opacity-80 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">Vừa xong</div>
                       </div>
-                      <p className="text-sm font-medium leading-snug text-shadow-sm">Video ghép mặt triệu view chỉ trong 2 giờ!</p>
+                      <p className="text-sm font-medium leading-snug text-shadow-sm">Video triệu view chỉ trong 2 giờ!</p>
 
-                      {/* Fake engagement stats */}
-                      <div className="flex items-center gap-3 mt-3 opacity-90">
-                        <div className="flex items-center gap-1">
-                          <HugeiconsIcon icon={Star} className="w-3 h-3 text-red-500 fill-red-500" />
-                          <span className="text-[10px]">12.5K</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <HugeiconsIcon icon={Film} className="w-3 h-3 text-white" />
-                          <span className="text-[10px]">842</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
