@@ -359,7 +359,7 @@ export default async function LandingPage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-              Dịch Vụ Video AI <span className="text-primary">Hot Nhất 2025</span>
+              Dịch Vụ Video AI <span className="text-primary">Hot Nhất</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Bắt trend TikTok, Reels, YouTube Shorts cực dễ dàng.
