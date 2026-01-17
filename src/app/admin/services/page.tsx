@@ -12,6 +12,7 @@ import {
   Film01Icon as Film 
 } from "@hugeicons/core-free-icons"
 import Image from "next/image"
+import { DeleteServiceButton } from "@/components/admin/delete-service-button"
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -139,6 +140,7 @@ export default async function AdminServicesPage() {
                       Sửa
                     </Link>
                   </Button>
+                  <DeleteServiceButton serviceId={service.id} serviceName={service.name} />
                 </div>
               </CardContent>
             </Card>
