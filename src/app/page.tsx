@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@/components/ui/avatar"
 import { Logo } from "@/components/logo"
 import { Navbar } from "@/components/layout/navbar"
+import { LogoCloud } from "@/components/landing/logo-cloud"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   SparklesIcon as Sparkles,
@@ -92,44 +93,45 @@ export default async function LandingPage() {
             {/* Left Column: Content */}
             <div className="space-y-10 text-center lg:text-left">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary hover:bg-primary/10 transition-colors cursor-default">
-                <span className="flex h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"></span>
-                Nền tảng AI Video #1 Việt Nam
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary hover:bg-primary/10 transition-colors cursor-default mb-4">
+                <span className="flex h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)] animate-pulse"></span>
+                Đã phục vụ 1,500+ khách hàng tại Việt Nam 🇻🇳
               </div>
 
               {/* Headings */}
-              <div className="space-y-4">
+              <div className="space-y-6">
+
                 <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
-                  Biến ý tưởng thành <br />
-                  <span className="relative inline-block">
-                    <span className="absolute -inset-1 -rotate-1 bg-primary/10 rounded-xl blur-sm" />
-                    <span className="relative text-primary">
-                      Video AI
-                    </span>
+                  Tạo Video AI <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
+                    Triệu View
                   </span>
-                  <br /> trong tích tắc.
+                  <br />
+                  <span className="text-4xl md:text-6xl text-foreground/80">Chỉ Từ 10K.</span>
                 </h1>
 
-                <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-                  Tạo video chuyên nghiệp từ văn bản và hình ảnh.
-                  <span className="text-foreground font-medium"> Không cần kỹ năng.</span>
+                <p className="text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+                  Tích hợp công nghệ <span className="text-foreground font-medium">Google VEO, Runway, Pika, Kling</span> đắt đỏ nhất thế giới - với giá rẻ cho người Việt.
                   <br />
-                  Tiết kiệm <span className="text-primary font-bold">90%</span> thời gian và chi phí.
+                  <span className="flex items-center gap-2 mt-3 text-sm font-medium text-foreground/80">
+                    <HugeiconsIcon icon={Zap} className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                    Không cần biết edit. Không cần tiếng Anh.
+                  </span>
                 </p>
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
-                <Button size="lg" className="h-16 px-8 text-lg rounded-full shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 bg-primary hover:bg-primary/90 border-0" asChild>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                <Button size="lg" className="h-14 px-8 text-lg rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 bg-primary hover:bg-primary/90 font-bold" asChild>
                   <Link href={user ? "/dashboard/services" : "/register"}>
                     <HugeiconsIcon icon={Wand2} className="mr-2 h-6 w-6" />
-                    Tạo video miễn phí
+                    Thử Ngay Miễn Phí
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="h-16 px-8 text-lg rounded-full border-2 hover:bg-muted/50 hover:text-primary transition-all duration-300 backdrop-blur-sm bg-background/50" asChild>
-                  <Link href="#how-it-works">
-                    <HugeiconsIcon icon={Play} className="mr-2 h-6 w-6" />
-                    Xem demo 1 phút
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full border-2 hover:bg-muted/50 transition-all duration-300 backdrop-blur-sm" asChild>
+                  <Link href="#services">
+                    <HugeiconsIcon icon={Film} className="mr-2 h-6 w-6" />
+                    Xem Mẫu Video
                   </Link>
                 </Button>
               </div>
@@ -160,27 +162,25 @@ export default async function LandingPage() {
                     <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
                     <span className="text-foreground font-bold ml-1">5.0</span>
                   </div>
-                  <span className="text-muted-foreground">Tin dùng bởi 1000+ creators</span>
+                  <span className="text-muted-foreground">Được TikToker & KOL tin dùng</span>
                 </div>
               </div>
             </div>
 
             {/* Right Column: Visuals */}
-            <div className="relative hidden lg:block h-[650px] w-full perspective-[2000px]">
-              {/* Floating Elements Animation */}
-              <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg preserve-3d">
-
+            <div className="hidden lg:flex h-full min-h-[600px] w-full items-center justify-center perspective-[2000px]">
+              <div className="relative w-[600px] h-[600px] preserve-3d">
                 {/* Back Glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[80px] -z-10" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] -z-10 animate-pulse-slow" />
 
                 {/* 1. Main Landscape Video Card */}
-                <div className="absolute top-0 left-0 transform -translate-x-16 -translate-y-32 w-[480px] bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-float z-20 hover:scale-[1.02] transition-transform duration-500 ring-1 ring-border/20">
+                <div className="absolute top-[10%] left-0 w-[450px] bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-float z-20 hover:scale-[1.02] transition-transform duration-500 ring-1 ring-border/20">
                   {/* Header */}
                   <div className="h-10 bg-muted/30 border-b border-border/50 flex items-center px-4 gap-3">
                     <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
-                      <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
-                      <div className="w-3 h-3 rounded-full bg-zinc-300 shadow-sm" />
+                      <div className="w-3 h-3 rounded-full bg-red-400/80 shadow-sm" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-400/80 shadow-sm" />
+                      <div className="w-3 h-3 rounded-full bg-green-400/80 shadow-sm" />
                     </div>
                   </div>
 
@@ -194,15 +194,10 @@ export default async function LandingPage() {
                       sizes="(max-width: 768px) 100vw, 50vw"
                       quality={100}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/20 z-10" />
-
-                    {/* Simulated Waveform/Video Content */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-60 z-20">
-                      <div className="w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40 z-10" />
 
                     {/* Controls */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-20">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
                           <HugeiconsIcon icon={Play} className="w-3 h-3 text-black fill-black ml-0.5" />
@@ -217,41 +212,57 @@ export default async function LandingPage() {
                 </div>
 
                 {/* 2. Floating Portrait Card */}
-                <div className="absolute top-20 right-0 transform translate-x-12 translate-y-0 w-[240px] bg-black rounded-[2rem] shadow-2xl overflow-hidden animate-float-delayed z-30 ring-4 ring-black/10 border border-border/20">
+                <div className="absolute top-[25%] right-[5%] w-[240px] bg-black rounded-[2rem] shadow-2xl overflow-hidden animate-float-delayed z-30 ring-4 ring-black/5 border border-white/10">
                   <div className="relative h-[420px] bg-zinc-900">
                     {/* Image content */}
                     <Image
                       src="/images/landing/short-form-bg.png"
                       alt="Viral Short Form Video"
                       fill
-                      className="object-cover opacity-90"
+                      className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
                       sizes="(max-width: 768px) 50vw, 25vw"
                       quality={90}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-black/90 z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-10" />
 
                     {/* Overlay Elements */}
-                    <div className="absolute top-6 right-6 z-20">
-                      <div className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20">
+                    <div className="absolute top-4 right-4 z-20">
+                      <div className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg">
                         <HugeiconsIcon icon={Sparkles} className="w-4 h-4 text-primary" />
                       </div>
                     </div>
 
-                    <div className="absolute bottom-8 left-6 right-6 z-20 text-white">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-sm text-[10px] font-bold border border-white/10">VIRAL</div>
-                        <div className="text-xs opacity-80">Just now</div>
+                    <div className="absolute bottom-6 left-4 right-4 z-20 text-white">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="px-2 py-0.5 rounded-full bg-primary/90 text-[10px] font-bold shadow-lg shadow-primary/20">VIRAL</div>
+                        <div className="text-[10px] opacity-80 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">Vừa xong</div>
                       </div>
-                      <p className="text-sm font-medium leading-snug">Tạo video TikTok triệu view chỉ trong 30 giây! 🚀</p>
+                      <p className="text-sm font-medium leading-snug text-shadow-sm">Video ghép mặt triệu view chỉ trong 2 giờ!</p>
+
+                      {/* Fake engagement stats */}
+                      <div className="flex items-center gap-3 mt-3 opacity-90">
+                        <div className="flex items-center gap-1">
+                          <HugeiconsIcon icon={Star} className="w-3 h-3 text-red-500 fill-red-500" />
+                          <span className="text-[10px]">12.5K</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <HugeiconsIcon icon={Film} className="w-3 h-3 text-white" />
+                          <span className="text-[10px]">842</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </section>
+
+
+
+      {/* Trusted By / Logo Cloud */}
+      <LogoCloud />
 
       {/* Features Section */}
       <section id="features" className="py-24 relative overflow-hidden">
@@ -262,95 +273,94 @@ export default async function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-              Tại sao <span className="text-primary">Taophim</span> khác biệt?
+              Vì sao <span className="text-primary">1,500+ khách hàng</span> chọn Taophim?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Không chỉ là công cụ, chúng tôi mang đến giải pháp video AI toàn diện
-              giúp bạn bứt phá khả năng sáng tạo.
+              Chúng tôi giải quyết mọi rào cản để bạn có video chất lượng cao mà không cần học edit, không cần mua subscription đắt đỏ.
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3 relative z-10">
             {/* Feature 1 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <HugeiconsIcon icon={Zap} className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Công nghệ AI Đỉnh Cao</h3>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Công Nghệ AI Số 1 Thế Giới</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Tích hợp sức mạnh từ những model AI hàng đầu thế giới như Runway Gen-2, Pika Labs và Kling. Chất lượng video 4K sắc nét.
+                  Tích hợp các model AI đắt đỏ như <strong>Google VEO, Runway, Pika, Kling</strong>. Tạo video 4K sắc nét, chuyển động mượt mà mà các app miễn phí không làm được.
                 </p>
               </div>
             </div>
 
             {/* Feature 2 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <HugeiconsIcon icon={Clock} className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Tốc độ & Tiện lợi</h3>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Có Video Trong Thời Gian Ngắn</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Hệ thống AI xử lý tự động 24/7 với tốc độ nhanh chóng. Nhận kết quả video 4K chất lượng cao chỉ trong vài giờ.
+                  Thay vì thuê freelancer mất 3-5 ngày, Taophim trả kết quả cực nhanh. Phù hợp để bắt trend TikTok, Reels ngay lập tức.
                 </p>
               </div>
             </div>
 
             {/* Feature 3 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <HugeiconsIcon icon={Shield} className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Bảo mật Tuyệt đối</h3>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Bảo Mật & Riêng Tư</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Chúng tôi cam kết bảo vệ quyền riêng tư. Dữ liệu gốc và video thành phẩm được mã hóa và tự động xóa sau 7 ngày.
+                  Source ảnh và video của bạn được mã hóa và tự động xóa sau 7 ngày. Cam kết không sử dụng dữ liệu của khách hàng cho mục đích training AI.
                 </p>
               </div>
             </div>
 
-            {/* Feature 4: VietQR */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Feature 4: QR */}
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <HugeiconsIcon icon={QrCode} className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Thanh toán VietQR</h3>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Thanh Toán QR Tiện Lợi</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Hỗ trợ nạp Xu tự động 24/7 qua chuyển khoản ngân hàng (VietQR). Quét mã là có Xu ngay lập tức, không cần chờ đợi.
+                  Không cần thẻ Visa/Mastercard. Quét mã QR ngân hàng Việt Nam, Xu cộng ngay lập tức. Nạp bao nhiêu dùng bấy nhiêu.
                 </p>
               </div>
             </div>
 
             {/* Feature 5: Xu Never Expires */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <HugeiconsIcon icon={Infinity} className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Xu Không Hết Hạn</h3>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Xu Bảo Lưu Vĩnh Viễn</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Mua một lần, dùng trọn đời. Số dư Xu của bạn được bảo lưu vĩnh viễn cho đến khi bạn sử dụng dịch vụ.
+                  Không ép dùng hết trong tháng. Nạp 1 lần dùng cả đời. Xu của bạn luôn ở đó cho đến khi bạn sử dụng dịch vụ.
                 </p>
               </div>
             </div>
 
             {/* Feature 6: No Monthly Sub */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <HugeiconsIcon icon={CreditCard} className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Không Phí Tháng</h3>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Rẻ Hơn 90% So Với Mua Acc</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Mô hình Pay-as-you-go linh hoạt. Chỉ trả phí cho đúng những gì bạn tạo ra. Không có phí duy trì, không ràng buộc.
+                  Không tốn $30-$90/tháng để mua tài khoản Premium của các công cụ AI. Tại Taophim, bạn chỉ trả đúng giá trị video bạn tạo.
                 </p>
               </div>
             </div>
@@ -366,10 +376,12 @@ export default async function LandingPage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-              Khám phá <span className="text-primary">Thế giới Video AI</span>
+              Dịch Vụ Video AI <span className="text-primary">Hot Nhất 2025</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Tuyển tập các công cụ tạo video mạnh mẽ nhất. Đơn giản hóa quy trình sáng tạo của bạn chỉ với vài cú click chuột.
+              Bắt trend TikTok, Reels, YouTube Shorts cực dễ dàng.
+              <br className="hidden md:block" />
+              <span className="text-foreground font-medium">Chọn dịch vụ, xem giá ngay bên dưới.</span>
             </p>
           </div>
 
@@ -423,13 +435,13 @@ export default async function LandingPage() {
                         {service.name}
                       </h3>
                       <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
-                        {service.description || "Tạo video chất lượng cao với công nghệ AI tiên tiến nhất hiện nay."}
+                        {service.description || "Tạo video chất lượng 4K với công nghệ AI tiên tiến nhất. Gửi ảnh, nhận video trong vài giờ."}
                       </p>
                     </div>
 
                     <div className="mt-auto pt-4 border-t border-border/50 flex items-center justify-between">
                       <span className="text-sm font-medium text-primary flex items-center gap-1 group/btn">
-                        Bắt đầu ngay
+                        Đặt Đơn Ngay
                         <HugeiconsIcon icon={ArrowRight} className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
                       </span>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -463,11 +475,12 @@ export default async function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-20">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-              Sáng tạo Video AI <br /> chỉ với <span className="text-primary">3 bước</span>
+              Có Video Đẹp <br /> Chỉ Sau <span className="text-primary">3 Bước Đơn Giản</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Chúng tôi đã tối ưu hóa mọi thứ để bạn có thể tập trung vào ý tưởng.
-              Phần kỹ thuật khó khăn đã có AI lo.
+              Không cần cài phần mềm. Không cần học edit. Không cần chờ đợi lâu.
+              <br />
+              <span className="text-foreground font-medium">Bạn lo ý tưởng, Taophim lo phần còn lại.</span>
             </p>
           </div>
 
@@ -482,9 +495,9 @@ export default async function LandingPage() {
                   <div className="absolute inset-0 bg-primary/10 rounded-full" />
                   <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">01</div>
                 </div>
-                <h3 className="text-xl font-bold mb-3">Chọn dịch vụ</h3>
+                <h3 className="text-xl font-bold mb-3">Chọn Dịch Vụ Phù Hợp</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Khám phá kho công cụ đa dạng: từ ghép mặt (Face Swap), biến ảnh thành video, đến tạo video từ văn bản.
+                  Ghép mặt AI, biến ảnh thành video, hay video từ text? Xem giá ngay, không có phí ẩn. Biết trước chi phí trước khi đặt.
                 </p>
               </div>
             </div>
@@ -496,9 +509,9 @@ export default async function LandingPage() {
                   <div className="absolute inset-0 bg-primary/10 rounded-full" />
                   <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">02</div>
                 </div>
-                <h3 className="text-xl font-bold mb-3">Tải lên & Tùy chỉnh</h3>
+                <h3 className="text-xl font-bold mb-3">Gửi Ảnh & Mô Tả</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Upload file của bạn (ảnh/video) và nhập mô tả mong muốn. Hệ thống sẽ tự động tính toán chi phí.
+                  Upload ảnh/video của bạn, viết vài dòng mô tả mong muốn. Xu sẽ được giữ tạm thời, chỉ trừ khi bạn hài lòng với kết quả.
                 </p>
               </div>
             </div>
@@ -510,9 +523,9 @@ export default async function LandingPage() {
                   <div className="absolute inset-0 bg-primary/10 rounded-full" />
                   <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">03</div>
                 </div>
-                <h3 className="text-xl font-bold mb-3">Nhận kết quả</h3>
+                <h3 className="text-xl font-bold mb-3">Nhận Video 4K - Xong!</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  AI sẽ tự động xử lý và gửi thông báo khi hoàn tất. Video 4K sắc nét sẽ sẵn sàng tải xuống ngay sau khi xử lý xong.
+                  Chờ vài giờ là có thông báo. Tải video 4K sắc nét về máy. Đăng TikTok, Reels, YouTube Shorts - tuỳ bạn!
                 </p>
               </div>
             </div>
@@ -521,10 +534,11 @@ export default async function LandingPage() {
           <div className="mt-16 text-center">
             <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1" asChild>
               <Link href="/register">
-                Bắt đầu sáng tạo ngay
+                Thử Ngay - Đăng Ký Miễn Phí
                 <HugeiconsIcon icon={ArrowRight} className="ml-2 w-4 h-4" />
               </Link>
             </Button>
+            <p className="text-sm text-muted-foreground mt-4">Không cần thẻ tín dụng.</p>
           </div>
         </div>
       </section>
@@ -540,7 +554,8 @@ export default async function LandingPage() {
                 <span className="font-bold text-xl tracking-tight">Taophim</span>
               </Link>
               <p className="text-muted-foreground leading-relaxed text-sm">
-                Nền tảng tạo video AI hàng đầu Việt Nam. Giúp bạn hiện thực hóa ý tưởng chỉ trong vài phút.
+                Dịch vụ ghép mặt AI và tạo video chất lượng 4K hàng đầu Việt Nam.
+                Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài giờ.
               </p>
               <div className="flex gap-4">
                 {/* Social Icons Placeholder */}
@@ -555,7 +570,7 @@ export default async function LandingPage() {
           </div>
 
           <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <p>© 2024 Taophim. All rights reserved.</p>
+            <p>© 2025 Taophim. Ghép mặt AI, tạo video AI chất lượng cao tại Việt Nam.</p>
             <div className="flex gap-6">
               <Link href="/privacy" className="hover:text-foreground transition-colors">Chính sách bảo mật</Link>
               <Link href="/terms" className="hover:text-foreground transition-colors">Điều khoản sử dụng</Link>
@@ -563,6 +578,6 @@ export default async function LandingPage() {
           </div>
         </div>
       </footer>
-    </div>
+    </div >
   )
 }

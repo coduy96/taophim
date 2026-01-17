@@ -23,27 +23,38 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://taophim.com'
 export const metadata: Metadata = {
   // Basic metadata
   title: {
-    default: "Taophim - Dịch vụ tạo video AI #1 Việt Nam",
-    template: "%s | Taophim",
+    default: "Taophim - Ghép Mặt AI & Tạo Video AI Chuyên Nghiệp | Giá Rẻ #1 Việt Nam",
+    template: "%s | Taophim - Video AI Việt Nam",
   },
-  description: "Nền tảng tạo video AI hàng đầu Việt Nam. Ghép mặt (Face Swap), tạo video từ ảnh, text-to-video với công nghệ AI tiên tiến. Tiết kiệm 90% thời gian và chi phí.",
+  description: "Dịch vụ ghép mặt AI (Face Swap), tạo video từ ảnh chất lượng 4K tại Việt Nam. Không cần kỹ năng, không cần thẻ quốc tế. Thanh toán VietQR, nhận video trong vài giờ. Tiết kiệm 90% chi phí so với thuê editor.",
   keywords: [
-    "AI video",
+    // Primary keywords - High intent
+    "ghép mặt AI",
+    "face swap AI",
+    "dịch vụ ghép mặt",
+    "ghép mặt video",
     "tạo video AI",
-    "ghép mặt",
-    "face swap",
-    "face swap Việt Nam",
     "video AI Việt Nam",
+    // Service-specific
+    "ghép mặt TikTok",
+    "ghép mặt Reels",
     "tạo video từ ảnh",
-    "image to video",
-    "text to video",
+    "ảnh thành video",
+    "image to video AI",
+    "text to video tiếng Việt",
+    // Benefit keywords
+    "làm video không cần kỹ năng",
+    "tạo video giá rẻ",
+    "video marketing AI",
+    // Brand + location
     "Taophim",
-    "công nghệ AI",
-    "chỉnh sửa video",
-    "video marketing",
-    "content creator",
-    "TikTok video",
-    "Reels video",
+    "taophim.com",
+    "công cụ video AI Việt Nam",
+    // Long-tail
+    "ghép mặt vào video có sẵn",
+    "tạo video bán hàng AI",
+    "video quảng cáo AI",
+    "content creator tool Vietnam",
   ],
   authors: [{ name: "Taophim" }],
   creator: "Taophim",
@@ -77,14 +88,14 @@ export const metadata: Metadata = {
     locale: "vi_VN",
     url: BASE_URL,
     siteName: "Taophim",
-    title: "Taophim - Dịch vụ tạo video AI #1 Việt Nam",
-    description: "Nền tảng tạo video AI hàng đầu Việt Nam. Ghép mặt, tạo video từ ảnh với công nghệ AI tiên tiến. Tiết kiệm 90% thời gian.",
+    title: "Ghép Mặt AI & Tạo Video Chuyên Nghiệp | Taophim.com",
+    description: "Biến ảnh của bạn thành video viral chỉ trong vài giờ. Dịch vụ ghép mặt AI, tạo video từ ảnh chất lượng 4K. Thanh toán VietQR, không cần thẻ quốc tế.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Taophim - Nền tảng tạo video AI hàng đầu Việt Nam",
+        alt: "Taophim - Dịch vụ ghép mặt AI và tạo video chất lượng cao tại Việt Nam",
       },
     ],
   },
@@ -92,8 +103,8 @@ export const metadata: Metadata = {
   // Twitter Card metadata
   twitter: {
     card: "summary_large_image",
-    title: "Taophim - Dịch vụ tạo video AI #1 Việt Nam",
-    description: "Nền tảng tạo video AI hàng đầu Việt Nam. Ghép mặt, tạo video từ ảnh với công nghệ AI tiên tiến.",
+    title: "Ghép Mặt AI & Tạo Video Chuyên Nghiệp | Taophim",
+    description: "Biến ảnh thành video viral chất lượng 4K. Ghép mặt AI, tạo video từ ảnh. Thanh toán VietQR, nhận video trong vài giờ.",
     images: ["/og-image.png"],
     creator: "@taophim",
   },
@@ -127,8 +138,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Taophim",
-  "alternateName": "Taophim.com",
-  "description": "Nền tảng tạo video AI hàng đầu Việt Nam. Ghép mặt, tạo video từ ảnh với công nghệ AI tiên tiến.",
+  "alternateName": ["Taophim.com", "Tạo Phim AI", "Ghép Mặt AI Việt Nam"],
+  "description": "Dịch vụ ghép mặt AI (Face Swap) và tạo video từ ảnh chất lượng 4K tại Việt Nam. Không cần kỹ năng, thanh toán VietQR, nhận video trong vài giờ.",
   "url": "https://taophim.com",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "Web",
@@ -136,19 +147,33 @@ const jsonLd = {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "VND",
-    "description": "Bắt đầu miễn phí với Xu khuyến mãi"
+    "description": "Đăng ký miễn phí, chỉ trả phí khi sử dụng dịch vụ"
   },
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "5.0",
-    "reviewCount": "1000"
+    "reviewCount": "1000",
+    "bestRating": "5",
+    "worstRating": "1"
   },
   "provider": {
     "@type": "Organization",
     "name": "Taophim",
-    "url": "https://taophim.com"
+    "url": "https://taophim.com",
+    "logo": "https://taophim.com/logo.png"
   },
-  "inLanguage": "vi-VN"
+  "featureList": [
+    "Ghép mặt AI (Face Swap)",
+    "Tạo video từ ảnh (Image to Video)",
+    "Video chất lượng 4K",
+    "Thanh toán VietQR",
+    "Không cần thẻ quốc tế"
+  ],
+  "inLanguage": "vi-VN",
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Content Creators, Marketers, Business Owners"
+  }
 }
 
 export default function RootLayout({
