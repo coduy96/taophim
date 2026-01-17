@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Image from "next/image"
+import Link from "next/link"
 import {
   Table,
   TableBody,
@@ -491,10 +492,10 @@ function ResultPreview({ url }: { url: string }) {
 interface OrderListProps {
   orders: OrderWithService[]
   initialOrderId?: string
+  currentFilter?: string
 }
 
-export function OrderList({ orders, initialOrderId }: OrderListProps) {
-  const [filter, setFilter] = React.useState("all")
+export function OrderList({ orders, initialOrderId, currentFilter = "all" }: OrderListProps) {
   const [selectedOrder, setSelectedOrder] = React.useState<OrderWithService | null>(null)
   const [isSheetOpen, setIsSheetOpen] = React.useState(false)
   const [copiedId, setCopiedId] = React.useState(false)
@@ -510,10 +511,8 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
     }
   }, [initialOrderId, orders])
 
-  const filteredOrders = React.useMemo(() => {
-    if (filter === "all") return orders
-    return orders.filter(order => order.status === filter)
-  }, [orders, filter])
+  // Orders are now already filtered server-side, just use directly
+  const filteredOrders = orders
 
   const handleViewOrder = (order: OrderWithService) => {
     setSelectedOrder(order)
@@ -557,19 +556,19 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <Tabs value={filter} onValueChange={setFilter} className="w-full sm:w-auto">
+        <Tabs value={currentFilter} className="w-full sm:w-auto">
           <TabsList className="grid w-full grid-cols-4 sm:w-auto sm:inline-flex bg-muted/50 p-1 rounded-xl">
-            <TabsTrigger value="all" className="rounded-lg">
-              Tất cả
+            <TabsTrigger value="all" className="rounded-lg" asChild>
+              <Link href="/dashboard/orders?status=all">Tất cả</Link>
             </TabsTrigger>
-            <TabsTrigger value="pending" className="rounded-lg">
-              Đang xử lý
+            <TabsTrigger value="pending" className="rounded-lg" asChild>
+              <Link href="/dashboard/orders?status=pending">Đang xử lý</Link>
             </TabsTrigger>
-            <TabsTrigger value="completed" className="rounded-lg">
-              Hoàn thành
+            <TabsTrigger value="completed" className="rounded-lg" asChild>
+              <Link href="/dashboard/orders?status=completed">Hoàn thành</Link>
             </TabsTrigger>
-            <TabsTrigger value="cancelled" className="rounded-lg">
-              Đã hủy
+            <TabsTrigger value="cancelled" className="rounded-lg" asChild>
+              <Link href="/dashboard/orders?status=cancelled">Đã hủy</Link>
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -636,7 +635,7 @@ export function OrderList({ orders, initialOrderId }: OrderListProps) {
                           <span className="font-medium truncate">{order.services.name}</span>
                           {summary && (
                             <p className="text-xs text-muted-foreground line-clamp-1 italic">
-                              "{summary}"
+                              &ldquo;{summary}&rdquo;
                             </p>
                           )}
                           <div className="flex items-center gap-2 mt-0.5 sm:hidden">

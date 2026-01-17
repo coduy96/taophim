@@ -5,20 +5,44 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { ShoppingBag01Icon as ShoppingBag } from "@hugeicons/core-free-icons"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { Pagination, PaginationInfo } from "@/components/ui/pagination"
+
+const ITEMS_PER_PAGE = 10
 
 export default async function OrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ order?: string }>
+  searchParams: Promise<{ order?: string; page?: string; status?: string }>
 }) {
-  const { order: selectedOrderId } = await searchParams
+  const { order: selectedOrderId, page, status } = await searchParams
+  const currentPage = Math.max(1, parseInt(page || "1", 10) || 1)
+  const statusFilter = status || "all"
   const supabase = await createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Fetch all orders
-  const { data: orders, error } = await supabase
+  // Build query with optional status filter
+  let countQuery = supabase
+    .from('orders')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+
+  if (statusFilter !== "all" && ["pending", "processing", "completed", "cancelled"].includes(statusFilter)) {
+    countQuery = countQuery.eq('status', statusFilter as "pending" | "processing" | "completed" | "cancelled")
+  }
+
+  const { count: totalCount } = await countQuery
+
+  const totalItems = totalCount || 0
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
+  
+  // Ensure currentPage is within valid range
+  const validPage = Math.min(currentPage, Math.max(1, totalPages))
+  const offset = (validPage - 1) * ITEMS_PER_PAGE
+
+  // Fetch paginated orders
+  let dataQuery = supabase
     .from('orders')
     .select(`
       *,
@@ -26,10 +50,16 @@ export default async function OrdersPage({
     `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
+    .range(offset, offset + ITEMS_PER_PAGE - 1)
+
+  if (statusFilter !== "all" && ["pending", "processing", "completed", "cancelled"].includes(statusFilter)) {
+    dataQuery = dataQuery.eq('status', statusFilter as "pending" | "processing" | "completed" | "cancelled")
+  }
+
+  const { data: orders, error } = await dataQuery
 
   if (error) {
     console.error("Error fetching orders:", error)
-    // You might want to show an error state here
   }
 
   // Type casting to match the interface expected by OrderList
@@ -80,7 +110,28 @@ export default async function OrdersPage({
       </div>
 
       {/* Main Content */}
-      <OrderList orders={typedOrders} initialOrderId={selectedOrderId} />
+      <OrderList 
+        orders={typedOrders} 
+        initialOrderId={selectedOrderId}
+        currentFilter={statusFilter}
+      />
+
+      {/* Pagination */}
+      {totalItems > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+          <PaginationInfo
+            currentPage={validPage}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalItems={totalItems}
+          />
+          <Pagination
+            totalItems={totalItems}
+            itemsPerPage={ITEMS_PER_PAGE}
+            currentPage={validPage}
+            preserveParams={["status", "order"]}
+          />
+        </div>
+      )}
     </div>
   )
 }

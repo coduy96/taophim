@@ -10,6 +10,9 @@ import {
   Time01Icon as Clock,
   Exchange01Icon as Exchange
 } from "@hugeicons/core-free-icons"
+import { Pagination, PaginationInfo } from "@/components/ui/pagination"
+
+const ITEMS_PER_PAGE = 10
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -43,7 +46,13 @@ const transactionTypeLabels: Record<string, { label: string; icon: React.ReactNo
   },
 }
 
-export default async function WalletPage() {
+export default async function WalletPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const { page } = await searchParams
+  const currentPage = Math.max(1, parseInt(page || "1", 10) || 1)
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -56,7 +65,20 @@ export default async function WalletPage() {
     .eq('id', user.id)
     .single()
 
-  // Fetch transactions
+  // Fetch total count for pagination
+  const { count: totalCount } = await supabase
+    .from('transactions')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+
+  const totalItems = totalCount || 0
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
+  
+  // Ensure currentPage is within valid range
+  const validPage = Math.min(currentPage, Math.max(1, totalPages))
+  const offset = (validPage - 1) * ITEMS_PER_PAGE
+
+  // Fetch paginated transactions
   const { data: transactions } = await supabase
     .from('transactions')
     .select(`
@@ -68,13 +90,20 @@ export default async function WalletPage() {
     `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
+    .range(offset, offset + ITEMS_PER_PAGE - 1)
+
+  // Fetch all transactions for stats calculation (totals)
+  const { data: allTransactions } = await supabase
+    .from('transactions')
+    .select('type, amount')
+    .eq('user_id', user.id)
 
   // Calculate total spent
-  const totalSpent = transactions
+  const totalSpent = allTransactions
     ?.filter(t => t.type === 'expense')
     .reduce((sum, t) => sum + Math.abs(t.amount), 0) || 0
 
-  const totalDeposited = transactions
+  const totalDeposited = allTransactions
     ?.filter(t => t.type === 'deposit')
     .reduce((sum, t) => sum + t.amount, 0) || 0
 
@@ -192,6 +221,22 @@ export default async function WalletPage() {
                 </div>
               )}
             </div>
+
+            {/* Pagination */}
+            {totalItems > 0 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6">
+                <PaginationInfo
+                  currentPage={validPage}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  totalItems={totalItems}
+                />
+                <Pagination
+                  totalItems={totalItems}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  currentPage={validPage}
+                />
+              </div>
+            )}
           </Card>
         </div>
 
@@ -204,4 +249,3 @@ export default async function WalletPage() {
     </div>
   )
 }
-
