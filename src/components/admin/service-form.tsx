@@ -174,6 +174,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [isActive, setIsActive] = useState(service?.is_active ?? true)
+  const [isPublicOnLanding, setIsPublicOnLanding] = useState(service?.is_public_on_landing ?? false)
   
   // Form fields
   const existingConfig = service?.form_config as unknown as FormConfig
@@ -285,6 +286,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
         base_cost: cost,
         cover_image: finalCoverImageUrl || null,
         is_active: isActive,
+        is_public_on_landing: isPublicOnLanding,
         form_config: JSON.parse(JSON.stringify(formConfig)),
         updated_at: new Date().toISOString(),
       }
@@ -409,6 +411,23 @@ export function ServiceForm({ service }: ServiceFormProps) {
           <Label htmlFor="isActive" className="cursor-pointer">
             Kích hoạt dịch vụ (hiển thị cho người dùng)
           </Label>
+        </div>
+
+        <div className="flex items-center gap-3 p-4 rounded-lg border">
+          <Switch
+            id="isPublicOnLanding"
+            checked={isPublicOnLanding}
+            onCheckedChange={setIsPublicOnLanding}
+            disabled={isLoading}
+          />
+          <div className="flex flex-col">
+            <Label htmlFor="isPublicOnLanding" className="cursor-pointer">
+              Hiển thị trên trang chủ
+            </Label>
+            <span className="text-xs text-muted-foreground">
+              Dịch vụ sẽ xuất hiện trong mục &ldquo;Dịch vụ nổi bật&rdquo; trên Landing Page
+            </span>
+          </div>
         </div>
       </div>
 

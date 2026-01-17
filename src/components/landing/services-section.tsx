@@ -9,6 +9,7 @@ import {
   Coins01Icon as Coins,
   MagicWand01Icon as Wand2,
 } from "@hugeicons/core-free-icons"
+import { unstable_noStore as noStore } from "next/cache"
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -24,14 +25,18 @@ interface Service {
 }
 
 export async function ServicesSection({ user }: { user: any }) {
+  // Disable caching to ensure fresh data on each request
+  noStore()
+  
   const supabase = await createClient()
 
-  // Fetch active services
+  // Fetch active services that are marked to show on landing page
   const { data: services } = await supabase
     .from('services')
     .select('id, slug, name, description, base_cost, cover_image')
     .is('deleted_at', null)
     .eq('is_active', true)
+    .eq('is_public_on_landing', true)
     .limit(6)
 
   if (!services || services.length === 0) {

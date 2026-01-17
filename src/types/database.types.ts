@@ -108,6 +108,7 @@ export type Database = {
           form_config: Json
           id: string
           is_active: boolean
+          is_public_on_landing: boolean
           name: string
           slug: string
           updated_at: string
@@ -120,6 +121,7 @@ export type Database = {
           form_config?: Json
           id?: string
           is_active?: boolean
+          is_public_on_landing?: boolean
           name: string
           slug: string
           updated_at?: string
@@ -132,6 +134,7 @@ export type Database = {
           form_config?: Json
           id?: string
           is_active?: boolean
+          is_public_on_landing?: boolean
           name?: string
           slug?: string
           updated_at?: string
