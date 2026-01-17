@@ -66,6 +66,7 @@ export default async function LandingPage() {
   const { data: services } = await supabase
     .from('services')
     .select('id, slug, name, description, base_cost, cover_image')
+    .is('deleted_at', null)
     .eq('is_active', true)
     .limit(6)
 

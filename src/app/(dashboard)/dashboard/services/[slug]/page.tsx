@@ -34,6 +34,7 @@ export default async function ServiceDetailPage({
     .from('services')
     .select('*')
     .eq('slug', slug)
+    .is('deleted_at', null)
     .eq('is_active', true)
     .single()
 

@@ -34,6 +34,7 @@ export default async function EditServicePage({
     .from('services')
     .select('*')
     .eq('id', id)
+    .is('deleted_at', null)
     .single()
 
   if (error || !service) {

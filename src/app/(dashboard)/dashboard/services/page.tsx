@@ -46,6 +46,7 @@ export default async function ServicesPage({
   const { count: totalCount } = await supabase
     .from('services')
     .select('*', { count: 'exact', head: true })
+    .is('deleted_at', null)
     .eq('is_active', true)
 
   const totalItems = totalCount || 0
@@ -59,6 +60,7 @@ export default async function ServicesPage({
   const { data: services } = await supabase
     .from('services')
     .select('*')
+    .is('deleted_at', null)
     .eq('is_active', true)
     .order('created_at', { ascending: true })
     .range(offset, offset + ITEMS_PER_PAGE - 1)

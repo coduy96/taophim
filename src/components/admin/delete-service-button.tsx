@@ -37,7 +37,7 @@ export function DeleteServiceButton({ serviceId, serviceName }: DeleteServiceBut
       
       const { error } = await supabase
         .from('services')
-        .delete()
+        .update({ deleted_at: new Date().toISOString(), is_active: false })
         .eq('id', serviceId)
 
       if (error) {
