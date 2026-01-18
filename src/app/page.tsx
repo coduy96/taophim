@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@/components/ui/avatar"
 import { Logo } from "@/components/logo"
 import { Navbar } from "@/components/layout/navbar"
-import { LogoCloud } from "@/components/landing/logo-cloud"
+// import { LogoCloud } from "@/components/landing/logo-cloud"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Suspense } from "react"
 import { ServicesSection } from "@/components/landing/services-section"
@@ -80,27 +80,27 @@ export default async function LandingPage() {
               {/* Badge */}
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary hover:bg-primary/10 transition-colors cursor-default mb-4">
                 <span className="flex h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)] animate-pulse"></span>
-                Đã phục vụ 1,500+ khách hàng tại Việt Nam 🇻🇳
+                Nền tảng Video AI hàng đầu Việt Nam
               </div>
 
               {/* Headings */}
               <div className="space-y-6">
 
                 <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
-                  Tạo Video AI <br />
+                  Biến Ý Tưởng <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
-                    Triệu View
+                    Thành Video AI
                   </span>
                   <br />
-                  <span className="text-4xl md:text-6xl text-foreground/80">Chỉ Từ 10K.</span>
+                  <span className="text-4xl md:text-6xl text-foreground/80">Trong Vài Giờ.</span>
                 </h1>
 
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-                  Tích hợp công nghệ <span className="text-foreground font-medium">Google VEO, Runway, Pika, Kling</span> đắt đỏ nhất thế giới - với giá rẻ cho người Việt.
+                  Giải pháp tạo video chuyên nghiệp cho <span className="text-foreground font-medium">Content Creator, KOL và Doanh nghiệp</span>. Công nghệ AI tiên tiến, chất lượng điện ảnh.
                   <br />
                   <span className="flex items-center gap-2 mt-3 text-sm font-medium text-foreground/80">
                     <HugeiconsIcon icon={Zap} className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    Không cần biết edit. Không cần tiếng Anh.
+                    Thanh toán nội địa. Hỗ trợ tiếng Việt. Cam kết hoàn tiền.
                   </span>
                 </p>
               </div>
@@ -110,13 +110,13 @@ export default async function LandingPage() {
                 <Button size="lg" className="h-14 px-8 text-lg rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 bg-primary hover:bg-primary/90 font-bold" asChild>
                   <Link href={user ? "/dashboard/services" : "/register"}>
                     <HugeiconsIcon icon={Wand2} className="mr-2 h-6 w-6" />
-                    Thử Ngay Miễn Phí
+                    Bắt Đầu Ngay
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full border-2 hover:bg-muted/50 transition-all duration-300 backdrop-blur-sm" asChild>
                   <Link href="#services">
                     <HugeiconsIcon icon={Film} className="mr-2 h-6 w-6" />
-                    Xem Mẫu Video
+                    Khám Phá Dịch Vụ
                   </Link>
                 </Button>
               </div>
@@ -147,7 +147,7 @@ export default async function LandingPage() {
                     <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
                     <span className="text-foreground font-bold ml-1">5.0</span>
                   </div>
-                  <span className="text-muted-foreground">Được TikToker & KOL tin dùng</span>
+                  <span className="text-muted-foreground">Được 1,500+ khách hàng tin dùng</span>
                 </div>
               </div>
             </div>
@@ -173,7 +173,7 @@ export default async function LandingPage() {
                   <div className="aspect-video relative bg-zinc-900 group cursor-pointer overflow-hidden">
                     <Image
                       src="/images/landing/long-form-bg.webp"
-                      alt="Giao diện tạo video AI chuyên nghiệp với công nghệ Runway và Kling"
+                      alt="Giao diện tạo video AI chuyên nghiệp"
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 450px"
@@ -215,10 +215,10 @@ export default async function LandingPage() {
 
                     <div className="absolute bottom-6 left-4 right-4 z-20 text-white">
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="px-2 py-0.5 rounded-full bg-primary/90 text-[10px] font-bold shadow-lg shadow-primary/20">VIRAL</div>
-                        <div className="text-[10px] opacity-80 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">Vừa xong</div>
+                        <div className="px-2 py-0.5 rounded-full bg-primary/90 text-[10px] font-bold shadow-lg shadow-primary/20">HD</div>
+                        <div className="text-[10px] opacity-80 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">Hoàn thành</div>
                       </div>
-                      <p className="text-sm font-medium leading-snug text-shadow-sm">Video triệu view chỉ trong 2 giờ!</p>
+                      <p className="text-sm font-medium leading-snug text-shadow-sm">Chất lượng cao, sẵn sàng đăng tải</p>
 
                     </div>
                   </div>
@@ -232,7 +232,7 @@ export default async function LandingPage() {
 
 
       {/* Trusted By / Logo Cloud */}
-      <LogoCloud />
+      {/* <LogoCloud /> */}
 
       {/* Features Section */}
       <section id="features" className="py-24 relative overflow-hidden">
@@ -258,9 +258,9 @@ export default async function LandingPage() {
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <HugeiconsIcon icon={Zap} className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Công Nghệ AI Số 1 Thế Giới</h3>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Công Nghệ AI Tiên Tiến Nhất</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Tích hợp các model AI đắt đỏ như <strong>Google VEO, Runway, Pika, Kling</strong>. Tạo video 4K sắc nét, chuyển động mượt mà mà các app miễn phí không làm được.
+                  Sử dụng các model AI hàng đầu thế giới. Tạo video <strong>chất lượng cao, chuyển động mượt mà</strong> - hiệu ứng mà các app miễn phí không thể làm được.
                 </p>
               </div>
             </div>
@@ -417,9 +417,9 @@ export default async function LandingPage() {
                   <div className="absolute inset-0 bg-primary/10 rounded-full" />
                   <div className="w-12 h-12 text-primary font-bold text-2xl flex items-center justify-center">03</div>
                 </div>
-                <h3 className="text-xl font-bold mb-3">Nhận Video 4K - Xong!</h3>
+                <h3 className="text-xl font-bold mb-3">Nhận Video - Xong!</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Chờ vài giờ là có thông báo. Tải video 4K sắc nét về máy. Đăng TikTok, Reels, YouTube Shorts - tuỳ bạn!
+                  Chờ vài giờ là có thông báo. Tải video chất lượng cao về máy. Đăng TikTok, Reels, YouTube Shorts - tuỳ bạn!
                 </p>
               </div>
             </div>
@@ -448,7 +448,7 @@ export default async function LandingPage() {
                 <span className="font-bold text-xl tracking-tight">Taophim</span>
               </Link>
               <p className="text-muted-foreground leading-relaxed text-sm">
-                Dịch vụ ghép mặt AI và tạo video chất lượng 4K hàng đầu Việt Nam.
+                Dịch vụ ghép mặt AI và tạo video chất lượng cao hàng đầu Việt Nam.
                 Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài giờ.
               </p>
               <div className="flex gap-4">
