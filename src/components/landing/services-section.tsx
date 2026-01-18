@@ -101,16 +101,16 @@ export async function ServicesSection({ user }: { user: any }) {
 
           {/* Content Area */}
           <div className="flex flex-col flex-grow p-6">
-            <div className="mb-4">
-              <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-1">
+            <div className="flex-grow">
+              <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
                 {service.name}
               </h3>
-              <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 {service.description || "Tạo video chất lượng 4K với công nghệ AI tiên tiến nhất. Gửi ảnh, nhận video trong vài giờ."}
               </p>
             </div>
 
-            <div className="mt-auto pt-4 border-t border-border/50 flex items-center justify-between">
+            <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
               <span className="text-sm font-medium text-primary flex items-center gap-1 group/btn">
                 Đặt Đơn Ngay
                 <HugeiconsIcon icon={ArrowRight} className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />

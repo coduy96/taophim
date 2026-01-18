@@ -135,13 +135,13 @@ export default async function ServicesPage({
                     </div>
                   </div>
 
-                  <div className="p-5 flex flex-col h-[calc(100%-aspect-video)]">
-                    <div className="mb-auto">
+                  <div className="p-5 flex flex-col">
+                    <div>
                       <h3 className="font-semibold text-lg group-hover:text-primary transition-colors flex items-center gap-2">
                         {service.name}
                         <HugeiconsIcon icon={ArrowRight} className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
                       </h3>
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-2 leading-relaxed">
+                      <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
                         {service.description || "Tạo video chất lượng cao với công nghệ AI tiên tiến."}
                       </p>
                     </div>
