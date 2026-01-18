@@ -25,7 +25,7 @@ interface Service {
   slug: string
   name: string
   description: string | null
-  base_cost: number
+  cost_per_second: number
   is_active: boolean
   cover_image: string | null
 }
@@ -130,7 +130,7 @@ export default async function ServicesPage({
                     <div className="absolute top-3 right-3">
                       <div className="flex items-center gap-1.5 bg-background/90 backdrop-blur text-foreground px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm border border-border/50">
                         <HugeiconsIcon icon={Coins} className="w-3.5 h-3.5 text-yellow-500" />
-                        <span>{formatXu(service.base_cost)} Xu</span>
+                        <span>{formatXu(service.cost_per_second)} Xu/giây</span>
                       </div>
                     </div>
                   </div>

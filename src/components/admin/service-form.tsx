@@ -169,7 +169,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
   const [name, setName] = useState(service?.name || "")
   const [slug, setSlug] = useState(service?.slug || "")
   const [description, setDescription] = useState(service?.description || "")
-  const [baseCost, setBaseCost] = useState(service?.base_cost?.toString() || "")
+  const [costPerSecond, setCostPerSecond] = useState(service?.cost_per_second?.toString() || "")
   const [coverImage, setCoverImage] = useState<string | null>(service?.cover_image || null)
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
@@ -218,14 +218,14 @@ export function ServiceForm({ service }: ServiceFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!name || !slug || !baseCost) {
+    if (!name || !slug || !costPerSecond) {
       toast.error("Vui lòng điền đầy đủ thông tin bắt buộc")
       return
     }
 
-    const cost = parseInt(baseCost)
-    if (isNaN(cost)) {
-      toast.error("Chi phí phải là một số hợp lệ")
+    const cost = parseInt(costPerSecond)
+    if (isNaN(cost) || cost < 1) {
+      toast.error("Chi phí mỗi giây phải là một số hợp lệ (tối thiểu 1 Xu)")
       return
     }
 
@@ -283,7 +283,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
         name,
         slug,
         description: description || null,
-        base_cost: cost,
+        cost_per_second: cost,
         cover_image: finalCoverImageUrl || null,
         is_active: isActive,
         is_public_on_landing: isPublicOnLanding,
@@ -372,16 +372,19 @@ export function ServiceForm({ service }: ServiceFormProps) {
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="baseCost">Chi phí (Xu) *</Label>
+            <Label htmlFor="costPerSecond">Chi phí mỗi giây (Xu) *</Label>
             <Input
-              id="baseCost"
+              id="costPerSecond"
               type="number"
-              min="0"
-              placeholder="100"
-              value={baseCost}
-              onChange={(e) => setBaseCost(e.target.value)}
+              min="1"
+              placeholder="10"
+              value={costPerSecond}
+              onChange={(e) => setCostPerSecond(e.target.value)}
               disabled={isLoading}
             />
+            <p className="text-xs text-muted-foreground">
+              Khách hàng sẽ chọn thời lượng video. Chi phí = Thời lượng × Giá mỗi giây.
+            </p>
           </div>
           <div className="space-y-2">
             <Label>Ảnh bìa</Label>

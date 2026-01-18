@@ -139,13 +139,18 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
   )
 }
 
-export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderFormProps) {
+export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: ServiceOrderFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<Record<string, string | boolean | File | null>>({})
-  
+  const [duration, setDuration] = useState<number>(5)
+
   const formConfig = (service.form_config as unknown as FormConfig) || { fields: [] }
   const fields = formConfig.fields || []
+
+  // Calculate total cost based on duration
+  const totalCost = duration * service.cost_per_second
+  const canAfford = userBalance >= totalCost
 
   const handleFieldChange = (fieldId: string, value: string | boolean | File | null) => {
     setFormData(prev => ({ ...prev, [fieldId]: value }))
@@ -153,9 +158,14 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!hasEnoughBalance) {
+
+    if (!canAfford) {
       toast.error("Số dư không đủ để tạo đơn hàng")
+      return
+    }
+
+    if (duration < 1) {
+      toast.error("Thời lượng video phải ít nhất 1 giây")
       return
     }
 
@@ -172,23 +182,25 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
     try {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
-      
+
       if (!user) {
         toast.error("Vui lòng đăng nhập lại")
         return
       }
 
       // Upload files first
-      const userInputs: Record<string, string | boolean> = {}
-      
+      const userInputs: Record<string, string | boolean | number> = {
+        duration_seconds: duration,
+      }
+
       for (const field of fields) {
         const value = formData[field.id]
-        
+
         if (value instanceof File) {
           // Upload to Supabase Storage
           const fileExt = value.name.split('.').pop()
           const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-          
+
           const { error: uploadError } = await supabase.storage
             .from('order-assets')
             .upload(`input/${fileName}`, value)
@@ -210,7 +222,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
       // Create order using the stored function
       const { error: orderError } = await supabase.rpc('create_order', {
         p_service_id: service.id,
-        p_total_cost: service.base_cost,
+        p_total_cost: totalCost,
         p_user_inputs: userInputs
       })
 
@@ -240,7 +252,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
             placeholder={field.placeholder}
             value={(value as string) || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
-            disabled={isSubmitting || !hasEnoughBalance}
+            disabled={isSubmitting || !canAfford}
           />
         )
       
@@ -251,7 +263,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
             placeholder={field.placeholder}
             value={(value as string) || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
-            disabled={isSubmitting || !hasEnoughBalance}
+            disabled={isSubmitting || !canAfford}
             rows={4}
           />
         )
@@ -264,7 +276,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
             field={field}
             value={value as File | null}
             onChange={(file) => handleFieldChange(field.id, file)}
-            disabled={isSubmitting || !hasEnoughBalance}
+            disabled={isSubmitting || !canAfford}
           />
         )
       
@@ -273,7 +285,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
           <Select
             value={(value as string) || ''}
             onValueChange={(v) => handleFieldChange(field.id, v)}
-            disabled={isSubmitting || !hasEnoughBalance}
+            disabled={isSubmitting || !canAfford}
           >
             <SelectTrigger>
               <SelectValue placeholder={field.placeholder || "Chọn..."} />
@@ -295,7 +307,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
               id={field.id}
               checked={(value as boolean) || false}
               onCheckedChange={(checked) => handleFieldChange(field.id, checked)}
-              disabled={isSubmitting || !hasEnoughBalance}
+              disabled={isSubmitting || !canAfford}
             />
             <Label htmlFor={field.id} className="text-sm text-muted-foreground">
               {field.placeholder || "Bật/Tắt"}
@@ -310,7 +322,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
             placeholder={field.placeholder}
             value={(value as string) || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
-            disabled={isSubmitting || !hasEnoughBalance}
+            disabled={isSubmitting || !canAfford}
           />
         )
     }
@@ -321,12 +333,28 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
     return (
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
+          <Label htmlFor="duration">Thời lượng video (giây) *</Label>
+          <Input
+            id="duration"
+            type="number"
+            min="1"
+            max="300"
+            value={duration}
+            onChange={(e) => setDuration(Math.max(1, parseInt(e.target.value) || 1))}
+            disabled={isSubmitting}
+          />
+          <p className="text-xs text-muted-foreground">
+            {formatXu(service.cost_per_second)} Xu/giây × {duration} giây = <span className="font-medium text-foreground">{formatXu(totalCost)} Xu</span>
+          </p>
+        </div>
+
+        <div className="space-y-2">
           <Label>Tải lên file nguồn</Label>
           <FileUploadField
             field={{ id: 'source_file', type: 'file', label: 'File nguồn', required: true }}
             value={formData['source_file'] as File | null}
             onChange={(file) => handleFieldChange('source_file', file)}
-            disabled={isSubmitting || !hasEnoughBalance}
+            disabled={isSubmitting || !canAfford}
           />
         </div>
 
@@ -337,16 +365,16 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
             placeholder="Mô tả yêu cầu của bạn..."
             value={(formData['notes'] as string) || ''}
             onChange={(e) => handleFieldChange('notes', e.target.value)}
-            disabled={isSubmitting || !hasEnoughBalance}
+            disabled={isSubmitting || !canAfford}
             rows={4}
           />
         </div>
 
-        <Button 
-          type="submit" 
-          className="w-full" 
+        <Button
+          type="submit"
+          className="w-full"
           size="lg"
-          disabled={isSubmitting || !hasEnoughBalance}
+          disabled={isSubmitting || !canAfford}
         >
           {isSubmitting ? (
             <>
@@ -355,7 +383,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
             </>
           ) : (
             <>
-              Tạo đơn hàng - {formatXu(service.base_cost)} Xu
+              Tạo đơn hàng - {formatXu(totalCost)} Xu
             </>
           )}
         </Button>
@@ -365,6 +393,22 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="duration">Thời lượng video (giây) *</Label>
+        <Input
+          id="duration"
+          type="number"
+          min="1"
+          max="300"
+          value={duration}
+          onChange={(e) => setDuration(Math.max(1, parseInt(e.target.value) || 1))}
+          disabled={isSubmitting}
+        />
+        <p className="text-xs text-muted-foreground">
+          {formatXu(service.cost_per_second)} Xu/giây × {duration} giây = <span className="font-medium text-foreground">{formatXu(totalCost)} Xu</span>
+        </p>
+      </div>
+
       {fields.map((field) => (
         <div key={field.id} className="space-y-2">
           <Label htmlFor={field.id}>
@@ -375,11 +419,11 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
         </div>
       ))}
 
-      <Button 
-        type="submit" 
-        className="w-full" 
+      <Button
+        type="submit"
+        className="w-full"
         size="lg"
-        disabled={isSubmitting || !hasEnoughBalance}
+        disabled={isSubmitting || !canAfford}
       >
         {isSubmitting ? (
           <>
@@ -388,7 +432,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance }: ServiceOrderForm
           </>
         ) : (
           <>
-            Tạo đơn hàng - {formatXu(service.base_cost)} Xu
+            Tạo đơn hàng - {formatXu(totalCost)} Xu
           </>
         )}
       </Button>

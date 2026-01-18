@@ -53,7 +53,8 @@ export default async function ServiceDetailPage({
     .eq('id', user.id)
     .single()
 
-  const hasEnoughBalance = (profile?.xu_balance || 0) >= service.base_cost
+  // Check if user can afford at least 1 second of video
+  const hasEnoughBalance = (profile?.xu_balance || 0) >= service.cost_per_second
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-10">
@@ -100,10 +101,10 @@ export default async function ServiceDetailPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between p-3 rounded-lg bg-primary/5 border border-primary/10">
-                <span className="text-sm font-medium text-muted-foreground">Giá mỗi lần tạo</span>
+                <span className="text-sm font-medium text-muted-foreground">Giá mỗi giây</span>
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={Coins} className="h-4 w-4 text-primary" />
-                  <span className="font-bold text-lg text-foreground">{formatXu(service.base_cost)} Xu</span>
+                  <span className="font-bold text-lg text-foreground">{formatXu(service.cost_per_second)} Xu/giây</span>
                 </div>
               </div>
 
@@ -112,7 +113,7 @@ export default async function ServiceDetailPage({
                   <span className="text-muted-foreground">Số dư hiện tại:</span>
                   <span className="font-medium">{formatXu(profile?.xu_balance || 0)} Xu</span>
                 </div>
-                
+
                 {!hasEnoughBalance ? (
                   <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 space-y-2">
                     <div className="flex gap-2">
@@ -120,7 +121,7 @@ export default async function ServiceDetailPage({
                       <p className="text-sm text-red-600 dark:text-red-400 font-medium">Số dư không đủ</p>
                     </div>
                     <p className="text-xs text-red-600/80 dark:text-red-400/80 pl-6">
-                      Thiếu {formatXu(service.base_cost - (profile?.xu_balance || 0))} Xu để thực hiện.
+                      Cần tối thiểu {formatXu(service.cost_per_second)} Xu cho 1 giây video.
                     </p>
                     <Button size="sm" variant="destructive" className="w-full mt-2" asChild>
                       <Link href="/dashboard/wallet">Nạp Xu ngay</Link>

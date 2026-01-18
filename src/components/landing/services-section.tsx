@@ -20,7 +20,7 @@ interface Service {
   slug: string
   name: string
   description: string | null
-  base_cost: number
+  cost_per_second: number
   cover_image: string | null
 }
 
@@ -33,7 +33,7 @@ export async function ServicesSection({ user }: { user: any }) {
   // Fetch active services that are marked to show on landing page
   const { data: services } = await supabase
     .from('services')
-    .select('id, slug, name, description, base_cost, cover_image')
+    .select('id, slug, name, description, cost_per_second, cover_image')
     .is('deleted_at', null)
     .eq('is_active', true)
     .eq('is_public_on_landing', true)
@@ -85,7 +85,7 @@ export async function ServicesSection({ user }: { user: any }) {
             <div className="absolute top-4 right-4 z-20">
               <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md border border-white/10 text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg">
                 <HugeiconsIcon icon={Coins} className="w-3.5 h-3.5 text-yellow-400" />
-                <span>{formatXu(service.base_cost)} Xu</span>
+                <span>{formatXu(service.cost_per_second)} Xu/giây</span>
               </div>
             </div>
 

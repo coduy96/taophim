@@ -101,7 +101,7 @@ export type Database = {
       }
       services: {
         Row: {
-          base_cost: number
+          cost_per_second: number
           cover_image: string | null
           created_at: string
           description: string | null
@@ -114,7 +114,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          base_cost: number
+          cost_per_second: number
           cover_image?: string | null
           created_at?: string
           description?: string | null
@@ -127,7 +127,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          base_cost?: number
+          cost_per_second?: number
           cover_image?: string | null
           created_at?: string
           description?: string | null

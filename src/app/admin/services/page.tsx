@@ -31,7 +31,7 @@ interface Service {
   slug: string
   name: string
   description: string | null
-  base_cost: number
+  cost_per_second: number
   is_active: boolean
   cover_image: string | null
   created_at: string
@@ -123,8 +123,8 @@ export default async function AdminServicesPage() {
               </CardHeader>
               <CardContent className="relative space-y-4">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Giá:</span>
-                  <span className="font-medium text-primary">{formatXu(service.base_cost)} Xu</span>
+                  <span className="text-muted-foreground">Giá mỗi giây:</span>
+                  <span className="font-medium text-primary">{formatXu(service.cost_per_second)} Xu/giây</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Slug:</span>
