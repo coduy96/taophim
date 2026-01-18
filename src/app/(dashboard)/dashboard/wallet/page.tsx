@@ -24,7 +24,8 @@ function formatDate(dateString: string): string {
     month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    timeZone: 'Asia/Ho_Chi_Minh'
   })
 }
 
@@ -203,7 +204,7 @@ export default async function WalletPage({
                           {transaction.amount > 0 ? '+' : ''}{formatXu(transaction.amount)} Xu
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(transaction.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                          {new Date(transaction.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' })}
                         </p>
                       </div>
                     </div>
