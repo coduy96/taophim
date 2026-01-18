@@ -18,9 +18,10 @@ import {
   Cancel01Icon as X
 } from "@hugeicons/core-free-icons"
 import { createClient } from "@/lib/supabase/client"
-import { Service, FormConfig, FormField } from "@/types/database.types"
+import { Service, FormConfig, FormField, DurationConfig, DurationMode } from "@/types/database.types"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Image from "next/image"
+import { Badge } from "@/components/ui/badge"
 
 // Image Upload Component for Cover Image
 interface ImageUploadFieldProps {
@@ -180,6 +181,37 @@ export function ServiceForm({ service }: ServiceFormProps) {
   const existingConfig = service?.form_config as unknown as FormConfig
   const [fields, setFields] = useState<FormField[]>(existingConfig?.fields || [])
 
+  // Duration configuration
+  const existingDurationConfig = service?.duration_config as unknown as DurationConfig
+  const [durationMode, setDurationMode] = useState<DurationMode | 'legacy'>(
+    existingDurationConfig?.mode || 'legacy'
+  )
+  const [fixedOptions, setFixedOptions] = useState<number[]>(
+    existingDurationConfig?.mode === 'fixed' ? existingDurationConfig.options : [3, 5, 10]
+  )
+  const [fixedDefault, setFixedDefault] = useState<number | undefined>(
+    existingDurationConfig?.mode === 'fixed' ? existingDurationConfig.default_option : undefined
+  )
+  const [rangeMin, setRangeMin] = useState<number>(
+    existingDurationConfig?.mode === 'range' ? existingDurationConfig.min : 3
+  )
+  const [rangeMax, setRangeMax] = useState<number>(
+    existingDurationConfig?.mode === 'range' ? existingDurationConfig.max : 60
+  )
+  const [rangeStep, setRangeStep] = useState<number>(
+    existingDurationConfig?.mode === 'range' ? (existingDurationConfig.step || 1) : 1
+  )
+  const [rangeDefault, setRangeDefault] = useState<number | undefined>(
+    existingDurationConfig?.mode === 'range' ? existingDurationConfig.default_value : undefined
+  )
+  const [videoSourceField, setVideoSourceField] = useState<string>(
+    existingDurationConfig?.mode === 'video_based' ? existingDurationConfig.source_field_id : ''
+  )
+  const [videoMaxDuration, setVideoMaxDuration] = useState<number | undefined>(
+    existingDurationConfig?.mode === 'video_based' ? existingDurationConfig.max_duration : undefined
+  )
+  const [newFixedOption, setNewFixedOption] = useState<string>('')
+
   const generateSlug = (text: string) => {
     return text
       .toLowerCase()
@@ -214,6 +246,52 @@ export function ServiceForm({ service }: ServiceFormProps) {
   const removeField = (index: number) => {
     setFields(fields.filter((_, i) => i !== index))
   }
+
+  // Duration config helpers
+  const addFixedOption = () => {
+    const value = parseInt(newFixedOption)
+    if (!isNaN(value) && value > 0 && !fixedOptions.includes(value)) {
+      setFixedOptions([...fixedOptions, value].sort((a, b) => a - b))
+      setNewFixedOption('')
+    }
+  }
+
+  const removeFixedOption = (value: number) => {
+    setFixedOptions(fixedOptions.filter(v => v !== value))
+    if (fixedDefault === value) {
+      setFixedDefault(undefined)
+    }
+  }
+
+  const buildDurationConfig = (): DurationConfig => {
+    switch (durationMode) {
+      case 'fixed':
+        return {
+          mode: 'fixed',
+          options: fixedOptions,
+          default_option: fixedDefault
+        }
+      case 'range':
+        return {
+          mode: 'range',
+          min: rangeMin,
+          max: rangeMax,
+          step: rangeStep || 1,
+          default_value: rangeDefault
+        }
+      case 'video_based':
+        return {
+          mode: 'video_based',
+          source_field_id: videoSourceField,
+          max_duration: videoMaxDuration
+        }
+      default:
+        return null
+    }
+  }
+
+  // Get video fields for video-based duration
+  const videoFields = fields.filter(f => f.type === 'video')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -278,7 +356,8 @@ export function ServiceForm({ service }: ServiceFormProps) {
       }
       
       const formConfig: FormConfig = { fields }
-      
+      const durationConfig = buildDurationConfig()
+
       const serviceData = {
         name,
         slug,
@@ -288,6 +367,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
         is_active: isActive,
         is_public_on_landing: isPublicOnLanding,
         form_config: JSON.parse(JSON.stringify(formConfig)),
+        duration_config: durationConfig ? JSON.parse(JSON.stringify(durationConfig)) : null,
         updated_at: new Date().toISOString(),
       }
 
@@ -432,6 +512,216 @@ export function ServiceForm({ service }: ServiceFormProps) {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Duration Configuration */}
+      <div className="space-y-4">
+        <div>
+          <h3 className="font-medium">Cấu hình thời lượng</h3>
+          <p className="text-sm text-muted-foreground">
+            Chọn cách khách hàng chọn thời lượng video
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+              durationMode === 'legacy' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+            }`}
+            onClick={() => setDurationMode('legacy')}
+          >
+            <div className="font-medium text-sm">Nhập tự do (mặc định)</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Khách hàng nhập số giây bất kỳ (1-300s)
+            </p>
+          </div>
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+              durationMode === 'fixed' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+            }`}
+            onClick={() => setDurationMode('fixed')}
+          >
+            <div className="font-medium text-sm">Tùy chọn cố định</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Chọn từ các mức thời lượng định sẵn
+            </p>
+          </div>
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+              durationMode === 'range' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+            }`}
+            onClick={() => setDurationMode('range')}
+          >
+            <div className="font-medium text-sm">Phạm vi tự chọn</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Kéo thanh chọn trong khoảng min-max
+            </p>
+          </div>
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+              durationMode === 'video_based' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+            }`}
+            onClick={() => setDurationMode('video_based')}
+          >
+            <div className="font-medium text-sm">Dựa trên video nguồn</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Tự động lấy từ file video tải lên
+            </p>
+          </div>
+        </div>
+
+        {/* Fixed Options Config */}
+        {durationMode === 'fixed' && (
+          <div className="p-4 rounded-lg border bg-muted/30 space-y-4">
+            <div className="space-y-2">
+              <Label>Các mức thời lượng (giây)</Label>
+              <div className="flex flex-wrap gap-2">
+                {fixedOptions.map((opt) => (
+                  <Badge
+                    key={opt}
+                    variant={fixedDefault === opt ? "default" : "secondary"}
+                    className="cursor-pointer"
+                    onClick={() => setFixedDefault(fixedDefault === opt ? undefined : opt)}
+                  >
+                    {opt}s
+                    <button
+                      type="button"
+                      className="ml-1 hover:text-destructive"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        removeFixedOption(opt)
+                      }}
+                    >
+                      <HugeiconsIcon icon={X} className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  min="1"
+                  placeholder="Thêm mức (VD: 15)"
+                  value={newFixedOption}
+                  onChange={(e) => setNewFixedOption(e.target.value)}
+                  className="w-40"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      addFixedOption()
+                    }
+                  }}
+                />
+                <Button type="button" variant="outline" size="sm" onClick={addFixedOption}>
+                  <HugeiconsIcon icon={Plus} className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Click vào badge để chọn làm mặc định. Chi phí = Thời lượng × {costPerSecond || '?'} Xu/giây
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Range Config */}
+        {durationMode === 'range' && (
+          <div className="p-4 rounded-lg border bg-muted/30 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="rangeMin">Tối thiểu (giây)</Label>
+                <Input
+                  id="rangeMin"
+                  type="number"
+                  min="1"
+                  value={rangeMin}
+                  onChange={(e) => setRangeMin(Math.max(1, parseInt(e.target.value) || 1))}
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rangeMax">Tối đa (giây)</Label>
+                <Input
+                  id="rangeMax"
+                  type="number"
+                  min="1"
+                  value={rangeMax}
+                  onChange={(e) => setRangeMax(Math.max(1, parseInt(e.target.value) || 60))}
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rangeStep">Bước nhảy</Label>
+                <Input
+                  id="rangeStep"
+                  type="number"
+                  min="1"
+                  value={rangeStep}
+                  onChange={(e) => setRangeStep(Math.max(1, parseInt(e.target.value) || 1))}
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="rangeDefault">Giá trị mặc định (tùy chọn)</Label>
+              <Input
+                id="rangeDefault"
+                type="number"
+                min={rangeMin}
+                max={rangeMax}
+                value={rangeDefault || ''}
+                onChange={(e) => setRangeDefault(e.target.value ? parseInt(e.target.value) : undefined)}
+                placeholder={`${rangeMin} - ${rangeMax}`}
+                disabled={isLoading}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Video-based Config */}
+        {durationMode === 'video_based' && (
+          <div className="p-4 rounded-lg border bg-muted/30 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="videoSourceField">Trường video nguồn</Label>
+              {videoFields.length > 0 ? (
+                <Select
+                  value={videoSourceField}
+                  onValueChange={setVideoSourceField}
+                  disabled={isLoading}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Chọn trường video..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {videoFields.map((field) => (
+                      <SelectItem key={field.id} value={field.id}>
+                        {field.label || field.id}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <p className="text-sm text-amber-600">
+                  Chưa có trường video nào. Thêm trường loại &ldquo;Video&rdquo; trong phần cấu hình form bên dưới.
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="videoMaxDuration">Thời lượng tối đa (tùy chọn)</Label>
+              <Input
+                id="videoMaxDuration"
+                type="number"
+                min="1"
+                value={videoMaxDuration || ''}
+                onChange={(e) => setVideoMaxDuration(e.target.value ? parseInt(e.target.value) : undefined)}
+                placeholder="Không giới hạn"
+                disabled={isLoading}
+              />
+              <p className="text-xs text-muted-foreground">
+                Nếu video dài hơn, sẽ tự động cắt về thời lượng tối đa
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Form Builder */}

@@ -105,6 +105,7 @@ export type Database = {
           cover_image: string | null
           created_at: string
           description: string | null
+          duration_config: Json | null
           form_config: Json
           id: string
           is_active: boolean
@@ -118,6 +119,7 @@ export type Database = {
           cover_image?: string | null
           created_at?: string
           description?: string | null
+          duration_config?: Json | null
           form_config?: Json
           id?: string
           is_active?: boolean
@@ -131,6 +133,7 @@ export type Database = {
           cover_image?: string | null
           created_at?: string
           description?: string | null
+          duration_config?: Json | null
           form_config?: Json
           id?: string
           is_active?: boolean
@@ -250,3 +253,28 @@ export interface FormConfig {
 export interface OrderWithService extends Order {
   services: Service
 }
+
+// Duration configuration types for services
+export type DurationMode = 'fixed' | 'range' | 'video_based'
+
+export interface FixedDurationConfig {
+  mode: 'fixed'
+  options: number[]  // e.g., [3, 5, 10]
+  default_option?: number
+}
+
+export interface RangeDurationConfig {
+  mode: 'range'
+  min: number
+  max: number
+  step?: number
+  default_value?: number
+}
+
+export interface VideoBasedDurationConfig {
+  mode: 'video_based'
+  source_field_id: string  // ID of video field in form_config
+  max_duration?: number
+}
+
+export type DurationConfig = FixedDurationConfig | RangeDurationConfig | VideoBasedDurationConfig | null

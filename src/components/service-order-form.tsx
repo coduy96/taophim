@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,18 +8,19 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  Upload01Icon as Upload, 
-  Cancel01Icon as X, 
-  Image01Icon as FileImage, 
-  Video01Icon as FileVideo, 
-  File01Icon as FileIcon 
+import {
+  Upload01Icon as Upload,
+  Cancel01Icon as X,
+  Image01Icon as FileImage,
+  Video01Icon as FileVideo,
+  File01Icon as FileIcon
 } from "@hugeicons/core-free-icons"
 import { createClient } from "@/lib/supabase/client"
-import { Service, FormConfig, FormField } from "@/types/database.types"
+import { Service, FormConfig, FormField, DurationConfig, FixedDurationConfig, RangeDurationConfig, VideoBasedDurationConfig } from "@/types/database.types"
 
 interface ServiceOrderFormProps {
   service: Service
@@ -139,14 +140,218 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
   )
 }
 
+// Duration Selector Components
+interface FixedDurationSelectorProps {
+  config: FixedDurationConfig
+  value: number
+  onChange: (value: number) => void
+  costPerSecond: number
+  disabled?: boolean
+}
+
+function FixedDurationSelector({ config, value, onChange, costPerSecond, disabled }: FixedDurationSelectorProps) {
+  return (
+    <div className="space-y-2">
+      <Label>Chọn thời lượng video *</Label>
+      <div className="flex flex-wrap gap-2">
+        {config.options.map((opt) => {
+          const cost = opt * costPerSecond
+          return (
+            <Button
+              key={opt}
+              type="button"
+              variant={value === opt ? "default" : "outline"}
+              size="sm"
+              onClick={() => onChange(opt)}
+              disabled={disabled}
+              className="min-w-[100px]"
+            >
+              {opt}s - {formatXu(cost)} Xu
+            </Button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+interface RangeDurationSelectorProps {
+  config: RangeDurationConfig
+  value: number
+  onChange: (value: number) => void
+  costPerSecond: number
+  disabled?: boolean
+}
+
+function RangeDurationSelector({ config, value, onChange, costPerSecond, disabled }: RangeDurationSelectorProps) {
+  const cost = value * costPerSecond
+
+  return (
+    <div className="space-y-4">
+      <Label>Chọn thời lượng video *</Label>
+      <div className="space-y-3">
+        <Slider
+          value={[value]}
+          onValueChange={(values) => onChange(values[0])}
+          min={config.min}
+          max={config.max}
+          step={config.step || 1}
+          disabled={disabled}
+          className="w-full"
+        />
+        <div className="flex justify-between text-sm text-muted-foreground">
+          <span>{config.min}s</span>
+          <span className="font-medium text-foreground">{value}s</span>
+          <span>{config.max}s</span>
+        </div>
+      </div>
+      <p className="text-sm">
+        Chi phí: <span className="font-medium">{formatXu(cost)} Xu</span>
+        <span className="text-muted-foreground ml-1">({formatXu(costPerSecond)} Xu/giây)</span>
+      </p>
+    </div>
+  )
+}
+
+interface VideoBasedDurationProps {
+  config: VideoBasedDurationConfig
+  videoFile: File | null
+  value: number
+  onChange: (value: number) => void
+  costPerSecond: number
+}
+
+function VideoBasedDuration({ config, videoFile, value, onChange, costPerSecond }: VideoBasedDurationProps) {
+  const [isDetecting, setIsDetecting] = useState(false)
+  const [detectedDuration, setDetectedDuration] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!videoFile) {
+      setDetectedDuration(null)
+      return
+    }
+
+    setIsDetecting(true)
+    const video = document.createElement('video')
+    video.preload = 'metadata'
+
+    video.onloadedmetadata = () => {
+      let duration = Math.ceil(video.duration)
+      // Apply max constraint if configured
+      if (config.max_duration && duration > config.max_duration) {
+        duration = config.max_duration
+      }
+      setDetectedDuration(duration)
+      onChange(duration)
+      setIsDetecting(false)
+      URL.revokeObjectURL(video.src)
+    }
+
+    video.onerror = () => {
+      setIsDetecting(false)
+      setDetectedDuration(null)
+      URL.revokeObjectURL(video.src)
+    }
+
+    video.src = URL.createObjectURL(videoFile)
+  }, [videoFile, config.max_duration, onChange])
+
+  const cost = value * costPerSecond
+
+  if (!videoFile) {
+    return (
+      <div className="space-y-2">
+        <Label>Thời lượng video</Label>
+        <p className="text-sm text-muted-foreground">
+          Tải lên video nguồn để tự động xác định thời lượng
+        </p>
+      </div>
+    )
+  }
+
+  if (isDetecting) {
+    return (
+      <div className="space-y-2">
+        <Label>Thời lượng video</Label>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Spinner className="h-4 w-4" />
+          Đang phát hiện thời lượng...
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-2">
+      <Label>Thời lượng video</Label>
+      <p className="text-sm">
+        <span className="font-medium">{detectedDuration}s</span>
+        <span className="text-muted-foreground ml-1">(tự động)</span>
+        {config.max_duration && detectedDuration === config.max_duration && (
+          <span className="text-amber-600 ml-2">(giới hạn {config.max_duration}s)</span>
+        )}
+      </p>
+      <p className="text-sm">
+        Chi phí: <span className="font-medium">{formatXu(cost)} Xu</span>
+      </p>
+    </div>
+  )
+}
+
+interface LegacyDurationInputProps {
+  value: number
+  onChange: (value: number) => void
+  costPerSecond: number
+  disabled?: boolean
+}
+
+function LegacyDurationInput({ value, onChange, costPerSecond, disabled }: LegacyDurationInputProps) {
+  const cost = value * costPerSecond
+
+  return (
+    <div className="space-y-2">
+      <Label htmlFor="duration">Thời lượng video (giây) *</Label>
+      <Input
+        id="duration"
+        type="number"
+        min="1"
+        max="300"
+        value={value}
+        onChange={(e) => onChange(Math.max(1, parseInt(e.target.value) || 1))}
+        disabled={disabled}
+      />
+      <p className="text-xs text-muted-foreground">
+        {formatXu(costPerSecond)} Xu/giây × {value} giây = <span className="font-medium text-foreground">{formatXu(cost)} Xu</span>
+      </p>
+    </div>
+  )
+}
+
 export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: ServiceOrderFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<Record<string, string | boolean | File | null>>({})
-  const [duration, setDuration] = useState<number>(5)
 
   const formConfig = (service.form_config as unknown as FormConfig) || { fields: [] }
   const fields = formConfig.fields || []
+  const durationConfig = service.duration_config as unknown as DurationConfig
+
+  // Initialize duration based on config
+  const getInitialDuration = (): number => {
+    if (!durationConfig) return 5 // Legacy default
+    switch (durationConfig.mode) {
+      case 'fixed':
+        return durationConfig.default_option ?? durationConfig.options[0] ?? 5
+      case 'range':
+        return durationConfig.default_value ?? durationConfig.min
+      case 'video_based':
+        return 0 // Will be set when video is uploaded
+      default:
+        return 5
+    }
+  }
+
+  const [duration, setDuration] = useState<number>(getInitialDuration)
 
   // Calculate total cost based on duration
   const totalCost = duration * service.cost_per_second
@@ -154,6 +359,70 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
 
   const handleFieldChange = (fieldId: string, value: string | boolean | File | null) => {
     setFormData(prev => ({ ...prev, [fieldId]: value }))
+  }
+
+  // Get video file for video-based duration detection
+  const getVideoFile = (): File | null => {
+    if (!durationConfig || durationConfig.mode !== 'video_based') return null
+    const videoFieldId = durationConfig.source_field_id
+    const videoValue = formData[videoFieldId]
+    return videoValue instanceof File ? videoValue : null
+  }
+
+  const renderDurationSelector = () => {
+    if (!durationConfig) {
+      // Legacy mode
+      return (
+        <LegacyDurationInput
+          value={duration}
+          onChange={setDuration}
+          costPerSecond={service.cost_per_second}
+          disabled={isSubmitting}
+        />
+      )
+    }
+
+    switch (durationConfig.mode) {
+      case 'fixed':
+        return (
+          <FixedDurationSelector
+            config={durationConfig}
+            value={duration}
+            onChange={setDuration}
+            costPerSecond={service.cost_per_second}
+            disabled={isSubmitting || !canAfford}
+          />
+        )
+      case 'range':
+        return (
+          <RangeDurationSelector
+            config={durationConfig}
+            value={duration}
+            onChange={setDuration}
+            costPerSecond={service.cost_per_second}
+            disabled={isSubmitting || !canAfford}
+          />
+        )
+      case 'video_based':
+        return (
+          <VideoBasedDuration
+            config={durationConfig}
+            videoFile={getVideoFile()}
+            value={duration}
+            onChange={setDuration}
+            costPerSecond={service.cost_per_second}
+          />
+        )
+      default:
+        return (
+          <LegacyDurationInput
+            value={duration}
+            onChange={setDuration}
+            costPerSecond={service.cost_per_second}
+            disabled={isSubmitting}
+          />
+        )
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -332,21 +601,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
   if (fields.length === 0) {
     return (
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="duration">Thời lượng video (giây) *</Label>
-          <Input
-            id="duration"
-            type="number"
-            min="1"
-            max="300"
-            value={duration}
-            onChange={(e) => setDuration(Math.max(1, parseInt(e.target.value) || 1))}
-            disabled={isSubmitting}
-          />
-          <p className="text-xs text-muted-foreground">
-            {formatXu(service.cost_per_second)} Xu/giây × {duration} giây = <span className="font-medium text-foreground">{formatXu(totalCost)} Xu</span>
-          </p>
-        </div>
+        {renderDurationSelector()}
 
         <div className="space-y-2">
           <Label>Tải lên file nguồn</Label>
@@ -374,7 +629,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
           type="submit"
           className="w-full"
           size="lg"
-          disabled={isSubmitting || !canAfford}
+          disabled={isSubmitting || !canAfford || (durationConfig?.mode === 'video_based' && duration === 0)}
         >
           {isSubmitting ? (
             <>
@@ -393,21 +648,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="duration">Thời lượng video (giây) *</Label>
-        <Input
-          id="duration"
-          type="number"
-          min="1"
-          max="300"
-          value={duration}
-          onChange={(e) => setDuration(Math.max(1, parseInt(e.target.value) || 1))}
-          disabled={isSubmitting}
-        />
-        <p className="text-xs text-muted-foreground">
-          {formatXu(service.cost_per_second)} Xu/giây × {duration} giây = <span className="font-medium text-foreground">{formatXu(totalCost)} Xu</span>
-        </p>
-      </div>
+      {renderDurationSelector()}
 
       {fields.map((field) => (
         <div key={field.id} className="space-y-2">
@@ -423,7 +664,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
         type="submit"
         className="w-full"
         size="lg"
-        disabled={isSubmitting || !canAfford}
+        disabled={isSubmitting || !canAfford || (durationConfig?.mode === 'video_based' && duration === 0)}
       >
         {isSubmitting ? (
           <>
