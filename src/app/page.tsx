@@ -92,7 +92,7 @@ export default async function LandingPage() {
                     Thành Video AI
                   </span>
                   <br />
-                  <span className="text-4xl md:text-6xl text-foreground/80">Trong Vài Giờ.</span>
+                  <span className="text-4xl md:text-6xl text-foreground/80">Trong vài phút.</span>
                 </h1>
 
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
@@ -203,7 +203,7 @@ export default async function LandingPage() {
                     {/* Image content */}
                     <Image
                       src="/images/landing/short-form-bg.webp"
-                      alt="Video TikTok viral được tạo bởi AI - triệu view chỉ trong vài giờ"
+                      alt="Video TikTok viral được tạo bởi AI - triệu view chỉ trong vài phút"
                       fill
                       className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
                       sizes="240px"
@@ -405,7 +405,7 @@ export default async function LandingPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Gửi Ảnh & Mô Tả</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Upload ảnh/video của bạn, viết vài dòng mô tả mong muốn. Xu sẽ được giữ tạm thời, chỉ trừ khi bạn hài lòng với kết quả.
+                  Upload ảnh/video của bạn, viết vài dòng mô tả mong muốn. Xu sẽ được giữ tạm thời.
                 </p>
               </div>
             </div>
@@ -419,7 +419,7 @@ export default async function LandingPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Nhận Video - Xong!</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Chờ vài giờ là có thông báo. Tải video chất lượng cao về máy. Đăng TikTok, Reels, YouTube Shorts - tuỳ bạn!
+                  Chờ vài phút là có thông báo. Tải video chất lượng cao về máy. Đăng TikTok, Reels, YouTube Shorts - tuỳ bạn!
                 </p>
               </div>
             </div>
@@ -432,7 +432,6 @@ export default async function LandingPage() {
                 <HugeiconsIcon icon={ArrowRight} className="ml-2 w-4 h-4" />
               </Link>
             </Button>
-            <p className="text-sm text-muted-foreground mt-4">Không cần thẻ tín dụng.</p>
           </div>
         </div>
       </section>
@@ -449,7 +448,7 @@ export default async function LandingPage() {
               </Link>
               <p className="text-muted-foreground leading-relaxed text-sm">
                 Dịch vụ ghép mặt AI và tạo video chất lượng cao hàng đầu Việt Nam.
-                Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài giờ.
+                Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài phút.
               </p>
               <div className="flex gap-4">
                 {/* Social Icons Placeholder */}
@@ -464,7 +463,7 @@ export default async function LandingPage() {
           </div>
 
           <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <p>© 2025 Taophim. Ghép mặt AI, tạo video AI chất lượng cao tại Việt Nam.</p>
+            <p>© 2025 Taophim. Tạo phim AI chất lượng cao tại Việt Nam.</p>
             <div className="flex gap-6">
               <Link href="/privacy" className="hover:text-foreground transition-colors">Chính sách bảo mật</Link>
               <Link href="/terms" className="hover:text-foreground transition-colors">Điều khoản sử dụng</Link>

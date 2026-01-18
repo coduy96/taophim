@@ -4,27 +4,29 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://taophim.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
-  
-  // Static pages
-  const staticPages: MetadataRoute.Sitemap = [
+
+  return [
+    // Homepage - highest priority
     {
       url: BASE_URL,
       lastModified: now,
       changeFrequency: 'daily',
       priority: 1,
     },
-    {
-      url: `${BASE_URL}/login`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
+    // Auth pages
     {
       url: `${BASE_URL}/register`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.6,
+      priority: 0.8,
     },
+    {
+      url: `${BASE_URL}/login`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    // Legal pages
     {
       url: `${BASE_URL}/privacy`,
       lastModified: now,
@@ -38,6 +40,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
   ]
-
-  return staticPages
 }

@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { createClient } from "@/lib/supabase/server"
 import { redirect, notFound } from "next/navigation"
 import { ServiceOrderForm } from "@/components/service-order-form"
@@ -13,6 +14,37 @@ import {
   CheckmarkCircle02Icon as CheckCircle
 } from "@hugeicons/core-free-icons"
 import Image from "next/image"
+
+type Props = {
+  params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const supabase = await createClient()
+
+  const { data: service } = await supabase
+    .from('services')
+    .select('name, description')
+    .eq('slug', slug)
+    .is('deleted_at', null)
+    .single()
+
+  if (!service) {
+    return {
+      title: "Dịch vụ không tồn tại",
+    }
+  }
+
+  return {
+    title: service.name,
+    description: service.description || `Sử dụng dịch vụ ${service.name} tại Taophim - Nền tảng tạo video AI hàng đầu Việt Nam.`,
+    openGraph: {
+      title: `${service.name} | Taophim`,
+      description: service.description || `Sử dụng dịch vụ ${service.name} tại Taophim.`,
+    },
+  }
+}
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)

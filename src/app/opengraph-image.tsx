@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-export const alt = 'Taophim - Nền tảng tạo video AI hàng đầu Việt Nam'
+export const alt = 'Taophim - Nền tảng tạo phim AI hàng đầu Việt Nam'
 export const size = {
   width: 1200,
   height: 630,
@@ -111,7 +111,7 @@ export default async function Image() {
                 textAlign: 'center',
               }}
             >
-              Dịch vụ tạo video AI #1 Việt Nam
+              Dịch vụ tạo phim AI #1 Việt Nam
             </span>
             <span
               style={{
@@ -121,7 +121,7 @@ export default async function Image() {
                 maxWidth: '800px',
               }}
             >
-              Ghép mặt • Tạo video từ ảnh • Công nghệ AI tiên tiến
+              Tạo video từ ảnh • Video AI chuyên nghiệp • Công nghệ tiên tiến
             </span>
           </div>
 
