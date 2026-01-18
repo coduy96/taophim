@@ -26,21 +26,21 @@ import {
   CreditCardIcon as CreditCard
 } from "@hugeicons/core-free-icons"
 
-// User avatars for social proof - local images
+// User avatars for social proof - optimized WebP images
 const userAvatars = [
   {
-    src: "/images/avatars/avatar-3.png",
+    src: "/images/avatars/avatar-3.webp",
     name: "Thu Hà"
   },
   {
-    src: "/images/avatars/avatar-2.png",
+    src: "/images/avatars/avatar-2.webp",
     name: "Minh Tuấn"
   },
   {
-    src: "/images/avatars/avatar-4.png",
+    src: "/images/avatars/avatar-4.webp",
     name: "Văn Hùng"
   }, {
-    src: "/images/avatars/avatar-1.png",
+    src: "/images/avatars/avatar-1.webp",
     name: "Lan Anh"
   }
 ]
@@ -172,12 +172,13 @@ export default async function LandingPage() {
                   {/* Content */}
                   <div className="aspect-video relative bg-zinc-900 group cursor-pointer overflow-hidden">
                     <Image
-                      src="/images/landing/long-form-bg.png"
-                      alt="AI Video Editor Interface"
+                      src="/images/landing/long-form-bg.webp"
+                      alt="Giao diện tạo video AI chuyên nghiệp với công nghệ Runway và Kling"
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      sizes="(max-width: 1024px) 100vw, 450px"
                       priority
+                      fetchPriority="high"
                     />
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40 z-10" />
 
@@ -201,12 +202,12 @@ export default async function LandingPage() {
                   <div className="relative h-[420px] bg-zinc-900">
                     {/* Image content */}
                     <Image
-                      src="/images/landing/short-form-bg.png"
-                      alt="Viral Short Form Video"
+                      src="/images/landing/short-form-bg.webp"
+                      alt="Video TikTok viral được tạo bởi AI - triệu view chỉ trong vài giờ"
                       fill
                       className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                      priority
+                      sizes="240px"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-10" />
 

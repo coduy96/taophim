@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
+import Image from "next/image"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   PlayIcon as Play,
@@ -68,11 +69,12 @@ export async function ServicesSection({ user }: { user: any }) {
 
             {/* Image */}
             {service.cover_image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={service.cover_image}
-                alt={service.name}
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                alt={`Dịch vụ ${service.name} - Tạo video AI chất lượng 4K`}
+                fill
+                className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 loading="lazy"
               />
             ) : (
