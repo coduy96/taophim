@@ -3,7 +3,6 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { User } from "@supabase/supabase-js"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Menu01Icon as Menu, ArrowRight01Icon as ArrowRight } from "@hugeicons/core-free-icons"
 
@@ -19,10 +18,10 @@ import {
 } from "@/components/ui/sheet"
 
 interface NavbarProps {
-  user: User | null
+  isLoggedIn?: boolean
 }
 
-export function Navbar({ user }: NavbarProps) {
+export function Navbar({ isLoggedIn = false }: NavbarProps) {
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
   const pathname = usePathname()
@@ -82,7 +81,7 @@ export function Navbar({ user }: NavbarProps) {
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
-          {user ? (
+          {isLoggedIn ? (
             <Button
               asChild
               className="rounded-full px-6 bg-gradient-to-r from-primary to-primary/80 hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
@@ -143,7 +142,7 @@ export function Navbar({ user }: NavbarProps) {
                   ))}
                 </div>
                 <div className="border-t border-border/50 pt-6 flex flex-col gap-3">
-                  {user ? (
+                  {isLoggedIn ? (
                     <Button asChild size="lg" className="w-full rounded-full shadow-lg shadow-primary/20">
                       <Link href="/dashboard">
                         Vào Dashboard

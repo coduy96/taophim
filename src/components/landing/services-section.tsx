@@ -34,7 +34,7 @@ interface Service {
 // Example video durations for price estimation
 const EXAMPLE_DURATIONS = [5, 10] // seconds
 
-export async function ServicesSection({ user }: { user: any }) {
+export async function ServicesSection({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
   // Disable caching to ensure fresh data on each request
   noStore()
 
@@ -71,7 +71,7 @@ export async function ServicesSection({ user }: { user: any }) {
 
         return (
           <Link
-            href={user ? `/dashboard/services/${service.slug}` : "/register"}
+            href={isLoggedIn ? `/dashboard/services/${service.slug}` : "/register"}
             key={service.id}
             className="group relative flex flex-col h-full bg-background border border-border/60 rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
           >

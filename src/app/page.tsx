@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { mightBeLoggedIn } from "@/lib/supabase/fast-auth-check"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -50,21 +50,19 @@ function formatXu(amount: number): string {
 }
 
 export default async function LandingPage() {
-  const supabase = await createClient()
-
-  // Check if user is logged in
-  const { data: { user } } = await supabase.auth.getUser()
+  // Fast cookie check - no network call, just checks for auth cookie presence
+  const isLoggedIn = await mightBeLoggedIn()
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar user={user} />
+      <Navbar isLoggedIn={isLoggedIn} />
 
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center pt-20 pb-20 overflow-hidden bg-background">
         {/* Background Gradients & Effects */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background" />
-        <div className="absolute top-0 right-0 p-[20%] w-[50rem] h-[50rem] bg-primary/5 rounded-full blur-[120px] opacity-40 pointer-events-none translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-[50rem] h-[50rem] bg-primary/5 rounded-full blur-[120px] opacity-40 pointer-events-none -translate-x-1/2 translate-y-1/2" />
+        <div className="absolute top-0 right-0 p-[20%] w-[50rem] h-[50rem] bg-primary/5 rounded-full blur-3xl opacity-40 pointer-events-none translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 left-0 w-[50rem] h-[50rem] bg-primary/5 rounded-full blur-3xl opacity-40 pointer-events-none -translate-x-1/2 translate-y-1/2" />
 
         {/* Floating Particles (Simulated) */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
@@ -108,7 +106,7 @@ export default async function LandingPage() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
                 <Button size="lg" className="h-14 px-8 text-lg rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 bg-primary hover:bg-primary/90 font-bold" asChild>
-                  <Link href={user ? "/dashboard/services" : "/register"}>
+                  <Link href={isLoggedIn ? "/dashboard/services" : "/register"}>
                     <HugeiconsIcon icon={Wand2} className="mr-2 h-6 w-6" />
                     Bắt Đầu Ngay
                   </Link>
@@ -156,7 +154,7 @@ export default async function LandingPage() {
             <div className="hidden lg:flex h-full min-h-[600px] w-full items-center justify-center perspective-[2000px]">
               <div className="relative w-[600px] h-[600px] preserve-3d">
                 {/* Back Glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] -z-10 animate-pulse-slow" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl -z-10" />
 
                 {/* 1. Main Landscape Video Card */}
                 <div className="absolute top-[10%] left-0 w-[450px] bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-float z-20 hover:scale-[1.02] transition-transform duration-500 ring-1 ring-border/20">
@@ -177,8 +175,7 @@ export default async function LandingPage() {
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 450px"
-                      priority
-                      fetchPriority="high"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40 z-10" />
 
@@ -238,7 +235,7 @@ export default async function LandingPage() {
       <section id="features" className="py-24 relative overflow-hidden">
         {/* Background Gradients */}
         <div className="absolute top-0 left-0 w-full h-full bg-muted/20 -z-10" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl -z-10" />
 
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -356,7 +353,7 @@ export default async function LandingPage() {
           </div>
 
           <Suspense fallback={<ServicesSkeleton />}>
-            <ServicesSection user={user} />
+            <ServicesSection isLoggedIn={isLoggedIn} />
           </Suspense>
         </div>
       </section>
@@ -364,7 +361,7 @@ export default async function LandingPage() {
       {/* How It Works */}
       <section id="how-it-works" className="py-24 bg-background relative overflow-hidden">
         {/* Background Decoration */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px] -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl -z-10" />
 
         <div className="container mx-auto px-4">
           <div className="text-center mb-20">
