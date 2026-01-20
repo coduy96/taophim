@@ -2,52 +2,72 @@ import { mightBeLoggedIn } from "@/lib/supabase/fast-auth-check"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@/components/ui/avatar"
 import { Logo } from "@/components/logo"
 import { Navbar } from "@/components/layout/navbar"
-// import { LogoCloud } from "@/components/landing/logo-cloud"
-import { HugeiconsIcon } from "@hugeicons/react"
 import { Suspense } from "react"
 import { ServicesSection } from "@/components/landing/services-section"
 import { ServicesSkeleton } from "@/components/landing/services-skeleton"
-import {
-  SparklesIcon as Sparkles,
-  ArrowRight01Icon as ArrowRight,
-  PlayIcon as Play,
-  FlashIcon as Zap,
-  Shield01Icon as Shield,
-  Time01Icon as Clock,
-  UserGroupIcon as Users,
-  MagicWand01Icon as Wand2,
-  StarIcon as Star,
-  Film01Icon as Film,
-  QrCodeIcon as QrCode,
-  InfinityIcon as Infinity,
-  CreditCardIcon as CreditCard
-} from "@hugeicons/core-free-icons"
+
+// Inline SVG icons for critical above-the-fold rendering (avoids hugeicons bundle)
+const ZapIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+  </svg>
+)
+
+const ArrowRightIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+  </svg>
+)
+
+const PlayIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8 5v14l11-7z" />
+  </svg>
+)
+
+const Wand2Icon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8l1.4 1.4M17.8 6.2l1.4-1.4M12.2 6.2l-1.4-1.4M3 21l9-9" />
+  </svg>
+)
+
+const FilmIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+    <line x1="7" y1="2" x2="7" y2="22" />
+    <line x1="17" y1="2" x2="17" y2="22" />
+    <line x1="2" y1="12" x2="22" y2="12" />
+    <line x1="2" y1="7" x2="7" y2="7" />
+    <line x1="2" y1="17" x2="7" y2="17" />
+    <line x1="17" y1="17" x2="22" y2="17" />
+    <line x1="17" y1="7" x2="22" y2="7" />
+  </svg>
+)
+
+const StarIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+  </svg>
+)
+
+const UsersIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+)
 
 // User avatars for social proof - optimized WebP images
 const userAvatars = [
-  {
-    src: "/images/avatars/avatar-3.webp",
-    name: "Thu Hà"
-  },
-  {
-    src: "/images/avatars/avatar-2.webp",
-    name: "Minh Tuấn"
-  },
-  {
-    src: "/images/avatars/avatar-4.webp",
-    name: "Văn Hùng"
-  }, {
-    src: "/images/avatars/avatar-1.webp",
-    name: "Lan Anh"
-  }
+  { src: "/images/avatars/avatar-3.webp", name: "Thu Hà" },
+  { src: "/images/avatars/avatar-2.webp", name: "Minh Tuấn" },
+  { src: "/images/avatars/avatar-4.webp", name: "Văn Hùng" },
+  { src: "/images/avatars/avatar-1.webp", name: "Lan Anh" }
 ]
-
-function formatXu(amount: number): string {
-  return new Intl.NumberFormat('vi-VN').format(amount)
-}
 
 export default async function LandingPage() {
   // Fast cookie check - no network call, just checks for auth cookie presence
@@ -83,7 +103,6 @@ export default async function LandingPage() {
 
               {/* Headings */}
               <div className="space-y-6">
-
                 <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
                   Biến Ý Tưởng <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
@@ -97,7 +116,7 @@ export default async function LandingPage() {
                   Giải pháp tạo video chuyên nghiệp cho <span className="text-foreground font-medium">Content Creator, KOL và Doanh nghiệp</span>. Công nghệ AI tiên tiến, chất lượng điện ảnh.
                   <br />
                   <span className="flex items-center gap-2 mt-3 text-sm font-medium text-foreground/80">
-                    <HugeiconsIcon icon={Zap} className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                    <ZapIcon className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                     Thanh toán nội địa. Hỗ trợ tiếng Việt. Cam kết hoàn tiền.
                   </span>
                 </p>
@@ -107,42 +126,47 @@ export default async function LandingPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
                 <Button size="lg" className="h-14 px-8 text-lg rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 bg-primary hover:bg-primary/90 font-bold" asChild>
                   <Link href={isLoggedIn ? "/dashboard/services" : "/register"}>
-                    <HugeiconsIcon icon={Wand2} className="mr-2 h-6 w-6" />
+                    <Wand2Icon className="mr-2 h-6 w-6" />
                     Bắt Đầu Ngay
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full border-2 hover:bg-muted/50 transition-all duration-300 backdrop-blur-sm" asChild>
                   <Link href="#services">
-                    <HugeiconsIcon icon={Film} className="mr-2 h-6 w-6" />
+                    <FilmIcon className="mr-2 h-6 w-6" />
                     Khám Phá Dịch Vụ
                   </Link>
                 </Button>
               </div>
 
-              {/* Social Proof */}
+              {/* Social Proof - Using native img for faster FCP */}
               <div className="pt-6 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 text-sm">
                 <div className="flex items-center">
-                  <AvatarGroup className="-space-x-3">
+                  <div className="flex -space-x-3">
                     {userAvatars.map((user, i) => (
-                      <Avatar key={i} size="lg" className="ring-[3px] ring-background shadow-md hover:scale-110 hover:z-10 transition-transform duration-200">
-                        <AvatarImage src={user.src} alt={user.name} />
-                        <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-primary font-medium">
-                          {user.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
+                      <div key={i} className="relative w-10 h-10 rounded-full ring-[3px] ring-background shadow-md overflow-hidden bg-gradient-to-br from-primary/20 to-primary/40">
+                        <img
+                          src={user.src}
+                          alt={user.name}
+                          width={40}
+                          height={40}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                     ))}
-                  </AvatarGroup>
+                  </div>
                   <div className="w-10 h-10 rounded-full border-[3px] border-background bg-gradient-to-br from-primary/20 to-primary/30 flex items-center justify-center text-xs font-bold text-primary shadow-md -ml-3">
                     +1k
                   </div>
                 </div>
                 <div className="flex flex-col items-center sm:items-start gap-1">
                   <div className="flex items-center gap-1 text-primary">
-                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
-                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
-                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
-                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
-                    <HugeiconsIcon icon={Star} className="w-4 h-4 fill-current" />
+                    <StarIcon className="w-4 h-4" />
+                    <StarIcon className="w-4 h-4" />
+                    <StarIcon className="w-4 h-4" />
+                    <StarIcon className="w-4 h-4" />
+                    <StarIcon className="w-4 h-4" />
                     <span className="text-foreground font-bold ml-1">5.0</span>
                   </div>
                   <span className="text-muted-foreground">Được 1,500+ khách hàng tin dùng</span>
@@ -175,7 +199,7 @@ export default async function LandingPage() {
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 450px"
-                      loading="lazy"
+                      priority
                     />
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40 z-10" />
 
@@ -183,7 +207,7 @@ export default async function LandingPage() {
                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-20">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
-                          <HugeiconsIcon icon={Play} className="w-3 h-3 text-black fill-black ml-0.5" />
+                          <PlayIcon className="w-3 h-3 text-black ml-0.5" />
                         </div>
                         <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
                           <div className="h-full w-1/3 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary),0.8)]" />
@@ -204,19 +228,17 @@ export default async function LandingPage() {
                       fill
                       className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
                       sizes="240px"
-                      loading="lazy"
+                      priority
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-10" />
 
                     {/* Overlay Elements */}
-
                     <div className="absolute bottom-6 left-4 right-4 z-20 text-white">
                       <div className="flex items-center gap-2 mb-2">
                         <div className="px-2 py-0.5 rounded-full bg-primary/90 text-[10px] font-bold shadow-lg shadow-primary/20">HD</div>
                         <div className="text-[10px] opacity-80 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">Hoàn thành</div>
                       </div>
                       <p className="text-sm font-medium leading-snug text-shadow-sm">Chất lượng cao, sẵn sàng đăng tải</p>
-
                     </div>
                   </div>
                 </div>
@@ -226,11 +248,75 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* Below-the-fold content - can be streamed in */}
+      <Suspense fallback={<BelowFoldSkeleton />}>
+        <BelowFoldContent isLoggedIn={isLoggedIn} />
+      </Suspense>
 
+      {/* Footer */}
+      <footer className="border-t bg-slate-50 dark:bg-black/20 pt-16 pb-8 mt-auto">
+        <div className="container mx-auto px-4">
+          <div className="mb-12 max-w-md">
+            {/* Brand */}
+            <div className="space-y-6">
+              <Link href="/" className="flex items-center gap-2.5">
+                <Logo className="w-9 h-9" width={36} height={36} />
+                <span className="font-bold text-xl tracking-tight">Taophim</span>
+              </Link>
+              <p className="text-muted-foreground leading-relaxed text-sm">
+                Dịch vụ ghép mặt AI và tạo video chất lượng cao hàng đầu Việt Nam.
+                Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài phút.
+              </p>
+              <div className="flex gap-4">
+                {/* Social Icons Placeholder */}
+                <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
+                  <UsersIcon className="w-4 h-4" />
+                </div>
+                <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
+                  <FilmIcon className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </div>
 
-      {/* Trusted By / Logo Cloud */}
-      {/* <LogoCloud /> */}
+          <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+            <p>© 2025 Taophim. Tạo phim AI chất lượng cao tại Việt Nam.</p>
+            <div className="flex gap-6">
+              <Link href="/privacy" className="hover:text-foreground transition-colors">Chính sách bảo mật</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Điều khoản sử dụng</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
 
+// Skeleton for below-fold content
+function BelowFoldSkeleton() {
+  return (
+    <div className="py-24">
+      <div className="container mx-auto px-4">
+        <div className="h-8 w-64 bg-muted rounded mx-auto mb-8 animate-pulse" />
+        <div className="h-4 w-96 bg-muted rounded mx-auto mb-16 animate-pulse" />
+        <div className="grid gap-8 md:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-64 bg-muted rounded-3xl animate-pulse" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Below-the-fold content - loaded after initial paint
+async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
+  // Dynamic imports for icons used below the fold
+  const { HugeiconsIcon } = await import("@hugeicons/react")
+  const icons = await import("@hugeicons/core-free-icons")
+
+  return (
+    <>
       {/* Features Section */}
       <section id="features" className="py-24 relative overflow-hidden">
         {/* Background Gradients */}
@@ -253,7 +339,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <HugeiconsIcon icon={Zap} className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={icons.FlashIcon} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Công Nghệ AI Tiên Tiến Nhất</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -267,7 +353,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <HugeiconsIcon icon={Clock} className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={icons.Time01Icon} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Có Video Trong Thời Gian Ngắn</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -281,7 +367,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <HugeiconsIcon icon={Shield} className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={icons.Shield01Icon} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Bảo Mật & Riêng Tư</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -295,7 +381,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <HugeiconsIcon icon={QrCode} className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={icons.QrCodeIcon} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Thanh Toán QR Tiện Lợi</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -309,7 +395,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <HugeiconsIcon icon={Infinity} className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={icons.InfinityIcon} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Xu Bảo Lưu Vĩnh Viễn</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -323,7 +409,7 @@ export default async function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  <HugeiconsIcon icon={CreditCard} className="h-7 w-7 text-primary" />
+                  <HugeiconsIcon icon={icons.CreditCardIcon} className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">Rẻ Hơn 90% So Với Mua Acc</h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -426,48 +512,12 @@ export default async function LandingPage() {
             <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1" asChild>
               <Link href="/register">
                 Thử Ngay - Đăng Ký Miễn Phí
-                <HugeiconsIcon icon={ArrowRight} className="ml-2 w-4 h-4" />
+                <ArrowRightIcon className="ml-2 w-4 h-4" />
               </Link>
             </Button>
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t bg-slate-50 dark:bg-black/20 pt-16 pb-8 mt-auto">
-        <div className="container mx-auto px-4">
-          <div className="mb-12 max-w-md">
-            {/* Brand */}
-            <div className="space-y-6">
-              <Link href="/" className="flex items-center gap-2.5">
-                <Logo className="w-9 h-9" width={36} height={36} />
-                <span className="font-bold text-xl tracking-tight">Taophim</span>
-              </Link>
-              <p className="text-muted-foreground leading-relaxed text-sm">
-                Dịch vụ ghép mặt AI và tạo video chất lượng cao hàng đầu Việt Nam.
-                Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài phút.
-              </p>
-              <div className="flex gap-4">
-                {/* Social Icons Placeholder */}
-                <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
-                  <HugeiconsIcon icon={Users} className="w-4 h-4" />
-                </div>
-                <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer">
-                  <HugeiconsIcon icon={Film} className="w-4 h-4" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <p>© 2025 Taophim. Tạo phim AI chất lượng cao tại Việt Nam.</p>
-            <div className="flex gap-6">
-              <Link href="/privacy" className="hover:text-foreground transition-colors">Chính sách bảo mật</Link>
-              <Link href="/terms" className="hover:text-foreground transition-colors">Điều khoản sử dụng</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div >
+    </>
   )
 }

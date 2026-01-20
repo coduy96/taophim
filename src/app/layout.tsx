@@ -296,6 +296,13 @@ export default function RootLayout({
           href="/images/landing/long-form-bg.webp"
           as="image"
           type="image/webp"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          href="/images/landing/short-form-bg.webp"
+          as="image"
+          type="image/webp"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
