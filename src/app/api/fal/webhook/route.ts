@@ -23,12 +23,18 @@ export async function POST(request: Request) {
   try {
     // Extract headers
     const requestId = request.headers.get('X-Fal-Webhook-Request-Id')
+    const falUserId = request.headers.get('X-Fal-Webhook-User-Id')
     const timestamp = request.headers.get('X-Fal-Webhook-Timestamp')
     const signature = request.headers.get('X-Fal-Webhook-Signature')
 
     // Validate required headers
-    if (!requestId || !timestamp || !signature) {
-      console.error('Missing webhook headers')
+    if (!requestId || !falUserId || !timestamp || !signature) {
+      console.error('Missing webhook headers:', {
+        hasRequestId: !!requestId,
+        hasFalUserId: !!falUserId,
+        hasTimestamp: !!timestamp,
+        hasSignature: !!signature,
+      })
       return NextResponse.json(
         { error: 'Missing required headers' },
         { status: 400 }
@@ -50,13 +56,19 @@ export async function POST(request: Request) {
     // Verify signature
     const verification = await verifyWebhookSignature(
       requestId,
+      falUserId,
       timestamp,
       signature,
       body
     )
 
     if (!verification.valid) {
-      console.error('Webhook signature verification failed:', verification.error)
+      console.error('Webhook signature verification failed:', {
+        error: verification.error,
+        requestId,
+        falUserId,
+        timestamp,
+      })
       return NextResponse.json(
         { error: 'Invalid signature' },
         { status: 401 }

@@ -71,6 +71,26 @@ function base64urlToUint8Array(base64url: string): Uint8Array {
   return bytes
 }
 
+/**
+ * Convert hex string to Uint8Array
+ */
+function hexToUint8Array(hex: string): Uint8Array {
+  const bytes = new Uint8Array(hex.length / 2)
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes[i / 2] = parseInt(hex.substr(i, 2), 16)
+  }
+  return bytes
+}
+
+/**
+ * Convert Uint8Array to hex string
+ */
+function uint8ArrayToHex(bytes: Uint8Array): string {
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+}
+
 export interface WebhookVerificationResult {
   valid: boolean
   error?: string
@@ -81,14 +101,16 @@ export interface WebhookVerificationResult {
  *
  * Headers expected:
  * - X-Fal-Webhook-Request-Id: Unique request ID
+ * - X-Fal-Webhook-User-Id: FAL user ID
  * - X-Fal-Webhook-Timestamp: Unix timestamp
- * - X-Fal-Webhook-Signature: Base64url encoded signature
+ * - X-Fal-Webhook-Signature: Hex encoded signature
  *
- * The signed message is: `${requestId}.${timestamp}.${bodyHash}`
- * where bodyHash is the SHA-256 hash of the request body
+ * The signed message is: `${requestId}\n${userId}\n${timestamp}\n${bodyHash}`
+ * where bodyHash is the hex-encoded SHA-256 hash of the request body
  */
 export async function verifyWebhookSignature(
   requestId: string,
+  userId: string,
   timestamp: string,
   signature: string,
   body: string
@@ -104,20 +126,17 @@ export async function verifyWebhookSignature(
       return { valid: false, error: 'No JWKS keys available' }
     }
 
-    // Compute SHA-256 hash of body
+    // Compute SHA-256 hash of body (hex encoded)
     const bodyBytes = new TextEncoder().encode(body)
     const bodyHashBuffer = await crypto.subtle.digest('SHA-256', bodyBytes)
-    const bodyHash = btoa(String.fromCharCode(...new Uint8Array(bodyHashBuffer)))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '')
+    const bodyHash = uint8ArrayToHex(new Uint8Array(bodyHashBuffer))
 
-    // Construct the signed message
-    const signedMessage = `${requestId}.${timestamp}.${bodyHash}`
+    // Construct the signed message (newline separated)
+    const signedMessage = `${requestId}\n${userId}\n${timestamp}\n${bodyHash}`
     const messageBytes = new TextEncoder().encode(signedMessage)
 
-    // Decode signature
-    const signatureBytes = base64urlToUint8Array(signature)
+    // Decode signature from hex
+    const signatureBytes = hexToUint8Array(signature)
 
     // Try verification with each key
     for (const key of keys) {
