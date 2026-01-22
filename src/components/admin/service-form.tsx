@@ -371,8 +371,6 @@ export function ServiceForm({ service }: ServiceFormProps) {
         updated_at: new Date().toISOString(),
       }
 
-      // Log the data being sent for debugging
-      console.log('Submitting service data:', serviceData)
 
       if (service) {
         // Update existing

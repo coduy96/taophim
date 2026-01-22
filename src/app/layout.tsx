@@ -3,8 +3,7 @@ import { Inter } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@/components/analytics"
 
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
@@ -303,10 +302,14 @@ export default function RootLayout({
           href="/images/landing/short-form-bg.webp"
           as="image"
           type="image/webp"
+          fetchPriority="high"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        {/* Preconnect to Supabase for faster image and API loading */}
+        <link rel="preconnect" href="https://qzshnmpjubqpaqdcisky.supabase.co" />
+        <link rel="dns-prefetch" href="https://qzshnmpjubqpaqdcisky.supabase.co" />
         {jsonLdScripts.map((schema, index) => (
           <script
             key={index}
@@ -327,7 +330,6 @@ export default function RootLayout({
           {children}
           <Toaster richColors position="top-center" />
           <Analytics />
-          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

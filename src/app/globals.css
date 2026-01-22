@@ -166,3 +166,20 @@
   background-size: 200% 200%;
   animation: gradient-x 3s ease infinite;
 }
+
+/* Reduce motion for users who prefer it - improves performance and accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-delayed,
+  .animate-pulse-slow,
+  .animate-gradient-x,
+  .animate-pulse {
+    animation: none;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

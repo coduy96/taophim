@@ -199,6 +199,7 @@ export default async function LandingPage() {
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 450px"
                       priority
+                      fetchPriority="high"
                     />
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40 z-10" />
 
@@ -228,6 +229,7 @@ export default async function LandingPage() {
                       className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
                       sizes="240px"
                       priority
+                      fetchPriority="high"
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-10" />
 
