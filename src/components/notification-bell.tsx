@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -19,6 +21,7 @@ import {
   Download01Icon as Download,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
 import { Notification, NotificationType } from "@/lib/notifications/types"
 
 function formatTimeAgo(dateString: string): string {
@@ -64,14 +67,72 @@ export function NotificationBell() {
     }
   }, [])
 
+  const router = useRouter()
+
   // Fetch notifications on mount and when dropdown opens
   useEffect(() => {
     fetchNotifications()
   }, [fetchNotifications])
 
-  // Poll for new notifications every 30 seconds
+  // Subscribe to real-time notification updates
   useEffect(() => {
-    const interval = setInterval(fetchNotifications, 30000)
+    const supabase = createClient()
+    let channel: ReturnType<typeof supabase.channel> | null = null
+
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+
+      channel = supabase
+        .channel('notifications-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'notifications',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            console.log('New notification:', payload)
+            // Add the new notification to the top of the list
+            const newNotification = payload.new as Notification
+            setNotifications(prev => [newNotification, ...prev.slice(0, 9)])
+            setUnreadCount(prev => prev + 1)
+
+            // Show toast notification
+            if (newNotification.type === 'order_completed') {
+              toast.success(newNotification.title, {
+                description: newNotification.message,
+              })
+            } else if (newNotification.type === 'order_cancelled') {
+              toast.error(newNotification.title, {
+                description: newNotification.message,
+              })
+            } else {
+              toast.info(newNotification.title, {
+                description: newNotification.message,
+              })
+            }
+
+            // Also refresh the page if we're on orders page to show new status
+            if (window.location.pathname.includes('/orders')) {
+              router.refresh()
+            }
+          }
+        )
+        .subscribe()
+    })
+
+    return () => {
+      if (channel) {
+        supabase.removeChannel(channel)
+      }
+    }
+  }, [router])
+
+  // Fallback polling every 2 minutes (in case real-time connection drops)
+  useEffect(() => {
+    const interval = setInterval(fetchNotifications, 120000)
     return () => clearInterval(interval)
   }, [fetchNotifications])
 

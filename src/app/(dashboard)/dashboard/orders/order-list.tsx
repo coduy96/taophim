@@ -44,6 +44,37 @@ import {
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
+// Download file helper - handles cross-origin downloads properly
+async function downloadFile(url: string, filename?: string) {
+  try {
+    toast.loading("Đang tải xuống...", { id: "download" })
+
+    const response = await fetch(url)
+    if (!response.ok) throw new Error("Failed to fetch file")
+
+    const blob = await response.blob()
+    const blobUrl = URL.createObjectURL(blob)
+
+    // Extract filename from URL if not provided
+    const defaultFilename = url.split('/').pop()?.split('?')[0] || 'download'
+
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = filename || defaultFilename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    // Clean up blob URL
+    URL.revokeObjectURL(blobUrl)
+
+    toast.success("Tải xuống thành công!", { id: "download" })
+  } catch (error) {
+    console.error("Download failed:", error)
+    toast.error("Không thể tải xuống. Vui lòng thử lại.", { id: "download" })
+  }
+}
+
 // Reuse types from page or define shared types
 interface FormField {
   id: string
@@ -209,16 +240,16 @@ function FilePreview({ url, label }: { url: string; label: string }) {
             </span>
           </div>
         </div>
-        <a 
-          href={url} 
-          target="_blank" 
-          rel="noopener noreferrer"
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            downloadFile(url)
+          }}
           className="text-xs text-primary hover:underline flex items-center gap-1"
-          onClick={(e) => e.stopPropagation()}
         >
           <HugeiconsIcon icon={Download} className="h-3 w-3" />
           Tải về
-        </a>
+        </button>
       </div>
     )
   }
@@ -247,15 +278,13 @@ function FilePreview({ url, label }: { url: string; label: string }) {
             </a>
           </div>
         </div>
-        <a 
-          href={url} 
-          target="_blank" 
-          rel="noopener noreferrer"
+        <button
+          onClick={() => downloadFile(url)}
           className="text-xs text-primary hover:underline flex items-center gap-1"
         >
           <HugeiconsIcon icon={Download} className="h-3 w-3" />
           Tải về
-        </a>
+        </button>
       </div>
     )
   }
@@ -266,11 +295,9 @@ function FilePreview({ url, label }: { url: string; label: string }) {
       <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70">
         {label}
       </span>
-      <a 
-        href={url} 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="flex items-center gap-3 p-3 rounded-xl border bg-muted/30 hover:bg-muted/50 transition-colors"
+      <button
+        onClick={() => downloadFile(url)}
+        className="flex items-center gap-3 p-3 rounded-xl border bg-muted/30 hover:bg-muted/50 transition-colors w-full text-left"
       >
         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
           <HugeiconsIcon icon={Download} className="h-5 w-5 text-primary" />
@@ -280,7 +307,7 @@ function FilePreview({ url, label }: { url: string; label: string }) {
           <p className="text-xs text-muted-foreground">Nhấn để tải về</p>
         </div>
         <HugeiconsIcon icon={ArrowRight} className="h-4 w-4 text-muted-foreground" />
-      </a>
+      </button>
     </div>
   )
 }
@@ -501,6 +528,10 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
   const [isSheetOpen, setIsSheetOpen] = React.useState(false)
   const [copiedId, setCopiedId] = React.useState(false)
 
+  // Note: Real-time updates are handled by NotificationBell component
+  // which triggers router.refresh() when new notifications arrive
+  // This avoids duplicate subscriptions and reduces Supabase real-time costs
+
   // Auto-open sheet if initialOrderId is provided
   React.useEffect(() => {
     if (initialOrderId) {
@@ -511,6 +542,16 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
       }
     }
   }, [initialOrderId, orders])
+
+  // Update selected order when orders prop changes (real-time update)
+  React.useEffect(() => {
+    if (selectedOrder) {
+      const updatedOrder = orders.find(o => o.id === selectedOrder.id)
+      if (updatedOrder && JSON.stringify(updatedOrder) !== JSON.stringify(selectedOrder)) {
+        setSelectedOrder(updatedOrder)
+      }
+    }
+  }, [orders, selectedOrder])
 
   // Orders are now already filtered server-side, just use directly
   const filteredOrders = orders
@@ -863,11 +904,12 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
               {/* Footer */}
               <SheetFooter className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t p-6">
                 {selectedOrder.status === 'completed' && selectedOrder.admin_output?.result_url ? (
-                  <Button className="w-full rounded-full shadow-lg shadow-primary/20 h-12 text-base" asChild>
-                    <a href={selectedOrder.admin_output.result_url} target="_blank" rel="noopener noreferrer" download>
-                      <HugeiconsIcon icon={Download} className="mr-2 h-5 w-5" />
-                      Tải Video Kết Quả
-                    </a>
+                  <Button
+                    className="w-full rounded-full shadow-lg shadow-primary/20 h-12 text-base"
+                    onClick={() => downloadFile(selectedOrder.admin_output!.result_url!)}
+                  >
+                    <HugeiconsIcon icon={Download} className="mr-2 h-5 w-5" />
+                    Tải Video Kết Quả
                   </Button>
                 ) : (
                   <Button variant="outline" className="w-full rounded-full h-12" onClick={() => setIsSheetOpen(false)}>
