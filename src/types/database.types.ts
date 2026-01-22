@@ -9,6 +9,47 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      notifications: {
+        Row: {
+          id: string
+          user_id: string
+          type: 'order_completed' | 'order_cancelled' | 'order_processing' | 'system'
+          title: string
+          message: string
+          data: Record<string, unknown>
+          is_read: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          type: 'order_completed' | 'order_cancelled' | 'order_processing' | 'system'
+          title: string
+          message: string
+          data?: Record<string, unknown>
+          is_read?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: 'order_completed' | 'order_cancelled' | 'order_processing' | 'system'
+          title?: string
+          message?: string
+          data?: Record<string, unknown>
+          is_read?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       fal_jobs: {
         Row: {
           id: string

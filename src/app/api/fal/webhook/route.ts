@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { verifyWebhookSignature, isTimestampValid } from '@/lib/fal/verify-webhook'
 import { FalWebhookPayload } from '@/lib/fal/types'
+import { createOrderCompletedNotification, createOrderCancelledNotification } from '@/lib/notifications/in-app'
 
 // Create admin client for database operations
 function getSupabaseAdmin() {
@@ -100,6 +101,32 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: 'Already processed' })
     }
 
+    // Fetch order details with service and user info for notifications
+    const { data: orderData, error: orderFetchError } = await supabase
+      .from('orders')
+      .select(`
+        id,
+        user_id,
+        services:service_id (name),
+        profiles:user_id (email, full_name)
+      `)
+      .eq('id', falJob.order_id)
+      .single()
+
+    if (orderFetchError || !orderData) {
+      console.error('Failed to fetch order details:', orderFetchError)
+      // Continue without notifications - order completion is more important
+    }
+
+    // Extract notification details
+    // Note: Supabase returns single objects for foreign key relations, not arrays
+    const serviceData = orderData?.services as unknown as { name: string } | null
+    const serviceName = serviceData?.name || 'Video'
+    const userProfile = orderData?.profiles as unknown as { email: string | null; full_name: string | null } | null
+    const userEmail = userProfile?.email || null
+    const userName = userProfile?.full_name || null
+    const userId = orderData?.user_id
+
     if (status === 'OK' && resultPayload?.video?.url) {
       // Success: Complete the order
       const videoUrl = resultPayload.video.url
@@ -127,6 +154,21 @@ export async function POST(request: Request) {
         // We'll need to handle this manually
       }
 
+      // Send in-app notification
+      if (userId) {
+        try {
+          await createOrderCompletedNotification(supabase, {
+            userId,
+            orderId: falJob.order_id,
+            serviceName,
+            videoUrl,
+          })
+        } catch (notifyError) {
+          console.error('Failed to create notification:', notifyError)
+          // Don't fail the webhook for notification errors
+        }
+      }
+
       console.log('Order completed:', falJob.order_id, 'Video:', videoUrl)
       return NextResponse.json({ success: true })
     } else {
@@ -152,6 +194,21 @@ export async function POST(request: Request) {
 
       if (cancelError) {
         console.error('Failed to cancel order:', cancelError)
+      }
+
+      // Send in-app notification
+      if (userId) {
+        try {
+          await createOrderCancelledNotification(supabase, {
+            userId,
+            orderId: falJob.order_id,
+            serviceName,
+            reason: errorMessage,
+          })
+        } catch (notifyError) {
+          console.error('Failed to create notification:', notifyError)
+          // Don't fail the webhook for notification errors
+        }
       }
 
       console.log('Order cancelled due to FAL error:', falJob.order_id, errorMessage)
