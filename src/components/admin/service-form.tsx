@@ -212,6 +212,11 @@ export function ServiceForm({ service }: ServiceFormProps) {
   )
   const [newFixedOption, setNewFixedOption] = useState<string>('')
 
+  // Minimum duration validation
+  const [minDuration, setMinDuration] = useState<string>(
+    service?.min_duration?.toString() || ''
+  )
+
   const generateSlug = (text: string) => {
     return text
       .toLowerCase()
@@ -358,6 +363,12 @@ export function ServiceForm({ service }: ServiceFormProps) {
       const formConfig: FormConfig = { fields }
       const durationConfig = buildDurationConfig()
 
+      // Parse min_duration
+      const parsedMinDuration = minDuration ? parseInt(minDuration) : null
+      const validMinDuration = parsedMinDuration && !isNaN(parsedMinDuration) && parsedMinDuration >= 1
+        ? parsedMinDuration
+        : null
+
       const serviceData = {
         name,
         slug,
@@ -368,6 +379,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
         is_public_on_landing: isPublicOnLanding,
         form_config: JSON.parse(JSON.stringify(formConfig)),
         duration_config: durationConfig ? JSON.parse(JSON.stringify(durationConfig)) : null,
+        min_duration: validMinDuration,
         updated_at: new Date().toISOString(),
       }
 
@@ -566,6 +578,24 @@ export function ServiceForm({ service }: ServiceFormProps) {
               Tự động lấy từ file video tải lên
             </p>
           </div>
+        </div>
+
+        {/* Minimum Duration Validation */}
+        <div className="p-4 rounded-lg border bg-muted/30 space-y-2">
+          <Label htmlFor="minDuration">Thời lượng tối thiểu (giây)</Label>
+          <Input
+            id="minDuration"
+            type="number"
+            min="1"
+            placeholder="Không giới hạn"
+            value={minDuration}
+            onChange={(e) => setMinDuration(e.target.value)}
+            disabled={isLoading}
+            className="max-w-[200px]"
+          />
+          <p className="text-xs text-muted-foreground">
+            Thời lượng video không được nhỏ hơn giá trị này. Để trống nếu không giới hạn (mặc định 1 giây).
+          </p>
         </div>
 
         {/* Fixed Options Config */}

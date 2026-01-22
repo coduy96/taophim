@@ -195,6 +195,7 @@ export type Database = {
           id: string
           is_active: boolean
           is_public_on_landing: boolean
+          min_duration: number | null
           name: string
           slug: string
           updated_at: string
@@ -209,6 +210,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           is_public_on_landing?: boolean
+          min_duration?: number | null
           name: string
           slug: string
           updated_at?: string
@@ -223,6 +225,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           is_public_on_landing?: boolean
+          min_duration?: number | null
           name?: string
           slug?: string
           updated_at?: string

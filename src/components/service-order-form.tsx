@@ -146,16 +146,18 @@ interface FixedDurationSelectorProps {
   value: number
   onChange: (value: number) => void
   costPerSecond: number
+  minDuration: number
   disabled?: boolean
 }
 
-function FixedDurationSelector({ config, value, onChange, costPerSecond, disabled }: FixedDurationSelectorProps) {
+function FixedDurationSelector({ config, value, onChange, costPerSecond, minDuration, disabled }: FixedDurationSelectorProps) {
   return (
     <div className="space-y-2">
       <Label>Chọn thời lượng video *</Label>
       <div className="flex flex-wrap gap-2">
         {config.options.map((opt) => {
           const cost = opt * costPerSecond
+          const isBelowMin = opt < minDuration
           return (
             <Button
               key={opt}
@@ -163,14 +165,18 @@ function FixedDurationSelector({ config, value, onChange, costPerSecond, disable
               variant={value === opt ? "default" : "outline"}
               size="sm"
               onClick={() => onChange(opt)}
-              disabled={disabled}
-              className="min-w-[100px]"
+              disabled={disabled || isBelowMin}
+              className={`min-w-[100px] ${isBelowMin ? 'opacity-50 line-through' : ''}`}
+              title={isBelowMin ? `Tối thiểu ${minDuration} giây` : undefined}
             >
               {opt}s - {formatXu(cost)} Xu
             </Button>
           )
         })}
       </div>
+      {minDuration > 1 && (
+        <p className="text-xs text-amber-600">Tối thiểu {minDuration} giây</p>
+      )}
     </div>
   )
 }
@@ -180,11 +186,15 @@ interface RangeDurationSelectorProps {
   value: number
   onChange: (value: number) => void
   costPerSecond: number
+  minDuration: number
   disabled?: boolean
 }
 
-function RangeDurationSelector({ config, value, onChange, costPerSecond, disabled }: RangeDurationSelectorProps) {
+function RangeDurationSelector({ config, value, onChange, costPerSecond, minDuration, disabled }: RangeDurationSelectorProps) {
   const cost = value * costPerSecond
+  // Use the higher of config.min and service minDuration
+  const effectiveMin = Math.max(config.min, minDuration)
+  const isBelowMin = value < minDuration
 
   return (
     <div className="space-y-4">
@@ -193,21 +203,24 @@ function RangeDurationSelector({ config, value, onChange, costPerSecond, disable
         <Slider
           value={[value]}
           onValueChange={(values) => onChange(values[0])}
-          min={config.min}
+          min={effectiveMin}
           max={config.max}
           step={config.step || 1}
           disabled={disabled}
           className="w-full"
         />
         <div className="flex justify-between text-sm text-muted-foreground">
-          <span>{config.min}s</span>
-          <span className="font-medium text-foreground">{value}s</span>
+          <span>{effectiveMin}s</span>
+          <span className={`font-medium ${isBelowMin ? 'text-red-600' : 'text-foreground'}`}>{value}s</span>
           <span>{config.max}s</span>
         </div>
       </div>
       <p className="text-sm">
         Chi phí: <span className="font-medium">{formatXu(cost)} Xu</span>
         <span className="text-muted-foreground ml-1">({formatXu(costPerSecond)} Xu/giây)</span>
+        {minDuration > 1 && (
+          <span className="text-amber-600 ml-2">(tối thiểu {minDuration} giây)</span>
+        )}
       </p>
     </div>
   )
@@ -219,15 +232,18 @@ interface VideoBasedDurationProps {
   value: number
   onChange: (value: number) => void
   costPerSecond: number
+  minDuration: number
 }
 
-function VideoBasedDuration({ config, videoFile, value, onChange, costPerSecond }: VideoBasedDurationProps) {
+function VideoBasedDuration({ config, videoFile, value, onChange, costPerSecond, minDuration }: VideoBasedDurationProps) {
   const [isDetecting, setIsDetecting] = useState(false)
   const [detectedDuration, setDetectedDuration] = useState<number | null>(null)
+  const [isTooShort, setIsTooShort] = useState(false)
 
   useEffect(() => {
     if (!videoFile) {
       setDetectedDuration(null)
+      setIsTooShort(false)
       return
     }
 
@@ -242,6 +258,7 @@ function VideoBasedDuration({ config, videoFile, value, onChange, costPerSecond 
         duration = config.max_duration
       }
       setDetectedDuration(duration)
+      setIsTooShort(duration < minDuration)
       onChange(duration)
       setIsDetecting(false)
       URL.revokeObjectURL(video.src)
@@ -250,11 +267,12 @@ function VideoBasedDuration({ config, videoFile, value, onChange, costPerSecond 
     video.onerror = () => {
       setIsDetecting(false)
       setDetectedDuration(null)
+      setIsTooShort(false)
       URL.revokeObjectURL(video.src)
     }
 
     video.src = URL.createObjectURL(videoFile)
-  }, [videoFile, config.max_duration, onChange])
+  }, [videoFile, config.max_duration, minDuration, onChange])
 
   const cost = value * costPerSecond
 
@@ -264,6 +282,9 @@ function VideoBasedDuration({ config, videoFile, value, onChange, costPerSecond 
         <Label>Thời lượng video</Label>
         <p className="text-sm text-muted-foreground">
           Tải lên video nguồn để tự động xác định thời lượng
+          {minDuration > 1 && (
+            <span className="text-amber-600 ml-1">(tối thiểu {minDuration} giây)</span>
+          )}
         </p>
       </div>
     )
@@ -285,10 +306,13 @@ function VideoBasedDuration({ config, videoFile, value, onChange, costPerSecond 
     <div className="space-y-2">
       <Label>Thời lượng video</Label>
       <p className="text-sm">
-        <span className="font-medium">{detectedDuration}s</span>
+        <span className={`font-medium ${isTooShort ? 'text-red-600' : ''}`}>{detectedDuration}s</span>
         <span className="text-muted-foreground ml-1">(tự động)</span>
         {config.max_duration && detectedDuration === config.max_duration && (
           <span className="text-amber-600 ml-2">(giới hạn {config.max_duration}s)</span>
+        )}
+        {isTooShort && (
+          <span className="text-red-600 ml-2">(video quá ngắn, tối thiểu {minDuration} giây)</span>
         )}
       </p>
       <p className="text-sm">
@@ -302,10 +326,11 @@ interface LegacyDurationInputProps {
   value: number
   onChange: (value: number) => void
   costPerSecond: number
+  minDuration: number
   disabled?: boolean
 }
 
-function LegacyDurationInput({ value, onChange, costPerSecond, disabled }: LegacyDurationInputProps) {
+function LegacyDurationInput({ value, onChange, costPerSecond, minDuration, disabled }: LegacyDurationInputProps) {
   const cost = value * costPerSecond
 
   return (
@@ -314,14 +339,17 @@ function LegacyDurationInput({ value, onChange, costPerSecond, disabled }: Legac
       <Input
         id="duration"
         type="number"
-        min="1"
+        min={minDuration}
         max="300"
         value={value}
-        onChange={(e) => onChange(Math.max(1, parseInt(e.target.value) || 1))}
+        onChange={(e) => onChange(Math.max(minDuration, parseInt(e.target.value) || minDuration))}
         disabled={disabled}
       />
       <p className="text-xs text-muted-foreground">
         {formatXu(costPerSecond)} Xu/giây × {value} giây = <span className="font-medium text-foreground">{formatXu(cost)} Xu</span>
+        {minDuration > 1 && (
+          <span className="ml-2 text-amber-600">(tối thiểu {minDuration} giây)</span>
+        )}
       </p>
     </div>
   )
@@ -369,6 +397,9 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
     return videoValue instanceof File ? videoValue : null
   }
 
+  // Get minimum duration from service (default to 1 if not set)
+  const minDuration = service.min_duration ?? 1
+
   const renderDurationSelector = () => {
     if (!durationConfig) {
       // Legacy mode
@@ -377,6 +408,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
           value={duration}
           onChange={setDuration}
           costPerSecond={service.cost_per_second}
+          minDuration={minDuration}
           disabled={isSubmitting}
         />
       )
@@ -390,6 +422,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
             value={duration}
             onChange={setDuration}
             costPerSecond={service.cost_per_second}
+            minDuration={minDuration}
             disabled={isSubmitting || !canAfford}
           />
         )
@@ -400,6 +433,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
             value={duration}
             onChange={setDuration}
             costPerSecond={service.cost_per_second}
+            minDuration={minDuration}
             disabled={isSubmitting || !canAfford}
           />
         )
@@ -411,6 +445,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
             value={duration}
             onChange={setDuration}
             costPerSecond={service.cost_per_second}
+            minDuration={minDuration}
           />
         )
       default:
@@ -419,6 +454,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
             value={duration}
             onChange={setDuration}
             costPerSecond={service.cost_per_second}
+            minDuration={minDuration}
             disabled={isSubmitting}
           />
         )
@@ -433,8 +469,10 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
       return
     }
 
-    if (duration < 1) {
-      toast.error("Thời lượng video phải ít nhất 1 giây")
+    // Validate minimum duration (use service's min_duration or default to 1)
+    const minDuration = service.min_duration ?? 1
+    if (duration < minDuration) {
+      toast.error(`Thời lượng video không được nhỏ hơn ${minDuration} giây`)
       return
     }
 
