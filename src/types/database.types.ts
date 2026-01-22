@@ -9,6 +9,50 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      fal_jobs: {
+        Row: {
+          id: string
+          order_id: string
+          fal_request_id: string
+          model_id: string
+          status: 'pending' | 'processing' | 'completed' | 'failed'
+          result_url: string | null
+          error_message: string | null
+          created_at: string
+          completed_at: string | null
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          fal_request_id: string
+          model_id: string
+          status?: 'pending' | 'processing' | 'completed' | 'failed'
+          result_url?: string | null
+          error_message?: string | null
+          created_at?: string
+          completed_at?: string | null
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          fal_request_id?: string
+          model_id?: string
+          status?: 'pending' | 'processing' | 'completed' | 'failed'
+          result_url?: string | null
+          error_message?: string | null
+          created_at?: string
+          completed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fal_jobs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       orders: {
         Row: {
           admin_note: string | null
@@ -231,8 +275,10 @@ export type Profile = Tables<'profiles'>
 export type Service = Tables<'services'>
 export type Order = Tables<'orders'>
 export type Transaction = Tables<'transactions'>
+export type FalJob = Tables<'fal_jobs'>
 export type OrderStatus = Enums<'order_status'>
 export type TransactionType = Enums<'transaction_type'>
+export type FalJobStatus = 'pending' | 'processing' | 'completed' | 'failed'
 
 // Form config types for dynamic service forms
 export interface FormField {

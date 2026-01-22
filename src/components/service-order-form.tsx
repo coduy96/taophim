@@ -489,7 +489,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
       }
 
       // Create order using the stored function
-      const { error: orderError } = await supabase.rpc('create_order', {
+      const { data: orderId, error: orderError } = await supabase.rpc('create_order', {
         p_service_id: service.id,
         p_total_cost: totalCost,
         p_user_inputs: userInputs
@@ -499,7 +499,32 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
         throw new Error(orderError.message)
       }
 
-      toast.success("Đơn hàng đã được tạo thành công!")
+      // Submit to FAL for automated processing
+      try {
+        const falResponse = await fetch('/api/fal/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderId,
+            serviceSlug: service.slug,
+            userInputs,
+          }),
+        })
+
+        if (!falResponse.ok) {
+          // FAL submission failed, but order was created
+          // Order will remain in pending status for manual processing
+          console.error('FAL submission failed, order requires manual processing')
+          toast.success("Đơn hàng đã được tạo. Đang chờ xử lý...")
+        } else {
+          toast.success("Đơn hàng đã được tạo và đang xử lý tự động!")
+        }
+      } catch (falError) {
+        // FAL submission failed, order was still created
+        console.error('FAL submission error:', falError)
+        toast.success("Đơn hàng đã được tạo. Đang chờ xử lý...")
+      }
+
       router.push('/dashboard/orders')
       router.refresh()
     } catch (error) {
