@@ -44,35 +44,25 @@ import {
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
-// Download file helper - handles cross-origin downloads properly
-async function downloadFile(url: string, filename?: string) {
-  try {
-    toast.loading("Đang tải xuống...", { id: "download" })
+// Download file helper - opens URL directly for streaming download
+function downloadFile(url: string, filename?: string) {
+  // Extract filename from URL if not provided
+  const defaultFilename = url.split('/').pop()?.split('?')[0] || 'download'
+  const downloadFilename = filename || defaultFilename
 
-    const response = await fetch(url)
-    if (!response.ok) throw new Error("Failed to fetch file")
+  // Create a temporary link and trigger download
+  // This opens the file directly, allowing the browser to stream it
+  // instead of loading the entire file into memory first
+  const link = document.createElement('a')
+  link.href = url
+  link.download = downloadFilename
+  link.target = '_blank'
+  link.rel = 'noopener noreferrer'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 
-    const blob = await response.blob()
-    const blobUrl = URL.createObjectURL(blob)
-
-    // Extract filename from URL if not provided
-    const defaultFilename = url.split('/').pop()?.split('?')[0] || 'download'
-
-    const link = document.createElement('a')
-    link.href = blobUrl
-    link.download = filename || defaultFilename
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-
-    // Clean up blob URL
-    URL.revokeObjectURL(blobUrl)
-
-    toast.success("Tải xuống thành công!", { id: "download" })
-  } catch (error) {
-    console.error("Download failed:", error)
-    toast.error("Không thể tải xuống. Vui lòng thử lại.", { id: "download" })
-  }
+  toast.success("Đang tải xuống...", { id: "download" })
 }
 
 // Reuse types from page or define shared types
