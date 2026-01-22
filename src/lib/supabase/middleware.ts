@@ -31,10 +31,12 @@ export async function updateSession(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   const publicPaths = ['/', '/login', '/register', '/services']
-  const isPublicPath = publicPaths.some(path => 
-    request.nextUrl.pathname === path || 
+  const isPublicPath = publicPaths.some(path =>
+    request.nextUrl.pathname === path ||
     request.nextUrl.pathname.startsWith('/services/') ||
-    request.nextUrl.pathname.startsWith('/auth/')
+    request.nextUrl.pathname.startsWith('/auth/') ||
+    request.nextUrl.pathname.startsWith('/api/fal/') ||
+    request.nextUrl.pathname.startsWith('/api/payos/')
   )
   const isAuthPath = request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register'
 
