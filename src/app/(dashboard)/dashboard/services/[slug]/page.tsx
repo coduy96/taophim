@@ -6,10 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  ArrowLeft01Icon as ArrowLeft, 
-  Coins01Icon as Coins, 
-  SparklesIcon as Sparkles, 
+import {
+  ArrowLeft01Icon as ArrowLeft,
+  Coins01Icon as Coins,
+  SparklesIcon as Sparkles,
   InformationCircleIcon as Info,
   CheckmarkCircle02Icon as CheckCircle
 } from "@hugeicons/core-free-icons"
@@ -57,7 +57,7 @@ export default async function ServiceDetailPage({
 }) {
   const { slug } = await params
   const supabase = await createClient()
-  
+
   const [userResult, serviceResult] = await Promise.all([
     supabase.auth.getUser(),
     supabase
@@ -93,7 +93,7 @@ export default async function ServiceDetailPage({
       {/* Header Section */}
       <div className="space-y-4">
 
-        
+
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{service.name}</h1>
@@ -172,7 +172,8 @@ export default async function ServiceDetailPage({
           <div className="bg-muted/30 rounded-xl p-4 text-sm text-muted-foreground space-y-2">
             <p className="font-medium text-foreground">Lưu ý:</p>
             <ul className="list-disc list-inside space-y-1 pl-1">
-              <li>Kết quả sẽ được AI tạo trong vòng 1-24h.</li>
+              <li>Kết quả sẽ được AI tạo trong vòng 3-30 phút.</li>
+              <li>Bạn sẽ nhận được thông báo khi đơn hàng hoàn thành.</li>
               <li>Xu sẽ bị tạm giữ khi tạo đơn và trừ khi hoàn thành.</li>
               <li>Nếu đơn hàng bị hủy, Xu sẽ được hoàn trả 100%.</li>
             </ul>
@@ -189,8 +190,8 @@ export default async function ServiceDetailPage({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ServiceOrderForm 
-                service={service} 
+              <ServiceOrderForm
+                service={service}
                 hasEnoughBalance={hasEnoughBalance}
                 userBalance={profile?.xu_balance || 0}
               />
