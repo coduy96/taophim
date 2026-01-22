@@ -104,12 +104,11 @@ export default async function LandingPage() {
               {/* Headings */}
               <div className="space-y-6">
                 <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
-                  Biến Ý Tưởng <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
+                  <span className="block">Biến Ý Tưởng</span>
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
                     Thành Video AI
                   </span>
-                  <br />
-                  <span className="text-4xl md:text-6xl text-foreground/80">Trong vài phút.</span>
+                  <span className="block text-4xl md:text-6xl text-foreground/80">Trong Vài Phút</span>
                 </h1>
 
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
@@ -280,7 +279,7 @@ export default async function LandingPage() {
           </div>
 
           <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <p>© 2025 Taophim. Tạo phim AI chất lượng cao tại Việt Nam.</p>
+            <p>© {new Date().getFullYear()} Taophim. Tạo phim AI chất lượng cao tại Việt Nam.</p>
             <div className="flex gap-6">
               <Link href="/privacy" className="hover:text-foreground transition-colors">Chính sách bảo mật</Link>
               <Link href="/terms" className="hover:text-foreground transition-colors">Điều khoản sử dụng</Link>

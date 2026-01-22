@@ -5,6 +5,9 @@ import { Logo } from "@/components/logo"
 export const metadata: Metadata = {
   title: "Điều khoản sử dụng",
   description: "Điều khoản sử dụng của Taophim. Tìm hiểu các quy định khi sử dụng dịch vụ tạo video AI của chúng tôi.",
+  alternates: {
+    canonical: "/terms",
+  },
   openGraph: {
     title: "Điều khoản sử dụng | Taophim",
     description: "Điều khoản sử dụng của Taophim - Nền tảng tạo video AI hàng đầu Việt Nam.",

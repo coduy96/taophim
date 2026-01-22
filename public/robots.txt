@@ -1,0 +1,17 @@
+# Robots.txt for Taophim.com
+# https://taophim.com
+
+User-agent: *
+Allow: /
+
+# Disallow admin and dashboard routes (require auth)
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /api/
+
+# Disallow auth callback routes
+Disallow: /auth/callback
+Disallow: /auth/confirm
+
+# Sitemap location
+Sitemap: https://taophim.com/sitemap.xml

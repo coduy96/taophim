@@ -5,6 +5,9 @@ import { Logo } from "@/components/logo"
 export const metadata: Metadata = {
   title: "Chính sách bảo mật",
   description: "Chính sách bảo mật của Taophim. Tìm hiểu cách chúng tôi thu thập, sử dụng và bảo vệ thông tin cá nhân của bạn.",
+  alternates: {
+    canonical: "/privacy",
+  },
   openGraph: {
     title: "Chính sách bảo mật | Taophim",
     description: "Chính sách bảo mật của Taophim - Nền tảng tạo video AI hàng đầu Việt Nam.",
