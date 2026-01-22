@@ -74,13 +74,13 @@ export async function POST(request: Request) {
       )
     }
 
-    // Submit to FAL
+    // Submit job for processing
     const result = await submitFalJob(orderId, serviceSlug, userInputs)
 
     if (!result.success) {
-      console.error('FAL submission failed:', result.error)
+      console.error('Job submission failed:', result.error)
       return NextResponse.json(
-        { error: result.error || 'Failed to submit job' },
+        { error: 'Không thể gửi yêu cầu xử lý. Vui lòng thử lại sau.' },
         { status: 500 }
       )
     }
@@ -90,9 +90,9 @@ export async function POST(request: Request) {
       requestId: result.requestId,
     })
   } catch (error) {
-    console.error('FAL submit error:', error)
+    console.error('Job submit error:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Lỗi hệ thống. Vui lòng thử lại sau.' },
       { status: 500 }
     )
   }

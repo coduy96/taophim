@@ -185,14 +185,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true })
     } else {
       // Error: Cancel the order and refund
-      const errorMessage = error || 'FAL processing failed'
+      // Store original error for logs but show generic message to user
+      const internalError = error || 'Processing failed'
+      const userFacingMessage = 'Xử lý video không thành công. Xu đã được hoàn trả.'
 
-      // Update fal_job
+      // Update fal_job with internal error (for admin debugging)
       await supabase
         .from('fal_jobs')
         .update({
           status: 'failed',
-          error_message: errorMessage,
+          error_message: internalError,
           completed_at: new Date().toISOString(),
         })
         .eq('id', falJob.id)
@@ -201,7 +203,7 @@ export async function POST(request: Request) {
       // This will refund frozen_xu to xu_balance
       const { error: cancelError } = await supabase.rpc('cancel_order', {
         p_order_id: falJob.order_id,
-        p_admin_note: `FAL processing failed: ${errorMessage}`,
+        p_admin_note: userFacingMessage,
       })
 
       if (cancelError) {
@@ -215,7 +217,7 @@ export async function POST(request: Request) {
             userId,
             orderId: falJob.order_id,
             serviceName,
-            reason: errorMessage,
+            reason: userFacingMessage,
           })
         } catch (notifyError) {
           console.error('Failed to create notification:', notifyError)
@@ -223,7 +225,7 @@ export async function POST(request: Request) {
         }
       }
 
-      console.log('Order cancelled due to FAL error:', falJob.order_id, errorMessage)
+      console.log('Order cancelled due to processing error:', falJob.order_id, internalError)
       return NextResponse.json({ success: true, error_handled: true })
     }
   } catch (error) {

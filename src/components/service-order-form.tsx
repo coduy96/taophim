@@ -512,16 +512,16 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
         })
 
         if (!falResponse.ok) {
-          // FAL submission failed, but order was created
+          // Auto processing submission failed, but order was created
           // Order will remain in pending status for manual processing
-          console.error('FAL submission failed, order requires manual processing')
+          console.error('Auto processing submission failed, order requires manual processing')
           toast.success("Đơn hàng đã được tạo. Đang chờ xử lý...")
         } else {
           toast.success("Đơn hàng đã được tạo và đang xử lý tự động!")
         }
-      } catch (falError) {
-        // FAL submission failed, order was still created
-        console.error('FAL submission error:', falError)
+      } catch (processingError) {
+        // Auto processing submission failed, order was still created
+        console.error('Auto processing submission error:', processingError)
         toast.success("Đơn hàng đã được tạo. Đang chờ xử lý...")
       }
 

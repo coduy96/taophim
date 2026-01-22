@@ -42,7 +42,7 @@ export async function submitFalJob(
   if (!isFalSupportedService(serviceSlug)) {
     return {
       success: false,
-      error: `Service ${serviceSlug} is not configured for FAL processing`,
+      error: 'Dịch vụ này không hỗ trợ xử lý tự động',
     }
   }
 
@@ -50,7 +50,7 @@ export async function submitFalJob(
   if (!modelId) {
     return {
       success: false,
-      error: `No FAL model configured for service: ${serviceSlug}`,
+      error: 'Dịch vụ chưa được cấu hình xử lý tự động',
     }
   }
 
@@ -73,7 +73,7 @@ export async function submitFalJob(
     // Map user inputs to FAL format (with validation)
     const falInput = mapUserInputsToFal(serviceSlug, userInputs)
 
-    // Step 1: Create fal_job record FIRST (before calling FAL)
+    // Step 1: Create job record FIRST (before calling processing API)
     const { error: insertError } = await supabaseAdmin
       .from('fal_jobs')
       .insert({
@@ -84,10 +84,10 @@ export async function submitFalJob(
       })
 
     if (insertError) {
-      console.error('Failed to insert fal_job:', insertError)
+      console.error('Failed to insert job record:', insertError)
       return {
         success: false,
-        error: `Database error: ${insertError.message}`,
+        error: 'Lỗi cơ sở dữ liệu. Vui lòng thử lại.',
       }
     }
 
@@ -107,7 +107,7 @@ export async function submitFalJob(
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('FAL API error:', response.status, errorText)
+      console.error('Processing API error:', response.status, errorText)
 
       // Clean up the placeholder record
       await supabaseAdmin
@@ -117,7 +117,7 @@ export async function submitFalJob(
 
       return {
         success: false,
-        error: `FAL API error: ${response.status} - ${errorText}`,
+        error: 'Lỗi hệ thống xử lý video. Vui lòng thử lại sau.',
       }
     }
 
@@ -132,19 +132,19 @@ export async function submitFalJob(
 
       return {
         success: false,
-        error: 'FAL response missing request_id',
+        error: 'Phản hồi từ hệ thống không hợp lệ',
       }
     }
 
-    // Step 3: Update the fal_job with real request_id
+    // Step 3: Update the job with real request_id
     const { error: updateJobError } = await supabaseAdmin
       .from('fal_jobs')
       .update({ fal_request_id: result.request_id })
       .eq('fal_request_id', placeholderRequestId)
 
     if (updateJobError) {
-      console.error('Failed to update fal_job request_id:', updateJobError)
-      // Job is submitted to FAL but we couldn't update our record
+      console.error('Failed to update job request_id:', updateJobError)
+      // Job is submitted but we couldn't update our record
       // Log this for manual intervention
     }
 
@@ -164,7 +164,7 @@ export async function submitFalJob(
       requestId: result.request_id,
     }
   } catch (error) {
-    console.error('FAL submission error:', error)
+    console.error('Job submission error:', error)
 
     // Attempt to clean up placeholder record on error
     try {
@@ -178,7 +178,7 @@ export async function submitFalJob(
 
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: 'Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại.',
     }
   }
 }
