@@ -22,6 +22,7 @@ import {
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { Notification, NotificationType } from "@/lib/notifications/types"
+import { triggerProfileRefresh } from "@/hooks/use-profile"
 
 function formatTimeAgo(dateString: string): string {
   const date = new Date(dateString)
@@ -103,10 +104,14 @@ export function NotificationBell() {
               toast.success(newNotification.title, {
                 description: newNotification.message,
               })
+              // Refresh profile to update Xu balance (frozen_xu deducted)
+              triggerProfileRefresh()
             } else if (newNotification.type === 'order_cancelled') {
               toast.error(newNotification.title, {
                 description: newNotification.message,
               })
+              // Refresh profile to update Xu balance (frozen_xu refunded)
+              triggerProfileRefresh()
             } else {
               toast.info(newNotification.title, {
                 description: newNotification.message,

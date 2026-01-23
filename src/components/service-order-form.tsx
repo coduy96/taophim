@@ -21,6 +21,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { createClient } from "@/lib/supabase/client"
 import { Service, FormConfig, FormField, DurationConfig, FixedDurationConfig, RangeDurationConfig, VideoBasedDurationConfig } from "@/types/database.types"
+import { triggerProfileRefresh } from "@/hooks/use-profile"
 
 interface ServiceOrderFormProps {
   service: Service
@@ -549,6 +550,9 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
       if (orderError) {
         throw new Error(orderError.message)
       }
+
+      // Refresh profile to update Xu balance in sidebar (xu_balance decreased, frozen_xu increased)
+      triggerProfileRefresh()
 
       // Submit to FAL for automated processing
       try {
