@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Image from "next/image"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   Table,
   TableBody,
@@ -566,6 +566,9 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
   const [selectedOrder, setSelectedOrder] = React.useState<OrderWithService | null>(null)
   const [isSheetOpen, setIsSheetOpen] = React.useState(false)
   const [copiedId, setCopiedId] = React.useState(false)
+  const [isPending, startTransition] = React.useTransition()
+  const [pendingFilter, setPendingFilter] = React.useState<string | null>(null)
+  const router = useRouter()
 
   // Note: Real-time updates are handled by NotificationBell component
   // which triggers router.refresh() when new notifications arrive
@@ -594,6 +597,25 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
 
   // Orders are now already filtered server-side, just use directly
   const filteredOrders = orders
+
+  // Handle tab click with transition for loading state
+  const handleFilterChange = (newFilter: string) => {
+    if (newFilter === currentFilter) return
+    setPendingFilter(newFilter)
+    startTransition(() => {
+      router.push(`/dashboard/orders?status=${newFilter}`)
+    })
+  }
+
+  // Reset pending filter when transition completes
+  React.useEffect(() => {
+    if (!isPending) {
+      setPendingFilter(null)
+    }
+  }, [isPending])
+
+  // Show active filter (pending or current)
+  const activeFilter = pendingFilter || currentFilter
 
   const handleViewOrder = (order: OrderWithService) => {
     setSelectedOrder(order)
@@ -637,25 +659,60 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <Tabs value={currentFilter} className="w-full sm:w-auto">
+        <Tabs value={activeFilter} className="w-full sm:w-auto">
           <TabsList className="grid w-full grid-cols-4 sm:w-auto sm:inline-flex bg-muted/50 p-1 rounded-xl">
-            <TabsTrigger value="all" className="rounded-lg" asChild>
-              <Link href="/dashboard/orders?status=all">Tất cả</Link>
+            <TabsTrigger
+              value="all"
+              className="rounded-lg"
+              onClick={() => handleFilterChange("all")}
+              disabled={isPending}
+            >
+              Tất cả
             </TabsTrigger>
-            <TabsTrigger value="pending" className="rounded-lg" asChild>
-              <Link href="/dashboard/orders?status=pending">Đang xử lý</Link>
+            <TabsTrigger
+              value="pending"
+              className="rounded-lg"
+              onClick={() => handleFilterChange("pending")}
+              disabled={isPending}
+            >
+              Đang xử lý
             </TabsTrigger>
-            <TabsTrigger value="completed" className="rounded-lg" asChild>
-              <Link href="/dashboard/orders?status=completed">Hoàn thành</Link>
+            <TabsTrigger
+              value="completed"
+              className="rounded-lg"
+              onClick={() => handleFilterChange("completed")}
+              disabled={isPending}
+            >
+              Hoàn thành
             </TabsTrigger>
-            <TabsTrigger value="cancelled" className="rounded-lg" asChild>
-              <Link href="/dashboard/orders?status=cancelled">Đã hủy</Link>
+            <TabsTrigger
+              value="cancelled"
+              className="rounded-lg"
+              onClick={() => handleFilterChange("cancelled")}
+              disabled={isPending}
+            >
+              Đã hủy
             </TabsTrigger>
           </TabsList>
         </Tabs>
+        {isPending && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span>Đang tải...</span>
+          </div>
+        )}
       </div>
 
-      <div className="rounded-2xl border bg-card shadow-sm overflow-hidden">
+      <div className="rounded-2xl border bg-card shadow-sm overflow-hidden relative">
+        {/* Loading overlay */}
+        {isPending && (
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] z-10 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-3">
+              <div className="h-8 w-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+              <span className="text-sm text-muted-foreground">Đang tải đơn hàng...</span>
+            </div>
+          </div>
+        )}
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow className="hover:bg-muted/30">
