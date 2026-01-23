@@ -39,6 +39,14 @@ interface FileUploadProps {
   disabled?: boolean
 }
 
+// Helper to create a stable File copy by reading into memory
+// This prevents ERR_UPLOAD_FILE_CHANGED when browser garbage collects file references
+async function createStableFileCopy(file: File): Promise<File> {
+  const arrayBuffer = await file.arrayBuffer()
+  const blob = new Blob([arrayBuffer], { type: file.type })
+  return new File([blob], file.name, { type: file.type, lastModified: file.lastModified })
+}
+
 function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) {
   const [dragActive, setDragActive] = useState(false)
 
@@ -52,18 +60,20 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
     }
   }, [])
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDragActive(false)
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      onChange(e.dataTransfer.files[0])
+      const stableFile = await createStableFileCopy(e.dataTransfer.files[0])
+      onChange(stableFile)
     }
   }, [onChange])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      onChange(e.target.files[0])
+      const stableFile = await createStableFileCopy(e.target.files[0])
+      onChange(stableFile)
     }
   }
 
