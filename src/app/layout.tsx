@@ -170,8 +170,9 @@ const organizationSchema = {
     height: 512,
   },
   sameAs: [
-    "https://www.facebook.com/taophim",
-    "https://www.tiktok.com/@taophim",
+    "https://www.facebook.com/profile.php?id=61573590554545",
+    "https://www.tiktok.com/@taophimaichonguoiviet?is_from_webapp=1&sender_device=pc",
+    "https://www.youtube.com/@T%E1%BA%A1oPhimAI",
   ],
   contactPoint: {
     "@type": "ContactPoint",
