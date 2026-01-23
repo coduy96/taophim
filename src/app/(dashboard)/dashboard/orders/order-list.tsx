@@ -44,25 +44,74 @@ import {
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
-// Download file helper - opens URL directly for streaming download
-function downloadFile(url: string, filename?: string) {
-  // Extract filename from URL if not provided
-  const defaultFilename = url.split('/').pop()?.split('?')[0] || 'download'
-  const downloadFilename = filename || defaultFilename
+// MIME type to file extension mapping
+const mimeToExtension: Record<string, string> = {
+  'video/mp4': '.mp4',
+  'video/webm': '.webm',
+  'video/quicktime': '.mov',
+  'video/x-msvideo': '.avi',
+  'video/x-matroska': '.mkv',
+  'image/jpeg': '.jpg',
+  'image/png': '.png',
+  'image/gif': '.gif',
+  'image/webp': '.webp',
+}
 
-  // Create a temporary link and trigger download
-  // This opens the file directly, allowing the browser to stream it
-  // instead of loading the entire file into memory first
-  const link = document.createElement('a')
-  link.href = url
-  link.download = downloadFilename
-  link.target = '_blank'
-  link.rel = 'noopener noreferrer'
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
+// Download file helper - fetches the file at full quality and triggers actual download
+async function downloadFile(url: string, filename?: string) {
+  const toastId = toast.loading("Đang tải xuống...")
 
-  toast.success("Đang tải xuống...", { id: "download" })
+  try {
+    // Fetch the file content with no-cache to ensure we get the original quality
+    const response = await fetch(url, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status}`)
+    }
+
+    // Get the content type from response headers
+    const contentType = response.headers.get('Content-Type') || 'application/octet-stream'
+
+    // Create a blob from the raw response data, preserving the original MIME type
+    const arrayBuffer = await response.arrayBuffer()
+    const blob = new Blob([arrayBuffer], { type: contentType })
+
+    // Extract filename from URL if not provided
+    let downloadFilename = filename
+    if (!downloadFilename) {
+      const urlFilename = url.split('/').pop()?.split('?')[0] || 'download'
+      downloadFilename = urlFilename
+
+      // Ensure proper extension based on MIME type
+      const hasExtension = /\.[a-zA-Z0-9]+$/.test(downloadFilename)
+      if (!hasExtension) {
+        const extension = mimeToExtension[contentType] || ''
+        downloadFilename += extension
+      }
+    }
+
+    // Create a blob URL and trigger download
+    const blobUrl = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = downloadFilename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    // Clean up the blob URL after a short delay to ensure download starts
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1000)
+
+    toast.success("Tải xuống hoàn tất!", { id: toastId })
+  } catch (error) {
+    console.error('Download failed:', error)
+    toast.error("Không thể tải xuống. Vui lòng thử lại.", { id: toastId })
+  }
 }
 
 // Reuse types from page or define shared types
