@@ -254,23 +254,23 @@ function FilePreview({ url, label }: { url: string; label: string }) {
 
   if (fileType === 'image') {
     return (
-      <div className="space-y-2">
+      <div className="space-y-2 max-w-full overflow-hidden">
         <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70">
           {label}
         </span>
-        <div 
+        <div
           className={cn(
-            "relative rounded-xl overflow-hidden border bg-muted/30 cursor-pointer transition-all duration-300",
+            "relative rounded-xl overflow-hidden border bg-muted/30 cursor-pointer transition-all duration-300 max-w-full",
             isExpanded ? "max-h-96" : "max-h-32"
           )}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <Image 
-            src={url} 
+          <Image
+            src={url}
             alt={label}
             width={400}
             height={300}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover max-w-full"
             unoptimized
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center pb-2">
@@ -295,21 +295,21 @@ function FilePreview({ url, label }: { url: string; label: string }) {
 
   if (fileType === 'video') {
     return (
-      <div className="space-y-2">
+      <div className="space-y-2 max-w-full overflow-hidden">
         <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70">
           {label}
         </span>
-        <div className="relative rounded-xl overflow-hidden border bg-muted/30">
-          <video 
+        <div className="relative rounded-xl overflow-hidden border bg-muted/30 max-w-full">
+          <video
             src={url}
-            className="w-full max-h-40 object-cover"
+            className="w-full max-h-40 max-w-full object-cover"
             controls={false}
             muted
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-            <a 
-              href={url} 
-              target="_blank" 
+            <a
+              href={url}
+              target="_blank"
               rel="noopener noreferrer"
               className="h-12 w-12 rounded-full bg-white/90 dark:bg-black/90 flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
             >
@@ -483,25 +483,25 @@ function ResultPreview({ url }: { url: string }) {
 
   if (fileType === 'video') {
     return (
-      <div className="space-y-3">
+      <div className="space-y-3 max-w-full overflow-hidden">
         <h4 className="text-sm font-semibold flex items-center gap-2">
           <div className="h-6 w-6 rounded-lg bg-green-500/10 flex items-center justify-center">
             <HugeiconsIcon icon={Film} className="h-3.5 w-3.5 text-green-600" />
           </div>
           Video kết quả
         </h4>
-        <div className="relative rounded-2xl overflow-hidden bg-black/90 border shadow-xl">
-          <video 
+        <div className="relative rounded-2xl overflow-hidden bg-black/90 border shadow-xl max-w-full">
+          <video
             ref={videoRef}
             src={url}
-            className="w-full aspect-video object-contain"
+            className="w-full max-w-full aspect-video object-contain"
             controls
             playsInline
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
           />
           {!isPlaying && (
-            <div 
+            <div
               className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/60 via-transparent to-black/20 cursor-pointer"
               onClick={handlePlayPause}
             >
@@ -517,20 +517,20 @@ function ResultPreview({ url }: { url: string }) {
 
   if (fileType === 'image') {
     return (
-      <div className="space-y-3">
+      <div className="space-y-3 max-w-full overflow-hidden">
         <h4 className="text-sm font-semibold flex items-center gap-2">
           <div className="h-6 w-6 rounded-lg bg-green-500/10 flex items-center justify-center">
             <HugeiconsIcon icon={ImageIcon} className="h-3.5 w-3.5 text-green-600" />
           </div>
           Ảnh kết quả
         </h4>
-        <div className="relative rounded-2xl overflow-hidden border shadow-xl">
-          <Image 
+        <div className="relative rounded-2xl overflow-hidden border shadow-xl max-w-full">
+          <Image
             src={url}
             alt="Kết quả"
             width={600}
             height={400}
-            className="w-full object-cover"
+            className="w-full max-w-full object-cover"
             unoptimized
           />
         </div>

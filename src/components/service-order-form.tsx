@@ -113,10 +113,12 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
       />
       
       {value ? (
-        <div className="flex items-center justify-center gap-3">
-          {getIcon()}
-          <div className="text-left flex-1">
-            <p className="font-medium truncate">{value.name}</p>
+        <div className="flex items-center gap-3 min-w-0 overflow-hidden">
+          <div className="shrink-0">
+            {getIcon()}
+          </div>
+          <div className="text-left flex-1 min-w-0 overflow-hidden">
+            <p className="font-medium truncate max-w-full">{value.name}</p>
             <p className="text-sm text-muted-foreground">
               {(value.size / 1024 / 1024).toFixed(2)} MB
             </p>
@@ -125,6 +127,7 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
             type="button"
             variant="ghost"
             size="icon"
+            className="shrink-0"
             onClick={(e) => {
               e.preventDefault()
               onChange(null)

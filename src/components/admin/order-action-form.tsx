@@ -169,9 +169,9 @@ export function OrderActionForm({ orderId, currentStatus }: OrderActionFormProps
                 disabled={isLoading}
               />
               {resultFile ? (
-                <div className="flex items-center justify-center gap-2">
-                  <HugeiconsIcon icon={CheckCircle2} className="h-5 w-5 text-green-500" />
-                  <span className="font-medium truncate">{resultFile.name}</span>
+                <div className="flex items-center justify-center gap-2 min-w-0 overflow-hidden max-w-full">
+                  <HugeiconsIcon icon={CheckCircle2} className="h-5 w-5 text-green-500 shrink-0" />
+                  <span className="font-medium truncate min-w-0">{resultFile.name}</span>
                 </div>
               ) : (
                 <div className="space-y-1">
