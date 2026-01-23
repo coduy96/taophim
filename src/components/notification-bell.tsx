@@ -18,7 +18,6 @@ import {
   Notification02Icon as Bell,
   CheckmarkCircle02Icon as CheckCircle,
   Cancel01Icon as XCircle,
-  Download01Icon as Download,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
@@ -181,6 +180,13 @@ export function NotificationBell() {
     if (!notification.is_read) {
       markAsRead(notification.id)
     }
+
+    // Navigate to orders page with the order panel open if orderId exists
+    const orderId = notification.data?.orderId
+    if (typeof orderId === 'string') {
+      setIsOpen(false)
+      router.push(`/dashboard/orders?order=${orderId}`)
+    }
   }
 
   return (
@@ -252,27 +258,6 @@ export function NotificationBell() {
                   )}
                 </div>
 
-                {/* Action buttons for completed orders */}
-                {notification.type === "order_completed" && typeof notification.data?.videoUrl === 'string' && (
-                  <div className="flex gap-2 mt-2 w-full">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 text-xs flex-1"
-                      asChild
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <a
-                        href={notification.data.videoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <HugeiconsIcon icon={Download} className="h-3 w-3 mr-1" />
-                        Tải video
-                      </a>
-                    </Button>
-                  </div>
-                )}
               </DropdownMenuItem>
             ))}
           </div>
