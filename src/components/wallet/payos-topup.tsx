@@ -10,8 +10,8 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Loading03Icon as Loader2,
   Coins01Icon as Coins,
-  SparklesIcon as Sparkles,
-  Fire03Icon as Fire
+  Fire03Icon as Fire,
+  CheckmarkCircle02Icon as Check
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
 
@@ -24,10 +24,10 @@ interface XuPackage {
 }
 
 const XU_PACKAGES: XuPackage[] = [
-  { xu: 100, label: "Gói cơ bản" },
-  { xu: 200, label: "Gói tiết kiệm" },
-  { xu: 500, label: "Phổ biến nhất", badge: "HOT", badgeColor: "bg-orange-500", popular: true },
-  { xu: 1000, label: "Gói siêu tiết kiệm", badge: "Best", badgeColor: "bg-green-500" },
+  { xu: 100, label: "Dùng thử" },
+  { xu: 200, label: "Cá nhân" },
+  { xu: 500, label: "Phổ biến nhất", popular: true },
+  { xu: 1000, label: "Chuyên nghiệp" },
 ]
 
 export function PayOSTopup() {
@@ -146,156 +146,163 @@ export function PayOSTopup() {
         onLoad={() => setPayosLoaded(true)}
       />
 
-      <div className="p-5 space-y-5">
-        {/* Package Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {XU_PACKAGES.map((pkg) => (
-            <button
-              key={pkg.xu}
-              onClick={() => handleSelectPackage(pkg.xu)}
-              disabled={loading}
-              className={cn(
-                "relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200",
-                "hover:border-primary/50 hover:bg-primary/5",
-                "focus:outline-none focus:ring-2 focus:ring-primary/20",
-                "disabled:opacity-50 disabled:cursor-not-allowed",
-                selectedPackage === pkg.xu && !isCustomMode
-                  ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
-                  : "border-border/50 bg-card"
-              )}
-            >
-              {/* Badge */}
-              {pkg.badge && (
-                <span className={cn(
-                  "absolute -top-2 -right-2 px-2 py-0.5 text-[10px] font-bold text-white rounded-full shadow-sm",
-                  pkg.badgeColor || "bg-primary"
+      <div className="p-6 space-y-6">
+        {/* Package Grid - Responsive Full Width */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {XU_PACKAGES.map((pkg) => {
+            const isSelected = selectedPackage === pkg.xu && !isCustomMode
+            return (
+              <button
+                key={pkg.xu}
+                onClick={() => handleSelectPackage(pkg.xu)}
+                disabled={loading}
+                className={cn(
+                  "relative flex flex-col items-center justify-center p-5 md:p-6 rounded-2xl border-2 transition-all duration-200",
+                  "hover:border-primary/50 hover:bg-primary/5",
+                  "focus:outline-none focus:ring-2 focus:ring-primary/20",
+                  "disabled:opacity-50 disabled:cursor-not-allowed",
+                  isSelected
+                    ? "border-primary bg-primary/10 shadow-lg shadow-primary/10"
+                    : "border-border/50 bg-card"
+                )}
+              >
+                {/* Badge */}
+                {pkg.badge && (
+                  <span className={cn(
+                    "absolute -top-2.5 -right-2.5 px-2.5 py-1 text-[10px] font-bold text-white rounded-full shadow-sm",
+                    pkg.badgeColor || "bg-primary"
+                  )}>
+                    {pkg.badge}
+                  </span>
+                )}
+
+                {/* Selected Check */}
+                {isSelected && (
+                  <div className="absolute top-2 left-2">
+                    <div className="h-5 w-5 rounded-full bg-primary flex items-center justify-center">
+                      <HugeiconsIcon icon={Check} className="h-3 w-3 text-primary-foreground" />
+                    </div>
+                  </div>
+                )}
+
+                {/* Icon */}
+                <div className={cn(
+                  "mb-3 p-3 rounded-full",
+                  isSelected ? "bg-primary/20" : "bg-muted/50"
                 )}>
-                  {pkg.badge}
+                  <HugeiconsIcon
+                    icon={pkg.popular ? Fire : Coins}
+                    className={cn(
+                      "h-6 w-6",
+                      isSelected ? "text-primary" : "text-muted-foreground"
+                    )}
+                  />
+                </div>
+
+                {/* Xu Amount */}
+                <span className={cn(
+                  "text-2xl md:text-3xl font-bold",
+                  isSelected ? "text-primary" : "text-foreground"
+                )}>
+                  {pkg.xu.toLocaleString('vi-VN')}
                 </span>
-              )}
+                <span className="text-sm text-muted-foreground font-medium">Xu</span>
 
-              {/* Icon */}
-              <div className={cn(
-                "mb-2 p-2 rounded-full",
-                selectedPackage === pkg.xu && !isCustomMode
-                  ? "bg-primary/20"
-                  : "bg-muted/50"
-              )}>
-                <HugeiconsIcon
-                  icon={pkg.popular ? Fire : Coins}
-                  className={cn(
-                    "h-5 w-5",
-                    selectedPackage === pkg.xu && !isCustomMode
-                      ? "text-primary"
-                      : "text-muted-foreground"
-                  )}
-                />
-              </div>
+                {/* Price */}
+                <span className="mt-2 text-base font-semibold text-muted-foreground">
+                  {(pkg.xu * 1000).toLocaleString('vi-VN')}đ
+                </span>
 
-              {/* Xu Amount */}
-              <span className={cn(
-                "text-xl font-bold",
-                selectedPackage === pkg.xu && !isCustomMode
-                  ? "text-primary"
-                  : "text-foreground"
-              )}>
-                {pkg.xu.toLocaleString('vi-VN')}
-              </span>
-              <span className="text-xs text-muted-foreground font-medium">Xu</span>
-
-              {/* Price */}
-              <span className="mt-1 text-sm font-semibold text-muted-foreground">
-                {(pkg.xu * 1000).toLocaleString('vi-VN')}đ
-              </span>
-
-              {/* Label */}
-              <span className="mt-1 text-[10px] text-muted-foreground/70">
-                {pkg.label}
-              </span>
-            </button>
-          ))}
+                {/* Label */}
+                <span className="mt-1 text-xs text-muted-foreground/70">
+                  {pkg.label}
+                </span>
+              </button>
+            )
+          })}
         </div>
 
         {/* Divider */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <div className="flex-1 h-px bg-border/50" />
-          <span className="text-xs text-muted-foreground">hoặc</span>
+          <span className="text-sm text-muted-foreground">hoặc nhập số tuỳ chọn</span>
           <div className="flex-1 h-px bg-border/50" />
         </div>
 
-        {/* Custom Amount */}
-        <div
-          className={cn(
-            "relative rounded-xl border-2 transition-all duration-200 overflow-hidden",
-            isCustomMode && customAmount
-              ? "border-primary bg-primary/5"
-              : "border-border/50 bg-card"
-          )}
-        >
-          <div className="flex items-center px-4 py-3">
-            <HugeiconsIcon
-              icon={Sparkles}
-              className={cn(
-                "h-5 w-5 mr-3 flex-shrink-0",
-                isCustomMode && customAmount ? "text-primary" : "text-muted-foreground"
-              )}
-            />
-            <Input
-              type="number"
-              min="99"
-              step="1"
-              value={customAmount}
-              onChange={(e) => handleCustomAmountChange(e.target.value)}
-              placeholder="Nhập số Xu khác..."
-              disabled={loading}
-              className="border-0 bg-transparent p-0 h-auto text-base font-semibold focus-visible:ring-0 placeholder:font-normal placeholder:text-muted-foreground/50"
-            />
-            {customAmount && Number(customAmount) > 0 && (
-              <span className="text-sm font-medium text-muted-foreground whitespace-nowrap ml-2">
-                = {(Number(customAmount) * 1000).toLocaleString('vi-VN')}đ
+        {/* Custom Amount & Summary Row */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Custom Amount */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-foreground">
+              Số Xu tuỳ chọn
+            </label>
+            <div className="relative">
+              <Input
+                type="number"
+                min="99"
+                step="1"
+                value={customAmount}
+                onChange={(e) => handleCustomAmountChange(e.target.value)}
+                placeholder="Nhập số Xu (tối thiểu 99)"
+                disabled={loading}
+                className={cn(
+                  "h-14 pl-5 pr-16 text-lg font-semibold rounded-xl",
+                  "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+                  isCustomMode && customAmount
+                    ? "border-primary ring-2 ring-primary/20"
+                    : ""
+                )}
+              />
+              <span className="absolute right-5 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground">
+                Xu
               </span>
+            </div>
+            {customAmount && Number(customAmount) > 0 && (
+              <p className="text-sm text-muted-foreground pl-1">
+                = {(Number(customAmount) * 1000).toLocaleString('vi-VN')}đ
+              </p>
             )}
           </div>
-          <div className="px-4 pb-2">
-            <span className="text-[10px] text-muted-foreground">Tối thiểu 99 Xu</span>
+
+          {/* Summary & CTA */}
+          <div className="flex flex-col justify-end space-y-4">
+            {currentAmount > 0 && (
+              <div className="bg-muted/30 rounded-xl p-4 space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Số Xu nạp:</span>
+                  <span className="font-bold text-xl text-primary">
+                    {currentAmount.toLocaleString('vi-VN')} Xu
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Thành tiền:</span>
+                  <span className="font-semibold text-lg">
+                    {(currentAmount * 1000).toLocaleString('vi-VN')}đ
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <Button
+              onClick={handleCreatePayment}
+              disabled={loading || !payosLoaded || currentAmount < 99}
+              size="lg"
+              className="w-full h-14 rounded-xl text-lg font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-[1.01] active:scale-[0.99]"
+            >
+              {loading ? (
+                <>
+                  <HugeiconsIcon icon={Loader2} className="mr-2 h-5 w-5 animate-spin" />
+                  Đang tạo mã QR...
+                </>
+              ) : (
+                <>
+                  <HugeiconsIcon icon={Coins} className="mr-2 h-5 w-5" />
+                  Nạp ngay {currentAmount > 0 && `${currentAmount.toLocaleString('vi-VN')} Xu`}
+                </>
+              )}
+            </Button>
           </div>
         </div>
-
-        {/* Summary & CTA */}
-        {currentAmount > 0 && (
-          <div className="bg-muted/30 rounded-xl p-4 space-y-3">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Số Xu nạp:</span>
-              <span className="font-bold text-lg text-primary">
-                {currentAmount.toLocaleString('vi-VN')} Xu
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Thành tiền:</span>
-              <span className="font-semibold">
-                {(currentAmount * 1000).toLocaleString('vi-VN')}đ
-              </span>
-            </div>
-          </div>
-        )}
-
-        <Button
-          onClick={handleCreatePayment}
-          disabled={loading || !payosLoaded || currentAmount < 99}
-          className="w-full h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-[1.01] active:scale-[0.99]"
-        >
-          {loading ? (
-            <>
-              <HugeiconsIcon icon={Loader2} className="mr-2 h-5 w-5 animate-spin" />
-              Đang tạo mã QR...
-            </>
-          ) : (
-            <>
-              <HugeiconsIcon icon={Coins} className="mr-2 h-5 w-5" />
-              Nạp ngay
-            </>
-          )}
-        </Button>
 
         {/* Embedded Container */}
         <div
