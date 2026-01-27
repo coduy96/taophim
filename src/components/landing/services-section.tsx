@@ -134,7 +134,7 @@ export async function ServicesSection({ isLoggedIn = false }: { isLoggedIn?: boo
                 <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">
                   {service.name}
                 </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {service.description || "Tạo video chất lượng 4K với công nghệ AI tiên tiến nhất."}
                 </p>
               </div>
@@ -148,12 +148,12 @@ export async function ServicesSection({ isLoggedIn = false }: { isLoggedIn?: boo
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex flex-col items-center p-2 bg-background rounded-lg border border-border/50">
                     <span className="text-xs text-muted-foreground">Video 5 giây</span>
-                    <span className="text-sm font-bold text-foreground">{formatVND(exampleCost5s)}đ</span>
+                    <span className="text-sm text-foreground">{formatVND(exampleCost5s)} <strong className="font-bold">VNĐ</strong></span>
                     <span className="text-[10px] text-muted-foreground">({formatNumber(exampleCost5s)} Xu)</span>
                   </div>
                   <div className="flex flex-col items-center p-2 bg-background rounded-lg border border-border/50">
                     <span className="text-xs text-muted-foreground">Video 10 giây</span>
-                    <span className="text-sm font-bold text-foreground">{formatVND(exampleCost10s)}đ</span>
+                    <span className="text-sm text-foreground">{formatVND(exampleCost10s)} <strong className="font-bold">VNĐ</strong></span>
                     <span className="text-[10px] text-muted-foreground">({formatNumber(exampleCost10s)} Xu)</span>
                   </div>
                 </div>
