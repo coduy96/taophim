@@ -35,7 +35,10 @@ export default async function OrdersPage({
     .order('created_at', { ascending: false })
     .range(offset, offset + ITEMS_PER_PAGE - 1)
 
-  if (statusFilter !== "all" && ["pending", "processing", "completed", "cancelled"].includes(statusFilter)) {
+  // Handle special "in_progress" filter that combines pending + processing
+  if (statusFilter === "in_progress") {
+    query = query.in('status', ['pending', 'processing'])
+  } else if (statusFilter !== "all" && ["pending", "processing", "completed", "cancelled"].includes(statusFilter)) {
     query = query.eq('status', statusFilter as "pending" | "processing" | "completed" | "cancelled")
   }
 

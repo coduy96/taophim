@@ -670,9 +670,9 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
               Tất cả
             </TabsTrigger>
             <TabsTrigger
-              value="pending"
+              value="in_progress"
               className="rounded-lg"
-              onClick={() => handleFilterChange("pending")}
+              onClick={() => handleFilterChange("in_progress")}
               disabled={isPending}
             >
               Đang xử lý
