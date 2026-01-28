@@ -1,6 +1,5 @@
 import { mightBeLoggedIn } from "@/lib/supabase/fast-auth-check"
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
 import { Navbar } from "@/components/layout/navbar"
@@ -22,12 +21,6 @@ const ZapIcon = ({ className }: { className?: string }) => (
 const ArrowRightIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M5 12h14M12 5l7 7-7 7" />
-  </svg>
-)
-
-const PlayIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M8 5v14l11-7z" />
   </svg>
 )
 
@@ -187,78 +180,15 @@ export default async function LandingPage() {
               </div>
             </div>
 
-            {/* Right Column: Visuals */}
-            <div className="hidden lg:flex h-full min-h-[600px] w-full items-center justify-center perspective-[2000px]">
-              <div className="relative w-[600px] h-[600px] preserve-3d">
-                {/* Back Glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl -z-10" />
-
-                {/* 1. Main Landscape Video Card */}
-                <div className="absolute top-[10%] left-0 w-[450px] bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-float z-20 hover:scale-[1.02] transition-transform duration-500 ring-1 ring-border/20">
-                  {/* Header */}
-                  <div className="h-10 bg-muted/30 border-b border-border/50 flex items-center px-4 gap-3">
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-400/80 shadow-sm" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-400/80 shadow-sm" />
-                      <div className="w-3 h-3 rounded-full bg-green-400/80 shadow-sm" />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="aspect-video relative bg-zinc-900 group cursor-pointer overflow-hidden">
-                    <Image
-                      src="/images/landing/long-form-bg.webp"
-                      alt="Giao diện tạo video AI chuyên nghiệp"
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-width: 1024px) 100vw, 450px"
-                      priority
-                      fetchPriority="high"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40 z-10" />
-
-                    {/* Controls */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-20">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
-                          <PlayIcon className="w-3 h-3 text-black ml-0.5" />
-                        </div>
-                        <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
-                          <div className="h-full w-1/3 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary),0.8)]" />
-                        </div>
-                        <span className="text-xs text-white/80 font-mono">00:04 / 00:10</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 2. Floating Portrait Card */}
-                <div className="absolute top-[25%] right-[5%] w-[240px] bg-black rounded-[2rem] shadow-2xl overflow-hidden animate-float-delayed z-30 ring-4 ring-black/5 border border-white/10">
-                  <div className="relative h-[420px] bg-zinc-900">
-                    {/* Image content */}
-                    <Image
-                      src="/images/landing/short-form-bg.webp"
-                      alt="Video TikTok viral được tạo bởi AI - triệu view chỉ trong vài phút"
-                      fill
-                      className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
-                      sizes="240px"
-                      priority
-                      fetchPriority="high"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-10" />
-
-                    {/* Overlay Elements */}
-                    <div className="absolute bottom-6 left-4 right-4 z-20 text-white">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="px-2 py-0.5 rounded-full bg-primary/90 text-[10px] font-bold shadow-lg shadow-primary/20">HD</div>
-                        <div className="text-[10px] opacity-80 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">Hoàn thành</div>
-                      </div>
-                      <p className="text-sm font-medium leading-snug text-shadow-sm">Chất lượng cao, sẵn sàng đăng tải</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {/* Right Column: Video Demos Carousel - Desktop */}
+            <div className="hidden lg:block">
+              <VideoDemosSection variant="hero" />
             </div>
+          </div>
+
+          {/* Video Demos Carousel - Mobile/Tablet */}
+          <div className="lg:hidden mt-12 -mx-4">
+            <VideoDemosSection variant="hero" />
           </div>
         </div>
       </section>
@@ -478,9 +408,6 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
           </Suspense>
         </div>
       </section>
-
-      {/* Video Demos Section */}
-      <VideoDemosSection />
 
       {/* How It Works */}
       <section id="how-it-works" className="py-24 bg-background relative overflow-hidden">

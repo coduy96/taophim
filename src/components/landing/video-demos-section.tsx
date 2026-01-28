@@ -14,8 +14,8 @@ import {
 // YouTube channel: https://www.youtube.com/@TạoPhimAI
 // Video IDs extracted from YouTube Shorts URLs
 const demoVideos = [
-  { id: "K4tM39_BgEc" },
   { id: "GTwlIakB0zE" },
+  { id: "K4tM39_BgEc" },
   { id: "YN4ddGwGufY" },
   { id: "Q62iHZVdAAQ" },
   { id: "uyYvCTVl3_k" },
@@ -31,17 +31,10 @@ const demoVideos = [
   { id: "rcWm-yqs4aE" },
 ]
 
-// Play icon for video overlay
-const PlayCircleIcon = ({ className }: { className?: string }) => (
+// Play icon (triangle only)
+const PlayIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
-  </svg>
-)
-
-// YouTube icon
-const YoutubeIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    <path d="M8 5v14l11-7z" />
   </svg>
 )
 
@@ -53,18 +46,33 @@ const CloseIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
+// YouTube icon (kept for default variant)
+const YoutubeIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+  </svg>
+)
+
 interface VideoCardProps {
   videoId: string
   isPlaying: boolean
   onPlay: () => void
   onStop: () => void
+  isActive?: boolean
 }
 
-function VideoCard({ videoId, isPlaying, onPlay, onStop }: VideoCardProps) {
+function VideoCard({ videoId, isPlaying, onPlay, onStop, isActive = true }: VideoCardProps) {
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-black ring-1 ring-white/10 shadow-xl hover:ring-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10">
-      {/* Shorts Container - 9:16 aspect ratio */}
-      <div className="aspect-[9/16] relative bg-zinc-900 max-h-[500px]">
+    <div
+      className={cn(
+        "relative rounded-xl overflow-hidden bg-zinc-900 transition-all duration-300",
+        isActive
+          ? "ring-1 ring-border/50 shadow-lg"
+          : "ring-1 ring-border/20 opacity-50 scale-[0.97]"
+      )}
+    >
+      {/* Shorts Container - 9:16 aspect ratio, width derived from height */}
+      <div className="relative bg-zinc-900 h-[400px] sm:h-[380px] md:h-[360px] w-[225px] sm:w-[214px] md:w-[203px]">
         {isPlaying ? (
           <>
             <iframe
@@ -77,7 +85,7 @@ function VideoCard({ videoId, isPlaying, onPlay, onStop }: VideoCardProps) {
             {/* Close button */}
             <button
               onClick={onStop}
-              className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/70 hover:bg-black flex items-center justify-center transition-colors"
+              className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/70 hover:bg-black/90 flex items-center justify-center transition-colors"
               aria-label="Đóng video"
             >
               <CloseIcon className="w-4 h-4 text-white" />
@@ -92,29 +100,23 @@ function VideoCard({ videoId, isPlaying, onPlay, onStop }: VideoCardProps) {
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
               onError={(e) => {
-                // Fallback to default thumbnail
                 (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
               }}
             />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
-            {/* Play Button */}
+            {/* Subtle gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+
+            {/* Play Button - minimal */}
             <button
               onClick={onPlay}
-              className="absolute inset-0 flex items-center justify-center group/play cursor-pointer"
+              className="absolute inset-0 flex items-center justify-center cursor-pointer group/play"
               aria-label="Phát video"
             >
-              <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-2xl shadow-primary/50 group-hover/play:scale-110 group-hover/play:bg-primary transition-all duration-300">
-                <PlayCircleIcon className="w-8 h-8 text-white ml-0.5" />
+              <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-md group-hover/play:scale-105 group-hover/play:bg-white transition-all duration-200">
+                <PlayIcon className="w-5 h-5 text-zinc-900 ml-0.5" />
               </div>
             </button>
-
-            {/* Shorts Badge */}
-            <div className="absolute top-3 left-3 px-2 py-1 bg-red-500/90 rounded-md flex items-center gap-1.5 shadow-lg">
-              <YoutubeIcon className="w-3.5 h-3.5 text-white" />
-              <span className="text-xs font-semibold text-white">Shorts</span>
-            </div>
           </>
         )}
       </div>
@@ -122,7 +124,11 @@ function VideoCard({ videoId, isPlaying, onPlay, onStop }: VideoCardProps) {
   )
 }
 
-export function VideoDemosSection() {
+interface VideoDemosSectionProps {
+  variant?: "default" | "hero"
+}
+
+export function VideoDemosSection({ variant = "default" }: VideoDemosSectionProps) {
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
   const [playingVideoId, setPlayingVideoId] = React.useState<string | null>(null)
@@ -137,20 +143,95 @@ export function VideoDemosSection() {
     })
   }, [api])
 
-  // Auto-advance carousel every 5 seconds - ONLY when no video is playing
-  React.useEffect(() => {
-    if (!api || playingVideoId) return
+  // Calculate total "pages" for dots
+  const itemsPerPage = variant === "hero" ? 2 : 4
+  const totalPages = Math.ceil(demoVideos.length / itemsPerPage)
 
-    const interval = setInterval(() => {
-      api.scrollNext()
-    }, 5000)
+  // Hero variant - minimal carousel
+  if (variant === "hero") {
+    return (
+      <div className="w-full space-y-4 overflow-hidden">
+        {/* Main Carousel */}
+        <Carousel
+          setApi={setApi}
+          opts={{
+            align: "center",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {demoVideos.map((video, index) => (
+              <CarouselItem
+                key={video.id}
+                className="basis-auto"
+              >
+                <VideoCard
+                  videoId={video.id}
+                  isPlaying={playingVideoId === video.id}
+                  onPlay={() => {
+                    setPlayingVideoId(video.id)
+                    api?.scrollTo(index)
+                  }}
+                  onStop={() => setPlayingVideoId(null)}
+                  isActive={current === index}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
 
-    return () => clearInterval(interval)
-  }, [api, playingVideoId])
+        {/* Bottom controls: Nav buttons + Dots */}
+        <div className="flex items-center justify-center gap-3">
+          {/* Previous button */}
+          <button
+            onClick={() => api?.scrollPrev()}
+            className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors"
+            aria-label="Video trước"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
 
-  // Calculate total "pages" for dots (showing 4 items per page on desktop)
-  const totalPages = Math.ceil(demoVideos.length / 4)
+          {/* Dots indicator */}
+          <div className="flex items-center gap-1">
+            {demoVideos.slice(0, 7).map((video, index) => (
+              <button
+                key={video.id}
+                onClick={() => api?.scrollTo(index)}
+                className={cn(
+                  "h-1.5 rounded-full transition-all duration-200",
+                  current === index
+                    ? "bg-primary w-4"
+                    : "bg-primary/20 hover:bg-primary/30 w-1.5"
+                )}
+                aria-label={`Đi đến video ${index + 1}`}
+              />
+            ))}
+            {demoVideos.length > 7 && (
+              <span className="text-[10px] text-primary/50 ml-1">
+                +{demoVideos.length - 7}
+              </span>
+            )}
+          </div>
 
+          {/* Next button */}
+          <button
+            onClick={() => api?.scrollNext()}
+            className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors"
+            aria-label="Video tiếp"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Default variant - full section with header
   return (
     <section className="py-24 bg-background relative overflow-hidden">
       {/* Background decorations */}
@@ -211,10 +292,10 @@ export function VideoDemosSection() {
             {Array.from({ length: Math.min(totalPages, 8) }).map((_, index) => (
               <button
                 key={index}
-                onClick={() => api?.scrollTo(index * 4)}
+                onClick={() => api?.scrollTo(index * itemsPerPage)}
                 className={cn(
                   "w-2 h-2 rounded-full transition-all duration-300",
-                  Math.floor(current / 4) === index
+                  Math.floor(current / itemsPerPage) === index
                     ? "bg-primary w-6"
                     : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
                 )}
