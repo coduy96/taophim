@@ -46,9 +46,9 @@ export default function TermsPage() {
               Taophim cung cấp dịch vụ tạo video AI bao gồm:
             </p>
             <ul>
-              <li>Ghép mặt AI (Face Swap)</li>
-              <li>Tạo video từ ảnh (Image to Video)</li>
-              <li>Các dịch vụ video AI khác</li>
+              <li>Ảnh thành Video: Chuyển đổi ảnh thành video chất lượng điện ảnh với chuyển động mượt mà</li>
+              <li>Thay đổi nhân vật: Thay đổi nhân vật từ video tham chiếu sang nhân vật trong ảnh</li>
+              <li>Tạo Video từ Văn Bản: Tạo video chất lượng điện ảnh từ mô tả văn bản</li>
             </ul>
 
             <h2>3. Tài khoản người dùng</h2>

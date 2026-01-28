@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Đăng nhập",
-  description: "Đăng nhập vào Taophim để sử dụng dịch vụ tạo video AI hàng đầu Việt Nam. Ghép mặt, tạo video từ ảnh với công nghệ AI tiên tiến.",
+  description: "Đăng nhập vào Taophim để sử dụng dịch vụ tạo video AI hàng đầu Việt Nam. Ảnh thành Video, Thay đổi nhân vật, Tạo Video từ Văn Bản.",
   alternates: {
     canonical: "/login",
   },

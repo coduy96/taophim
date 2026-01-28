@@ -278,7 +278,7 @@ export default async function LandingPage() {
                 <span className="font-bold text-xl tracking-tight">Taophim</span>
               </Link>
               <p className="text-muted-foreground leading-relaxed text-sm">
-                Dịch vụ ghép mặt AI và tạo video chất lượng cao hàng đầu Việt Nam.
+                Dịch vụ tạo video AI chất lượng điện ảnh hàng đầu Việt Nam.
                 Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài phút.
               </p>
               <div className="flex gap-3">
@@ -508,7 +508,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Chọn Dịch Vụ Phù Hợp</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Ghép mặt AI, biến ảnh thành video, hay video từ text? Xem giá ngay, không có phí ẩn. Biết trước chi phí trước khi đặt.
+                  Ảnh thành Video, Thay đổi nhân vật, hay Tạo Video từ Văn Bản? Xem giá ngay, không có phí ẩn. Biết trước chi phí trước khi đặt.
                 </p>
               </div>
             </div>

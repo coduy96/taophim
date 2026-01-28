@@ -3,7 +3,7 @@ import { LoginForm } from "./login-form"
 
 export const metadata: Metadata = {
   title: "Đăng nhập",
-  description: "Đăng nhập vào Taophim để tạo video AI chuyên nghiệp. Ghép mặt, tạo video từ ảnh với công nghệ AI tiên tiến.",
+  description: "Đăng nhập vào Taophim để tạo video AI chuyên nghiệp. Ảnh thành Video, Thay đổi nhân vật, Tạo Video từ Văn Bản.",
   openGraph: {
     title: "Đăng nhập | Taophim",
     description: "Đăng nhập vào Taophim để tạo video AI chuyên nghiệp.",
