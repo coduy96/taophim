@@ -15,14 +15,8 @@ interface NavbarProps {
 }
 
 // Server-rendered navbar shell - no "use client" directive
-// Client enhancements (scroll effect, mobile menu) are loaded separately
+// Client enhancements (scroll effect, mobile menu, active section) are loaded separately
 export function Navbar({ isLoggedIn = false }: NavbarProps) {
-  const navLinks = [
-    { name: "Tính năng", href: "#features" },
-    { name: "Dịch vụ", href: "#services" },
-    { name: "Cách hoạt động", href: "#how-it-works" },
-  ]
-
   return (
     <header
       data-navbar
@@ -37,18 +31,8 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
           </span>
         </Link>
 
-        {/* Desktop Nav - Server rendered */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
+        {/* Desktop Nav + Mobile Menu - Client component handles both with active state */}
+        <NavbarClientEnhancements isLoggedIn={isLoggedIn} />
 
         {/* Desktop Actions - Server rendered */}
         <div className="hidden md:flex items-center gap-4">
@@ -82,9 +66,6 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
             </>
           )}
         </div>
-
-        {/* Mobile Menu - Client component, deferred */}
-        <NavbarClientEnhancements isLoggedIn={isLoggedIn} />
       </div>
     </header>
   )

@@ -117,7 +117,7 @@ function TestimonialCard({ testimonial, className }: { testimonial: Testimonial;
 
 export function TestimonialsSection() {
   return (
-    <section className="py-24 bg-muted/30 relative overflow-hidden">
+    <section id="testimonials" className="py-24 bg-muted/30 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full bg-grid-black/[0.02] dark:bg-grid-white/[0.02] -z-10" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl -z-10" />

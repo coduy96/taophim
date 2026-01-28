@@ -110,7 +110,7 @@ export function FAQSection() {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-6">
+          <div className="inline-flex items-center gap-2 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-6">
             <QuestionIcon className="w-4 h-4" />
             Câu hỏi thường gặp
           </div>
@@ -124,7 +124,7 @@ export function FAQSection() {
 
         {/* FAQ Accordion */}
         <div className="max-w-3xl mx-auto">
-          <Accordion type="single" collapsible className="space-y-4">
+          <Accordion type="single" collapsible className="space-y-4 border-0 rounded-none">
             {faqItems.map((item, index) => (
               <AccordionItem
                 key={index}
