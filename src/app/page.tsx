@@ -10,6 +10,7 @@ import { ServicesSkeleton } from "@/components/landing/services-skeleton"
 import { TestimonialsSection } from "@/components/landing/testimonials-section"
 import { FAQSection } from "@/components/landing/faq-section"
 import { ComparisonSection } from "@/components/landing/comparison-section"
+import { VideoDemosSection } from "@/components/landing/video-demos-section"
 
 // Inline SVG icons for critical above-the-fold rendering (avoids hugeicons bundle)
 const ZapIcon = ({ className }: { className?: string }) => (
@@ -477,6 +478,9 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
           </Suspense>
         </div>
       </section>
+
+      {/* Video Demos Section */}
+      <VideoDemosSection />
 
       {/* How It Works */}
       <section id="how-it-works" className="py-24 bg-background relative overflow-hidden">
