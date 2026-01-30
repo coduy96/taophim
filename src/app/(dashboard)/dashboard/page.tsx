@@ -13,6 +13,9 @@ import {
   SparklesIcon as Sparkles,
   Film01Icon as Film
 } from "@hugeicons/core-free-icons"
+import { HeroCTA } from "@/components/dashboard/hero-cta"
+
+const LOW_BALANCE_THRESHOLD = 100
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -82,44 +85,80 @@ export default async function DashboardPage() {
     return "Chào buổi tối"
   }
 
+  const isLowBalance = (profile?.xu_balance || 0) < LOW_BALANCE_THRESHOLD
+  const hasZeroBalance = (profile?.xu_balance || 0) === 0
+
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-10">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {greeting()}, {profile?.full_name || 'bạn hiền'}! 👋
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Chào mừng trở lại với Taophim. Hôm nay bạn muốn tạo video gì?
-          </p>
+      {/* Header Section - Hidden when HeroCTA is shown */}
+      {!hasZeroBalance && (
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {greeting()}, {profile?.full_name || 'bạn hiền'}! 👋
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Chào mừng trở lại với Taophim. Hôm nay bạn muốn tạo video gì?
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button asChild size="lg" className="rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
+              <Link href="/dashboard/services">
+                <HugeiconsIcon icon={Film} className="mr-2 h-5 w-5" />
+                Tạo video mới
+              </Link>
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <Button asChild size="lg" className="rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
-            <Link href="/dashboard/services">
-              <HugeiconsIcon icon={Film} className="mr-2 h-5 w-5" />
-              Tạo video mới
+      )}
+
+      {/* Prominent Low Balance / Zero Balance Banner */}
+      {hasZeroBalance && <HeroCTA />}
+
+      {isLowBalance && !hasZeroBalance && (
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-zinc-900 dark:bg-zinc-800 flex items-center justify-center">
+              <HugeiconsIcon icon={Wallet} className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <p className="font-medium text-foreground">
+                Còn {formatXu(profile?.xu_balance || 0)} Xu
+              </p>
+              <p className="text-sm text-muted-foreground">Nạp thêm để tiếp tục tạo video</p>
+            </div>
+          </div>
+          <Button asChild variant="outline" className="w-full sm:w-auto border-zinc-300 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-800">
+            <Link href="/dashboard/wallet">
+              Nạp Xu
+              <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </div>
-      </div>
+      )}
 
       {/* Stats Grid - Cleaner & Minimal */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card size="sm" className="bg-primary/5 border-primary/10 hover:border-primary/20 transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Số dư hiện tại</CardTitle>
-            <HugeiconsIcon icon={Wallet} className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-primary">{formatXu(profile?.xu_balance || 0)}</div>
-            {profile && profile.frozen_xu > 0 && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Đang giữ: {formatXu(profile.frozen_xu)}
-              </p>
-            )}
-          </CardContent>
-        </Card>
+        <Link href="/dashboard/wallet" className="block group">
+          <Card size="sm" className="bg-primary/5 border-primary/10 hover:border-primary/30 hover:shadow-md transition-all cursor-pointer">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Số dư hiện tại</CardTitle>
+              <HugeiconsIcon icon={Wallet} className="h-4 w-4 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-primary">{formatXu(profile?.xu_balance || 0)}</div>
+              {profile && profile.frozen_xu > 0 ? (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Đang giữ: {formatXu(profile.frozen_xu)}
+                </p>
+              ) : (
+                <p className="text-xs text-primary/70 mt-1 group-hover:text-primary transition-colors">
+                  Nhấn để nạp thêm →
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </Link>
 
         <Card size="sm" className="hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -155,101 +194,68 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-7">
-        {/* Recent Orders Section */}
-        <div className="md:col-span-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold tracking-tight">Đơn hàng gần đây</h2>
-            <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
-              <Link href="/dashboard/orders">
-                Xem tất cả <HugeiconsIcon icon={ArrowRight} className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-
-          <Card className="border-none shadow-none bg-transparent">
-             <div className="space-y-3">
-              {recentOrders && recentOrders.length > 0 ? (
-                recentOrders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="group flex items-center justify-between p-4 rounded-2xl border bg-card hover:border-primary/20 hover:shadow-sm transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <HugeiconsIcon icon={Sparkles} className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="font-medium">{(order.services as { name: string })?.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {formatDate(order.created_at)}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                      <span className="text-sm font-medium text-muted-foreground hidden sm:inline-block">
-                        {formatXu(order.total_cost)} Xu
-                      </span>
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${statusLabels[order.status].className}`}>
-                        {statusLabels[order.status].label}
-                      </span>
-                      <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Link href={`/dashboard/orders?order=${order.id}`}>
-                           <HugeiconsIcon icon={ArrowRight} className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="flex flex-col items-center justify-center py-12 text-center rounded-2xl border border-dashed">
-                  <div className="h-12 w-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
-                    <HugeiconsIcon icon={ShoppingBag} className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <h3 className="font-medium">Chưa có đơn hàng nào</h3>
-                  <p className="text-sm text-muted-foreground max-w-[250px] mt-1 mb-4">
-                    Hãy tạo đơn hàng đầu tiên để bắt đầu trải nghiệm dịch vụ.
-                  </p>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href="/dashboard/services">Khám phá dịch vụ</Link>
-                  </Button>
-                </div>
-              )}
-            </div>
-          </Card>
+      {/* Recent Orders Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold tracking-tight">Đơn hàng gần đây</h2>
+          <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
+            <Link href="/dashboard/orders">
+              Xem tất cả <HugeiconsIcon icon={ArrowRight} className="ml-1 h-4 w-4" />
+            </Link>
+          </Button>
         </div>
 
-        {/* Side Actions */}
-        <div className="md:col-span-2 space-y-4">
-           <h2 className="text-lg font-semibold tracking-tight">Tiện ích</h2>
-           <Card className="p-0 overflow-hidden border-none shadow-none bg-transparent space-y-4">
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10">
-                <div className="flex items-start justify-between mb-4">
-                   <div className="h-10 w-10 rounded-xl bg-background/80 backdrop-blur flex items-center justify-center text-primary shadow-sm">
-                      <HugeiconsIcon icon={Wallet} className="h-5 w-5" />
-                   </div>
-                   <Button variant="secondary" size="sm" asChild className="h-8 text-xs bg-background/50 hover:bg-background">
-                      <Link href="/dashboard/wallet">Nạp ngay</Link>
-                   </Button>
+        <Card className="border-none shadow-none bg-transparent">
+           <div className="space-y-3">
+            {recentOrders && recentOrders.length > 0 ? (
+              recentOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="group flex items-center justify-between p-4 rounded-2xl border bg-card hover:border-primary/20 hover:shadow-sm transition-all duration-200"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <HugeiconsIcon icon={Sparkles} className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="font-medium">{(order.services as { name: string })?.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatDate(order.created_at)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm font-medium text-muted-foreground hidden sm:inline-block">
+                      {formatXu(order.total_cost)} Xu
+                    </span>
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${statusLabels[order.status].className}`}>
+                      {statusLabels[order.status].label}
+                    </span>
+                    <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Link href={`/dashboard/orders?order=${order.id}`}>
+                         <HugeiconsIcon icon={ArrowRight} className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-primary mb-1">Cần thêm Xu?</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Nạp thêm Xu để tiếp tục sử dụng các dịch vụ tạo video chất lượng cao.
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12 text-center rounded-2xl border border-dashed">
+                <div className="h-12 w-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+                  <HugeiconsIcon icon={ShoppingBag} className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <h3 className="font-medium">Chưa có đơn hàng nào</h3>
+                <p className="text-sm text-muted-foreground max-w-[250px] mt-1 mb-4">
+                  Hãy tạo đơn hàng đầu tiên để bắt đầu trải nghiệm dịch vụ.
                 </p>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/dashboard/services">Khám phá dịch vụ</Link>
+                </Button>
               </div>
-
-              <div className="p-5 rounded-2xl border bg-card hover:border-primary/20 transition-colors">
-                 <h3 className="font-medium mb-1">Hỗ trợ</h3>
-                 <p className="text-xs text-muted-foreground mb-3">
-                   Gặp vấn đề? Liên hệ ngay với đội ngũ hỗ trợ của chúng tôi.
-                 </p>
-                 <Button variant="outline" size="sm" className="w-full text-xs">
-                    Liên hệ Hỗ trợ
-                  </Button>
-              </div>
-           </Card>
-        </div>
+            )}
+          </div>
+        </Card>
       </div>
     </div>
   )

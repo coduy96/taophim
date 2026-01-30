@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Taophim.com** is an AI Video Generation SaaS for the Vietnamese market using a "Wizard of Oz" MVP approach. Users submit requests (Face Swap, Image-to-Video) which Admins manually fulfill using external tools (Runway, Pika, Kling).
+**Taophim.com** is an AI Video Generation SaaS for the Vietnamese market using a "Wizard of Oz" MVP approach. Users submit requests which Admins manually fulfill using external tools.
 
 **Critical:** All user-facing text must be in Vietnamese. Use "Xu" for credits, "Đơn hàng" for orders.
 

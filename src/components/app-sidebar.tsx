@@ -123,15 +123,20 @@ export function AppSidebar({ user, profile: initialProfile, ...props }: React.Co
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Minimal Wallet Card */}
+        {/* Minimal Wallet Card - Now Clickable */}
         <div className="px-2 py-2">
-          <div className={cn(
-            "relative overflow-hidden rounded-xl border bg-background p-4 shadow-sm transition-all hover:shadow-md",
-            "group-data-[collapsible=icon]:hidden" // Hide when collapsed
-          )}>
-            <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-              <HugeiconsIcon icon={Wallet} className="size-3.5" />
-              <span>Số dư khả dụng</span>
+          <Link
+            href="/dashboard/wallet"
+            className={cn(
+              "relative block overflow-hidden rounded-xl border bg-background p-4 shadow-sm transition-all hover:shadow-md hover:border-primary/30 group/wallet",
+              "group-data-[collapsible=icon]:hidden" // Hide when collapsed
+            )}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                <HugeiconsIcon icon={Wallet} className="size-3.5" />
+                <span>Số dư khả dụng</span>
+              </div>
             </div>
             <div className="mt-2 flex items-baseline gap-1">
               <span className="text-xl font-bold tracking-tight text-foreground">
@@ -147,9 +152,15 @@ export function AppSidebar({ user, profile: initialProfile, ...props }: React.Co
               </div>
             )}
 
+            {/* CTA Button */}
+            <div className="mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 py-1.5 px-3 rounded-lg transition-colors group-hover/wallet:bg-primary/20">
+              <span>Nạp Xu</span>
+              <HugeiconsIcon icon={History} className="size-3" />
+            </div>
+
             {/* Decorative background element */}
             <div className="absolute -right-4 -top-4 size-16 rounded-full bg-primary/5 blur-2xl" />
-          </div>
+          </Link>
         </div>
       </SidebarContent>
 
