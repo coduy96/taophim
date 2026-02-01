@@ -25,6 +25,7 @@ const navLinks = [
   { name: "Dịch vụ", href: "#services" },
   { name: "Cách hoạt động", href: "#how-it-works" },
   { name: "Đánh giá", href: "#testimonials" },
+  { name: "Bảng giá", href: "#pricing" },
   { name: "Hỏi đáp", href: "#faq" },
 ]
 
@@ -96,8 +97,23 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
       e.preventDefault()
 
       const headerOffset = 80 // Account for fixed header
-      const elementPosition = targetElement.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.scrollY - headerOffset
+      const elementRect = targetElement.getBoundingClientRect()
+      const elementHeight = targetElement.offsetHeight
+      const viewportHeight = window.innerHeight
+
+      // Calculate position to center the element in viewport
+      // For tall sections, scroll to show the top with header offset
+      // For shorter sections, center them in the viewport
+      let offsetPosition: number
+      if (elementHeight > viewportHeight - headerOffset) {
+        // Section is taller than viewport, scroll to top
+        offsetPosition = elementRect.top + window.scrollY - headerOffset
+      } else {
+        // Center the section in the viewport (accounting for header)
+        const availableHeight = viewportHeight - headerOffset
+        const centerOffset = (availableHeight - elementHeight) / 2
+        offsetPosition = elementRect.top + window.scrollY - headerOffset - centerOffset
+      }
 
       window.scrollTo({
         top: offsetPosition,

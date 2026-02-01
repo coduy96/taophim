@@ -10,6 +10,7 @@ import { TestimonialsSection } from "@/components/landing/testimonials-section"
 import { FAQSection } from "@/components/landing/faq-section"
 import { ComparisonSection } from "@/components/landing/comparison-section"
 import { VideoDemosSection } from "@/components/landing/video-demos-section"
+import { PricingSection } from "@/components/landing/pricing-section"
 import { FacebookMessengerChat } from "@/components/facebook-messenger-chat"
 
 // Inline SVG icons for critical above-the-fold rendering (avoids hugeicons bundle)
@@ -493,6 +494,9 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
 
       {/* Comparison Section */}
       <ComparisonSection />
+
+      {/* Pricing Section */}
+      <PricingSection isLoggedIn={isLoggedIn} />
 
       {/* FAQ Section */}
       <FAQSection />

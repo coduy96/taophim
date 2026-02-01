@@ -292,7 +292,7 @@ export function PayOSTopup() {
               <HugeiconsIcon icon={QrCode} className="h-3 w-3" />
               <HugeiconsIcon icon={CreditCard} className="h-3 w-3" />
               <HugeiconsIcon icon={Bank} className="h-3 w-3" />
-              <span>QR · VNPAY · Chuyển khoản</span>
+              <span>QR · VNPAY · MoMo · Chuyển khoản</span>
             </div>
           </div>
         </div>
