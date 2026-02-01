@@ -4,7 +4,6 @@ import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 import { Analytics } from "@/components/analytics"
-import { FacebookMessengerChat } from "@/components/facebook-messenger-chat"
 
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
@@ -332,7 +331,6 @@ export default function RootLayout({
           {children}
           <Toaster richColors position="top-center" />
           <Analytics />
-          <FacebookMessengerChat />
         </ThemeProvider>
       </body>
     </html>

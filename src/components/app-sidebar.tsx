@@ -36,6 +36,7 @@ import {
   ArrowUp01Icon as ChevronUp,
   Home01Icon as Home,
   Settings01Icon as Settings,
+  CustomerService01Icon as Support,
 } from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
@@ -118,13 +119,31 @@ export function AppSidebar({ user, profile: initialProfile, ...props }: React.Co
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup className="mt-auto">
+        <SidebarGroup>
+          <SidebarGroupLabel>Hỗ trợ</SidebarGroupLabel>
           <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  tooltip="Liên hệ hỗ trợ"
+                >
+                  <a
+                    href="https://m.me/61573590554545"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <HugeiconsIcon icon={Support} />
+                    <span>Liên hệ hỗ trợ</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
         {/* Minimal Wallet Card - Now Clickable */}
-        <div className="px-2 py-2">
+        <div className="px-2 py-2 mt-auto">
           <Link
             href="/dashboard/wallet"
             className={cn(

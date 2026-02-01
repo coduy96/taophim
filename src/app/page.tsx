@@ -10,6 +10,7 @@ import { TestimonialsSection } from "@/components/landing/testimonials-section"
 import { FAQSection } from "@/components/landing/faq-section"
 import { ComparisonSection } from "@/components/landing/comparison-section"
 import { VideoDemosSection } from "@/components/landing/video-demos-section"
+import { FacebookMessengerChat } from "@/components/facebook-messenger-chat"
 
 // Inline SVG icons for critical above-the-fold rendering (avoids hugeicons bundle)
 const ZapIcon = ({ className }: { className?: string }) => (
@@ -253,6 +254,9 @@ export default async function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Facebook Messenger Chat - Only on landing page */}
+      <FacebookMessengerChat />
     </div>
   )
 }
