@@ -142,9 +142,9 @@ export function TransactionHistorySheet({ totalDeposited, totalSpent }: Transact
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <HugeiconsIcon icon={History} className="h-4 w-4" />
-          Lịch sử giao dịch
+        <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-primary gap-1.5 h-auto py-1 px-2">
+          Xem tất cả
+          <HugeiconsIcon icon={History} className="h-3.5 w-3.5" />
         </Button>
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-6">
@@ -159,14 +159,18 @@ export function TransactionHistorySheet({ totalDeposited, totalSpent }: Transact
               <HugeiconsIcon icon={ArrowUpCircle} className="h-4 w-4 text-green-600" />
               <span className="text-xs text-muted-foreground">Tổng đã nạp</span>
             </div>
-            <p className="text-lg font-bold text-green-600">+{formatXu(totalDeposited)} Xu</p>
+            <p className="text-lg font-bold text-green-600">
+              {totalDeposited > 0 && '+'}{formatXu(totalDeposited)} Xu
+            </p>
           </div>
           <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
             <div className="flex items-center gap-2 mb-1">
               <HugeiconsIcon icon={ArrowDownCircle} className="h-4 w-4 text-red-600" />
               <span className="text-xs text-muted-foreground">Tổng đã chi</span>
             </div>
-            <p className="text-lg font-bold text-red-600">-{formatXu(totalSpent)} Xu</p>
+            <p className="text-lg font-bold text-red-600">
+              {totalSpent > 0 && '-'}{formatXu(totalSpent)} Xu
+            </p>
           </div>
         </div>
 
