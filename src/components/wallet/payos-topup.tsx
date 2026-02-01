@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Script from "next/script"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import {
   Dialog,
@@ -16,8 +15,6 @@ import { toast } from "sonner"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Loading03Icon as Loader2,
-  Coins01Icon as Coins,
-  Fire03Icon as Fire,
   CheckmarkCircle02Icon as Check,
   QrCodeIcon as QrCode,
   CreditCardIcon as CreditCard,
@@ -27,54 +24,61 @@ import {
 import { cn } from "@/lib/utils"
 
 interface XuPackage {
-  xu: number
+  slug: string
   label: string
-  badge?: string
-  badgeColor?: string
+  tagline: string
+  base_xu: number
+  bonus_xu: number
+  total_xu: number
+  price_vnd: number
   popular?: boolean
-  savings?: string
 }
 
 const XU_PACKAGES: XuPackage[] = [
-  { xu: 100, label: "Dùng thử" },
-  { xu: 200, label: "Cá nhân" },
-  { xu: 500, label: "Phổ biến", popular: true, badge: "Hot", badgeColor: "bg-orange-500" },
-  { xu: 1000, label: "Chuyên nghiệp", savings: "Tiết kiệm" },
+  {
+    slug: "starter",
+    label: "Dùng thử",
+    tagline: "Tạo 1-2 video đầu tiên",
+    base_xu: 150,
+    bonus_xu: 0,
+    total_xu: 150,
+    price_vnd: 150000
+  },
+  {
+    slug: "popular",
+    label: "Tiết kiệm",
+    tagline: "Được chọn nhiều nhất",
+    base_xu: 500,
+    bonus_xu: 50,
+    total_xu: 550,
+    price_vnd: 500000,
+    popular: true
+  },
+  {
+    slug: "pro",
+    label: "Pro",
+    tagline: "Dành cho creator chuyên nghiệp",
+    base_xu: 1500,
+    bonus_xu: 300,
+    total_xu: 1800,
+    price_vnd: 1500000
+  },
 ]
 
 export function PayOSTopup() {
-  const [selectedPackage, setSelectedPackage] = useState<number | null>(500)
-  const [customAmount, setCustomAmount] = useState<string>("")
-  const [isCustomMode, setIsCustomMode] = useState(false)
+  const [selectedPackage, setSelectedPackage] = useState<XuPackage>(XU_PACKAGES[1]) // Default to "Phổ biến"
   const [loading, setLoading] = useState(false)
   const [payosLoaded, setPayosLoaded] = useState(false)
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [paymentAmount, setPaymentAmount] = useState(0)
+  const [paymentPackage, setPaymentPackage] = useState<XuPackage | null>(null)
 
-  const currentAmount = isCustomMode ? Number(customAmount) || 0 : (selectedPackage || 0)
-
-  const handleSelectPackage = (xu: number) => {
-    setSelectedPackage(xu)
-    setIsCustomMode(false)
-    setCustomAmount("")
+  const handleSelectPackage = (pkg: XuPackage) => {
+    setSelectedPackage(pkg)
   }
 
-  const handleCustomAmountChange = (value: string) => {
-    setCustomAmount(value)
-    setIsCustomMode(true)
-    setSelectedPackage(null)
-  }
-
-  const handleCreatePayment = async (amount?: number) => {
-    const finalAmount = amount || currentAmount
-
-    if (finalAmount < 99) {
-      toast.error("Số tiền nạp tối thiểu là 99 Xu")
-      return
-    }
-
+  const handleCreatePayment = async () => {
     if (!payosLoaded) {
       toast.error("Hệ thống thanh toán đang tải, vui lòng thử lại")
       return
@@ -82,14 +86,14 @@ export function PayOSTopup() {
 
     try {
       setLoading(true)
-      setPaymentAmount(finalAmount)
+      setPaymentPackage(selectedPackage)
 
       // 1. Create Payment Link via API
       const response = await fetch("/api/payment/create-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: finalAmount,
+          package_slug: selectedPackage.slug,
           returnUrl: window.location.href,
           cancelUrl: window.location.href
         })
@@ -177,154 +181,118 @@ export function PayOSTopup() {
       <Card className="border-border/50 shadow-sm overflow-hidden">
         <div className="p-5 md:p-6 space-y-5">
           {/* Package Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {XU_PACKAGES.map((pkg) => {
-              const isSelected = selectedPackage === pkg.xu && !isCustomMode
+              const isSelected = selectedPackage.slug === pkg.slug
               return (
                 <button
-                  key={pkg.xu}
-                  onClick={() => handleSelectPackage(pkg.xu)}
+                  key={pkg.slug}
+                  onClick={() => handleSelectPackage(pkg)}
                   disabled={loading}
                   className={cn(
-                    "relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200",
+                    "relative flex flex-col items-center text-center p-5 rounded-xl border-2 transition-all duration-200",
                     "hover:border-primary/50 hover:bg-primary/5",
                     "focus:outline-none focus:ring-2 focus:ring-primary/20",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
                     isSelected
                       ? "border-primary bg-primary/5 shadow-md"
-                      : "border-border/50 bg-background"
+                      : "border-border/50 bg-background",
+                    pkg.popular && "ring-2 ring-orange-500/20"
                   )}
                 >
-                  {/* Badge */}
-                  {pkg.badge && (
-                    <span className={cn(
-                      "absolute -top-2 right-2 px-2 py-0.5 text-[10px] font-bold text-white rounded-full",
-                      pkg.badgeColor || "bg-primary"
-                    )}>
-                      {pkg.badge}
+                  {/* Popular Badge */}
+                  {pkg.popular && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold text-white rounded-full bg-orange-500 whitespace-nowrap">
+                      🔥 Phổ biến nhất
                     </span>
                   )}
 
                   {/* Selected Check */}
                   {isSelected && (
-                    <div className="absolute top-2 left-2">
+                    <div className="absolute top-3 right-3">
                       <div className="h-5 w-5 rounded-full bg-primary flex items-center justify-center">
                         <HugeiconsIcon icon={Check} className="h-3 w-3 text-primary-foreground" />
                       </div>
                     </div>
                   )}
 
-                  {/* Icon */}
-                  <div className={cn(
-                    "mb-2 p-2.5 rounded-full transition-colors",
-                    isSelected ? "bg-primary/20" : "bg-muted/50"
+                  {/* Label */}
+                  <h3 className={cn(
+                    "text-base font-bold mb-1",
+                    isSelected ? "text-primary" : "text-foreground",
+                    pkg.popular && "mt-2"
                   )}>
-                    <HugeiconsIcon
-                      icon={pkg.popular ? Fire : Coins}
-                      className={cn(
-                        "h-5 w-5",
-                        isSelected ? "text-primary" : "text-muted-foreground",
-                        pkg.popular && "text-orange-500"
-                      )}
-                    />
+                    {pkg.label}
+                  </h3>
+
+                  {/* Tagline */}
+                  <p className="text-xs text-muted-foreground mb-4">
+                    {pkg.tagline}
+                  </p>
+
+                  {/* Xu Amount - Main focus */}
+                  <div className="mb-1">
+                    <span className={cn(
+                      "text-3xl font-bold tracking-tight",
+                      isSelected ? "text-primary" : "text-foreground"
+                    )}>
+                      {pkg.total_xu.toLocaleString('vi-VN')}
+                    </span>
+                    <span className="text-lg font-semibold text-muted-foreground ml-1">Xu</span>
                   </div>
 
-                  {/* Xu Amount */}
-                  <span className={cn(
-                    "text-xl md:text-2xl font-bold",
-                    isSelected ? "text-primary" : "text-foreground"
-                  )}>
-                    {pkg.xu.toLocaleString('vi-VN')}
-                  </span>
-                  <span className="text-xs text-muted-foreground font-medium">Xu</span>
-
                   {/* Price */}
-                  <span className="mt-1.5 text-sm font-semibold text-muted-foreground">
-                    {(pkg.xu * 1000).toLocaleString('vi-VN')}đ
-                  </span>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {pkg.price_vnd.toLocaleString('vi-VN')}đ
+                  </p>
 
-                  {/* Label/Savings */}
-                  <span className={cn(
-                    "mt-0.5 text-[10px]",
-                    pkg.savings ? "text-green-600 font-medium" : "text-muted-foreground/70"
-                  )}>
-                    {pkg.savings || pkg.label}
-                  </span>
+                  {/* Bonus Badge */}
+                  {pkg.bonus_xu > 0 ? (
+                    <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30 rounded-full">
+                      🎁 Tặng thêm {pkg.bonus_xu} Xu
+                    </span>
+                  ) : (
+                    <span className="h-6" />
+                  )}
                 </button>
               )
             })}
           </div>
 
-          {/* Divider with Custom Option */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-border/50" />
-            <span className="text-xs text-muted-foreground">hoặc nhập số tuỳ chọn</span>
-            <div className="flex-1 h-px bg-border/50" />
-          </div>
+          {/* CTA Button */}
+          <Button
+            onClick={() => handleCreatePayment()}
+            disabled={loading || !payosLoaded}
+            size="lg"
+            className="w-full h-12 rounded-xl text-base font-semibold shadow-md hover:shadow-lg transition-all"
+          >
+            {loading ? (
+              <>
+                <HugeiconsIcon icon={Loader2} className="mr-2 h-5 w-5 animate-spin" />
+                Đang xử lý...
+              </>
+            ) : (
+              <>
+                Nạp ngay {selectedPackage.total_xu.toLocaleString('vi-VN')} Xu
+              </>
+            )}
+          </Button>
 
-          {/* Custom Amount + CTA Row */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Custom Amount Input */}
-            <div className="relative flex-1">
-              <Input
-                type="number"
-                min="99"
-                step="1"
-                value={customAmount}
-                onChange={(e) => handleCustomAmountChange(e.target.value)}
-                placeholder="Số Xu tuỳ chọn (tối thiểu 99)"
-                disabled={loading}
-                className={cn(
-                  "h-12 pl-4 pr-12 text-base font-medium rounded-xl",
-                  "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
-                  isCustomMode && customAmount
-                    ? "border-primary ring-1 ring-primary/20"
-                    : ""
-                )}
-              />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground">
-                Xu
+          {/* Trust Signals */}
+          <div className="flex flex-col items-center gap-2 pt-1">
+            <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <HugeiconsIcon icon={Shield} className="h-3.5 w-3.5 text-green-600" />
+                Bảo mật 100%
               </span>
+              <span>•</span>
+              <span>Xu về tài khoản ngay</span>
             </div>
-
-            {/* CTA Button */}
-            <Button
-              onClick={() => handleCreatePayment()}
-              disabled={loading || !payosLoaded || currentAmount < 99}
-              size="lg"
-              className="h-12 px-6 rounded-xl text-base font-semibold shadow-md hover:shadow-lg transition-all sm:w-auto w-full"
-            >
-              {loading ? (
-                <>
-                  <HugeiconsIcon icon={Loader2} className="mr-2 h-5 w-5 animate-spin" />
-                  Đang xử lý...
-                </>
-              ) : (
-                <>
-                  <HugeiconsIcon icon={QrCode} className="mr-2 h-5 w-5" />
-                  Thanh toán {currentAmount > 0 && (
-                    <span className="ml-1">{(currentAmount * 1000).toLocaleString('vi-VN')}đ</span>
-                  )}
-                </>
-              )}
-            </Button>
-          </div>
-
-          {/* Payment Methods */}
-          <div className="flex items-center justify-center gap-4 pt-2">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <HugeiconsIcon icon={QrCode} className="h-4 w-4" />
-              <span>QR Code</span>
-            </div>
-            <div className="w-px h-4 bg-border" />
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <HugeiconsIcon icon={CreditCard} className="h-4 w-4" />
-              <span>VNPAY</span>
-            </div>
-            <div className="w-px h-4 bg-border" />
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <HugeiconsIcon icon={Bank} className="h-4 w-4" />
-              <span>Ngân hàng</span>
+            <div className="flex items-center gap-2 text-[10px] text-muted-foreground/70">
+              <HugeiconsIcon icon={QrCode} className="h-3 w-3" />
+              <HugeiconsIcon icon={CreditCard} className="h-3 w-3" />
+              <HugeiconsIcon icon={Bank} className="h-3 w-3" />
+              <span>QR · VNPAY · Chuyển khoản</span>
             </div>
           </div>
         </div>
@@ -336,14 +304,17 @@ export function PayOSTopup() {
           <DialogHeader className="p-4 pb-3 border-b bg-muted/30">
             <DialogTitle className="flex items-center gap-2">
               <HugeiconsIcon icon={QrCode} className="h-5 w-5 text-primary" />
-              Thanh toán {paymentAmount.toLocaleString('vi-VN')} Xu
+              Thanh toán {paymentPackage?.total_xu.toLocaleString('vi-VN')} Xu
             </DialogTitle>
             <DialogDescription className="flex items-center gap-4 text-xs">
               <span className="flex items-center gap-1">
                 <HugeiconsIcon icon={Shield} className="h-3.5 w-3.5 text-green-600" />
                 Bảo mật SSL
               </span>
-              <span>Tổng: {(paymentAmount * 1000).toLocaleString('vi-VN')}đ</span>
+              <span>Tổng: {paymentPackage?.price_vnd.toLocaleString('vi-VN')}đ</span>
+              {paymentPackage && paymentPackage.bonus_xu > 0 && (
+                <span className="text-green-600 font-medium">+{paymentPackage.bonus_xu} bonus</span>
+              )}
             </DialogDescription>
           </DialogHeader>
 
