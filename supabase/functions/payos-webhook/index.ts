@@ -84,16 +84,10 @@ serve(async (req) => {
       })
     }
 
-    // Verify amount matches (allow some flexibility if needed, but strictly should match)
-    // paymentRequest.amount is in Xu. verifiedData.amount is in VND.
-    // 1 Xu = 1000 VND.
-    if (paymentRequest.amount * 1000 !== amountVND) {
-        console.warn(`Amount mismatch. Expected ${paymentRequest.amount * 1000} VND, got ${amountVND} VND`)
-        // You might want to reject or proceed with caution. 
-        // For now, let's update status to 'paid' but perhaps NOT top up full amount? 
-        // Or assume it's valid if it's close? 
-        // Safest is to fail or update only if matched.
-        // Let's assume strict match for now.
+    // Verify amount matches - use stored amount_vnd if available, otherwise fallback to calculation
+    const expectedVND = paymentRequest.amount_vnd || (paymentRequest.amount * 1000);
+    if (expectedVND !== amountVND) {
+        console.warn(`Amount mismatch. Expected ${expectedVND} VND, got ${amountVND} VND`)
         return new Response(JSON.stringify({ message: "Amount mismatch" }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 400, // PayOS might retry

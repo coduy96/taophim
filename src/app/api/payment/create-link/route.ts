@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     // Date.now() is 1.7x10^12. We can add 3 random digits.
     const orderCode = Number(`${Date.now()}${Math.floor(Math.random() * 1000)}`);
 
-    // Create record in DB - Store total Xu (base + bonus)
+    // Create record in DB - Store total Xu (base + bonus) and VND amount
     // Note: payment_requests table exists but isn't in generated types yet
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: dbError } = await (supabase as any)
@@ -44,6 +44,7 @@ export async function POST(request: Request) {
       .insert({
         user_id: user.id,
         amount: totalXu, // Store total Xu to credit (base + bonus)
+        amount_vnd: pkg.price_vnd, // Store VND for webhook validation
         payos_order_code: orderCode,
         status: 'pending'
       });
