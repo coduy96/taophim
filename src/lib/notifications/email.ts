@@ -1,20 +1,29 @@
-// Email notification service using Resend
+// Email notification service using SMTP
 
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
-let resendClient: Resend | null = null
-
-function getResendClient(): Resend | null {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn('RESEND_API_KEY not configured, email notifications disabled')
+function createTransporter() {
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn('SMTP not configured, email notifications disabled')
     return null
   }
 
-  if (!resendClient) {
-    resendClient = new Resend(process.env.RESEND_API_KEY)
-  }
-
-  return resendClient
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+    // Increased timeouts for Namecheap Private Email
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 60000,
+    tls: {
+      rejectUnauthorized: false,
+    },
+  })
 }
 
 interface SendEmailParams {
@@ -24,25 +33,21 @@ interface SendEmailParams {
 }
 
 export async function sendEmail(params: SendEmailParams): Promise<boolean> {
-  const client = getResendClient()
-  if (!client) {
+  const transporter = createTransporter()
+  if (!transporter) {
     return false
   }
 
-  const fromEmail = process.env.EMAIL_FROM || 'Taophim <noreply@taophim.com>'
+  const fromEmail = process.env.SMTP_FROM || 'hotro@taophim.com'
+  const fromName = process.env.SMTP_FROM_NAME || 'Taophim'
 
   try {
-    const { error } = await client.emails.send({
-      from: fromEmail,
+    await transporter.sendMail({
+      from: `${fromName} <${fromEmail}>`,
       to: params.to,
       subject: params.subject,
       html: params.html,
     })
-
-    if (error) {
-      console.error('Resend error:', error)
-      return false
-    }
 
     return true
   } catch (error) {

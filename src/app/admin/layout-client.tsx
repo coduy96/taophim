@@ -28,14 +28,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  DashboardSquare01Icon as LayoutDashboard, 
-  ShoppingBag01Icon as ShoppingBag, 
+import {
+  DashboardSquare01Icon as LayoutDashboard,
+  ShoppingBag01Icon as ShoppingBag,
   UserGroupIcon as Users,
   Logout01Icon as LogOut,
   Shield01Icon as Shield,
   ArrowUp01Icon as ChevronUp,
-  Film01Icon as Film
+  Film01Icon as Film,
+  Mail01Icon as Mail
 } from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
@@ -60,6 +61,11 @@ const menuItems = [
     title: "Người dùng",
     href: "/admin/users",
     icon: Users,
+  },
+  {
+    title: "Email Marketing",
+    href: "/admin/marketing",
+    icon: Mail,
   },
 ]
 
