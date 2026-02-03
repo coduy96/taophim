@@ -251,10 +251,10 @@ export function NotificationBell() {
                     )}>
                       {notification.title}
                     </p>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
+                    <p className="text-sm text-muted-foreground line-clamp-2">
                       {notification.message}
                     </p>
-                    <p className="text-[10px] text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       {formatTimeAgo(notification.created_at)}
                     </p>
                   </div>

@@ -21,10 +21,7 @@ interface MobileMenuProps {
 }
 
 const navLinks = [
-  { name: "Tính năng", href: "#features" },
   { name: "Dịch vụ", href: "#services" },
-  { name: "Cách hoạt động", href: "#how-it-works" },
-  { name: "Đánh giá", href: "#testimonials" },
   { name: "Bảng giá", href: "#pricing" },
   { name: "Hỏi đáp", href: "#faq" },
 ]
@@ -135,7 +132,7 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
 
   return (
     <>
-      {/* Desktop Navigation Links - Active state highlighting */}
+      {/* Desktop Navigation Links - Simplified */}
       <nav className="hidden md:flex items-center gap-1">
         {navLinks.map((link) => (
           <Link
@@ -143,10 +140,10 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
             href={getHref(link.href)}
             onClick={(e) => isHome && handleNavClick(e, link.href)}
             className={cn(
-              "text-sm font-medium px-4 py-2 rounded-full transition-all duration-300",
+              "text-sm font-medium px-4 py-2 rounded-full transition-all duration-200",
               activeSection === link.href
                 ? "text-primary bg-primary/10"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
             )}
           >
             {link.name}
@@ -171,16 +168,17 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
               </SheetTitle>
             </SheetHeader>
             <div className="flex flex-col gap-6">
+              {/* Navigation Links */}
               <div className="flex flex-col gap-1">
                 {navLinks.map((link) => (
                   <Link
                     key={link.name}
                     href={getHref(link.href)}
                     className={cn(
-                      "text-lg font-medium py-3 px-4 rounded-xl transition-all duration-300",
+                      "text-base font-medium py-3 px-4 rounded-xl transition-all duration-300",
                       activeSection === link.href
                         ? "text-primary bg-primary/10"
-                        : "hover:bg-muted"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     )}
                     onClick={(e) => {
                       if (isHome && link.href.startsWith('#')) {
@@ -192,23 +190,32 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
                     {link.name}
                   </Link>
                 ))}
-                {/* Blog Link */}
+              </div>
+
+              {/* Blog - Highlighted */}
+              <div className="border-t border-border/50 pt-4">
                 <Link
                   href="/blog"
                   className={cn(
-                    "text-lg font-medium py-3 px-4 rounded-xl transition-all duration-300",
+                    "flex items-center gap-2 text-base font-semibold py-3 px-4 rounded-xl border transition-all duration-300",
                     pathname === "/blog" || pathname?.startsWith("/blog/")
-                      ? "text-primary bg-primary/10"
-                      : "hover:bg-muted"
+                      ? "text-primary bg-primary/10 border-primary/30"
+                      : "text-primary border-primary/20 hover:bg-primary/5 hover:border-primary/40"
                   )}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                  </svg>
                   Blog
                 </Link>
               </div>
-              <div className="border-t border-border/50 pt-6 flex flex-col gap-3">
+
+              {/* Auth Actions - Highlighted */}
+              <div className="border-t border-border/50 pt-4 flex flex-col gap-3">
                 {isLoggedIn ? (
-                  <Button asChild size="lg" className="w-full rounded-full shadow-lg shadow-primary/20">
+                  <Button asChild size="lg" className="w-full rounded-full shadow-lg shadow-primary/20 bg-gradient-to-r from-primary to-primary/90">
                     <Link href="/dashboard">
                       Vào Dashboard
                       <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
@@ -216,12 +223,13 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
                   </Button>
                 ) : (
                   <>
-                    <Button variant="outline" size="lg" className="w-full rounded-full" asChild>
+                    <Button variant="outline" size="lg" className="w-full rounded-full border-muted-foreground/30" asChild>
                       <Link href="/login">Đăng nhập</Link>
                     </Button>
-                    <Button size="lg" className="w-full rounded-full shadow-md" asChild>
+                    <Button size="lg" className="w-full rounded-full shadow-lg shadow-primary/30 bg-gradient-to-r from-primary to-primary/90" asChild>
                       <Link href="/register">
-                        Đăng ký miễn phí
+                        Bắt đầu miễn phí
+                        <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
                   </>

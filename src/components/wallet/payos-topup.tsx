@@ -226,7 +226,7 @@ export function PayOSTopup() {
                   </h3>
 
                   {/* Tagline */}
-                  <p className="text-xs text-muted-foreground mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     {pkg.tagline}
                   </p>
 
@@ -280,18 +280,18 @@ export function PayOSTopup() {
 
           {/* Trust Signals */}
           <div className="flex flex-col items-center gap-2 pt-1">
-            <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
-                <HugeiconsIcon icon={Shield} className="h-3.5 w-3.5 text-green-600" />
+                <HugeiconsIcon icon={Shield} className="h-4 w-4 text-green-600" />
                 Bảo mật 100%
               </span>
               <span>•</span>
               <span>Xu về tài khoản ngay</span>
             </div>
-            <div className="flex items-center gap-2 text-[10px] text-muted-foreground/70">
-              <HugeiconsIcon icon={QrCode} className="h-3 w-3" />
-              <HugeiconsIcon icon={CreditCard} className="h-3 w-3" />
-              <HugeiconsIcon icon={Bank} className="h-3 w-3" />
+            <div className="flex items-center gap-2 text-xs text-muted-foreground/70">
+              <HugeiconsIcon icon={QrCode} className="h-3.5 w-3.5" />
+              <HugeiconsIcon icon={CreditCard} className="h-3.5 w-3.5" />
+              <HugeiconsIcon icon={Bank} className="h-3.5 w-3.5" />
               <span>QR · VNPAY · MoMo · Chuyển khoản</span>
             </div>
           </div>
@@ -306,7 +306,7 @@ export function PayOSTopup() {
               <HugeiconsIcon icon={QrCode} className="h-5 w-5 text-primary" />
               Thanh toán {paymentPackage?.total_xu.toLocaleString('vi-VN')} Xu
             </DialogTitle>
-            <DialogDescription className="flex items-center gap-4 text-xs">
+            <DialogDescription className="flex items-center gap-4 text-sm">
               <span className="flex items-center gap-1">
                 <HugeiconsIcon icon={Shield} className="h-3.5 w-3.5 text-green-600" />
                 Bảo mật SSL
@@ -327,7 +327,7 @@ export function PayOSTopup() {
 
           {/* Footer hint */}
           <div className="p-3 border-t bg-muted/30 text-center">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Quét mã QR bằng ứng dụng ngân hàng hoặc ví điện tử
             </p>
           </div>

@@ -213,7 +213,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
               Thanh toán QR ngân hàng
             </span>
           </div>
-          <p className="text-xs text-muted-foreground/70 text-center max-w-md">
+          <p className="text-sm text-muted-foreground/70 text-center max-w-md">
             Thanh toán qua QR Code, VNPAY, MoMo, hoặc chuyển khoản ngân hàng. Xu cộng ngay sau khi thanh toán thành công.
           </p>
         </div>

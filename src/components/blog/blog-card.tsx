@@ -47,8 +47,8 @@ export function BlogCard({ slug, title, excerpt, coverImage, publishedAt }: Blog
         <div className="p-5 space-y-3">
           {/* Date */}
           {publishedAt && (
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <HugeiconsIcon icon={Calendar} className="h-3.5 w-3.5" />
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <HugeiconsIcon icon={Calendar} className="h-4 w-4" />
               <span>{formatDate(publishedAt)}</span>
             </div>
           )}

@@ -141,20 +141,20 @@ export async function ServicesSection({ isLoggedIn = false }: { isLoggedIn?: boo
 
               {/* VND Price Estimation */}
               <div className="mt-4 p-3 bg-muted/50 rounded-xl space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                  <HugeiconsIcon icon={Coins} className="w-3.5 h-3.5 text-yellow-500" />
+                <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+                  <HugeiconsIcon icon={Coins} className="w-4 h-4 text-yellow-500" />
                   <span>Giá ước tính (1 Xu = 1.000đ)</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex flex-col items-center p-2 bg-background rounded-lg border border-border/50">
-                    <span className="text-xs text-muted-foreground">Video 5 giây</span>
-                    <span className="text-sm text-foreground">{formatVND(exampleCost5s)} <strong className="font-bold">VNĐ</strong></span>
-                    <span className="text-[10px] text-muted-foreground">({formatNumber(exampleCost5s)} Xu)</span>
+                    <span className="text-sm text-muted-foreground">Video 5 giây</span>
+                    <span className="text-base text-foreground">{formatVND(exampleCost5s)} <strong className="font-bold">VNĐ</strong></span>
+                    <span className="text-xs text-muted-foreground">({formatNumber(exampleCost5s)} Xu)</span>
                   </div>
                   <div className="flex flex-col items-center p-2 bg-background rounded-lg border border-border/50">
-                    <span className="text-xs text-muted-foreground">Video 10 giây</span>
-                    <span className="text-sm text-foreground">{formatVND(exampleCost10s)} <strong className="font-bold">VNĐ</strong></span>
-                    <span className="text-[10px] text-muted-foreground">({formatNumber(exampleCost10s)} Xu)</span>
+                    <span className="text-sm text-muted-foreground">Video 10 giây</span>
+                    <span className="text-base text-foreground">{formatVND(exampleCost10s)} <strong className="font-bold">VNĐ</strong></span>
+                    <span className="text-xs text-muted-foreground">({formatNumber(exampleCost10s)} Xu)</span>
                   </div>
                 </div>
               </div>
@@ -166,7 +166,7 @@ export async function ServicesSection({ isLoggedIn = false }: { isLoggedIn?: boo
                     Đặt Đơn Ngay
                     <HugeiconsIcon icon={ArrowRight} className="w-4 h-4" />
                   </span>
-                  <span className="text-xs text-muted-foreground">Nhận video trong vài phút</span>
+                  <span className="text-sm text-muted-foreground">Nhận video trong vài phút</span>
                 </div>
               </div>
             </div>

@@ -35,15 +35,18 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
         <NavbarClientEnhancements isLoggedIn={isLoggedIn} />
 
         {/* Desktop Actions - Server rendered */}
-        <div className="hidden md:flex items-center gap-3">
-          {/* Blog Link */}
+        <div className="hidden md:flex items-center gap-2">
+          {/* Blog Link - Highlighted */}
           <Button
-            variant="ghost"
+            variant="outline"
             asChild
-            className="hover:bg-primary/10 hover:text-primary transition-colors"
+            className="rounded-full border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 transition-all"
           >
             <Link href="/blog">Blog</Link>
           </Button>
+
+          {/* Divider */}
+          <div className="h-6 w-px bg-border/50 mx-1" />
 
           {isLoggedIn ? (
             <Button
@@ -60,16 +63,17 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
               <Button
                 variant="ghost"
                 asChild
-                className="hover:bg-primary/10 hover:text-primary transition-colors"
+                className="rounded-full hover:bg-muted transition-colors"
               >
                 <Link href="/login">Đăng nhập</Link>
               </Button>
               <Button
                 asChild
-                className="rounded-full px-6 shadow-md hover:shadow-lg transition-all"
+                className="rounded-full px-6 bg-gradient-to-r from-primary via-primary to-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all shadow-md"
               >
                 <Link href="/register">
-                  Đăng ký miễn phí
+                  Bắt đầu miễn phí
+                  <ArrowRightIcon />
                 </Link>
               </Button>
             </>

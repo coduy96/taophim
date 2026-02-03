@@ -157,7 +157,7 @@ export function TransactionHistorySheet({ totalDeposited, totalSpent }: Transact
           <div className="p-3 rounded-xl bg-green-500/10 border border-green-500/20">
             <div className="flex items-center gap-2 mb-1">
               <HugeiconsIcon icon={ArrowUpCircle} className="h-4 w-4 text-green-600" />
-              <span className="text-xs text-muted-foreground">Tổng đã nạp</span>
+              <span className="text-sm text-muted-foreground">Tổng đã nạp</span>
             </div>
             <p className="text-lg font-bold text-green-600">
               {totalDeposited > 0 && '+'}{formatXu(totalDeposited)} Xu
@@ -166,7 +166,7 @@ export function TransactionHistorySheet({ totalDeposited, totalSpent }: Transact
           <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
             <div className="flex items-center gap-2 mb-1">
               <HugeiconsIcon icon={ArrowDownCircle} className="h-4 w-4 text-red-600" />
-              <span className="text-xs text-muted-foreground">Tổng đã chi</span>
+              <span className="text-sm text-muted-foreground">Tổng đã chi</span>
             </div>
             <p className="text-lg font-bold text-red-600">
               {totalSpent > 0 && '-'}{formatXu(totalSpent)} Xu
@@ -190,8 +190,8 @@ export function TransactionHistorySheet({ totalDeposited, totalSpent }: Transact
                         {typeInfo.icon}
                       </div>
                       <div>
-                        <p className="font-medium text-sm">{typeInfo.label}</p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="font-medium">{typeInfo.label}</p>
+                        <p className="text-sm text-muted-foreground">
                           {transaction.orders
                             ? `Đơn: ${transaction.orders.services?.name || 'N/A'}`
                             : formatDate(transaction.created_at)
@@ -200,10 +200,10 @@ export function TransactionHistorySheet({ totalDeposited, totalSpent }: Transact
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className={`font-bold text-sm ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      <p className={`font-bold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
                         {transaction.amount > 0 ? '+' : ''}{formatXu(transaction.amount)} Xu
                       </p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {new Date(transaction.created_at).toLocaleTimeString('vi-VN', {
                           hour: '2-digit',
                           minute: '2-digit',
