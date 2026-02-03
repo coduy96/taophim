@@ -192,6 +192,19 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
                     {link.name}
                   </Link>
                 ))}
+                {/* Blog Link */}
+                <Link
+                  href="/blog"
+                  className={cn(
+                    "text-lg font-medium py-3 px-4 rounded-xl transition-all duration-300",
+                    pathname === "/blog" || pathname?.startsWith("/blog/")
+                      ? "text-primary bg-primary/10"
+                      : "hover:bg-muted"
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Blog
+                </Link>
               </div>
               <div className="border-t border-border/50 pt-6 flex flex-col gap-3">
                 {isLoggedIn ? (

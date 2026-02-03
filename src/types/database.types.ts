@@ -9,6 +9,65 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          id: string
+          title: string
+          slug: string
+          excerpt: string | null
+          content: string
+          cover_image: string | null
+          author_id: string | null
+          is_published: boolean
+          published_at: string | null
+          meta_title: string | null
+          meta_description: string | null
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          title: string
+          slug: string
+          excerpt?: string | null
+          content: string
+          cover_image?: string | null
+          author_id?: string | null
+          is_published?: boolean
+          published_at?: string | null
+          meta_title?: string | null
+          meta_description?: string | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          title?: string
+          slug?: string
+          excerpt?: string | null
+          content?: string
+          cover_image?: string | null
+          author_id?: string | null
+          is_published?: boolean
+          published_at?: string | null
+          meta_title?: string | null
+          meta_description?: string | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       notifications: {
         Row: {
           id: string
@@ -320,6 +379,7 @@ export type Service = Tables<'services'>
 export type Order = Tables<'orders'>
 export type Transaction = Tables<'transactions'>
 export type FalJob = Tables<'fal_jobs'>
+export type BlogPost = Tables<'blog_posts'>
 export type OrderStatus = Enums<'order_status'>
 export type TransactionType = Enums<'transaction_type'>
 export type FalJobStatus = 'pending' | 'processing' | 'completed' | 'failed'

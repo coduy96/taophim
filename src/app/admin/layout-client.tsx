@@ -36,7 +36,8 @@ import {
   Shield01Icon as Shield,
   ArrowUp01Icon as ChevronUp,
   Film01Icon as Film,
-  Mail01Icon as Mail
+  Mail01Icon as Mail,
+  TextIcon as Text
 } from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
@@ -66,6 +67,11 @@ const menuItems = [
     title: "Email Marketing",
     href: "/admin/marketing",
     icon: Mail,
+  },
+  {
+    title: "Blog",
+    href: "/admin/blog",
+    icon: Text,
   },
 ]
 

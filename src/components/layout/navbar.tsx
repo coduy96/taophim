@@ -35,7 +35,16 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
         <NavbarClientEnhancements isLoggedIn={isLoggedIn} />
 
         {/* Desktop Actions - Server rendered */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
+          {/* Blog Link */}
+          <Button
+            variant="ghost"
+            asChild
+            className="hover:bg-primary/10 hover:text-primary transition-colors"
+          >
+            <Link href="/blog">Blog</Link>
+          </Button>
+
           {isLoggedIn ? (
             <Button
               asChild
