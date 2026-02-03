@@ -159,17 +159,6 @@ export default function AdminMarketingPage() {
               margin: 0 auto;
               padding: 20px;
             }
-            .header {
-              text-align: center;
-              padding-bottom: 20px;
-              border-bottom: 2px solid #f0f0f0;
-              margin-bottom: 20px;
-            }
-            .logo {
-              font-size: 24px;
-              font-weight: bold;
-              color: #e11d48;
-            }
             .content {
               padding: 20px 0;
             }
@@ -183,9 +172,6 @@ export default function AdminMarketingPage() {
           </style>
         </head>
         <body>
-          <div class="header">
-            <div class="logo">Taophim</div>
-          </div>
           <div class="content">
             ${content.replace(/\n/g, "<br>")}
           </div>
