@@ -119,7 +119,8 @@ export default function PrivacyPage() {
       {/* Footer */}
       <footer className="border-t border-border/40 py-6">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2025 Taophim. Nền tảng tạo video AI hàng đầu Việt Nam.
+          <p>© 2025 Taophim. Nền tảng tạo video AI hàng đầu Việt Nam.</p>
+          <p className="mt-1">Hỗ trợ: <a href="mailto:hotro@taophim.com" className="hover:text-foreground transition-colors">hotro@taophim.com</a></p>
         </div>
       </footer>
     </div>

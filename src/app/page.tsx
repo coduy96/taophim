@@ -214,6 +214,9 @@ export default async function LandingPage() {
                 Dịch vụ tạo video AI chất lượng điện ảnh hàng đầu Việt Nam.
                 Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài phút.
               </p>
+              <p className="text-muted-foreground text-sm">
+                Hỗ trợ: <a href="mailto:hotro@taophim.com" className="hover:text-foreground transition-colors">hotro@taophim.com</a>
+              </p>
               <div className="flex gap-3">
                 <a
                   href="https://www.facebook.com/profile.php?id=61573590554545"
