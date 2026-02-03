@@ -82,13 +82,22 @@ function VideoCard({ videoId, isPlaying, onPlay, onStop, isActive = true }: Vide
               allowFullScreen
               className="absolute inset-0 w-full h-full"
             />
-            {/* Close button */}
+            {/* Close button - top right */}
             <button
               onClick={onStop}
-              className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/70 hover:bg-black/90 flex items-center justify-center transition-colors"
+              className="absolute top-2 right-2 z-10 w-10 h-10 sm:w-8 sm:h-8 rounded-full bg-black/80 hover:bg-black/90 active:bg-black flex items-center justify-center transition-colors touch-manipulation"
               aria-label="Đóng video"
             >
-              <CloseIcon className="w-4 h-4 text-white" />
+              <CloseIcon className="w-5 h-5 sm:w-4 sm:h-4 text-white" />
+            </button>
+            {/* Mobile close button - bottom center, easier to reach with thumb */}
+            <button
+              onClick={onStop}
+              className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 sm:hidden flex items-center gap-2 px-4 py-2 rounded-full bg-black/80 hover:bg-black/90 active:bg-black text-white text-sm font-medium transition-colors touch-manipulation"
+              aria-label="Đóng video"
+            >
+              <CloseIcon className="w-4 h-4" />
+              Đóng
             </button>
           </>
         ) : (

@@ -827,7 +827,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
             <>
               {/* Header Section */}
               <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
-                <SheetHeader className="p-6 pb-4">
+                <SheetHeader className="p-6 pb-4 pr-16">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary shadow-inner">
@@ -839,28 +839,29 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                           <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded-md">
                             #{selectedOrder.id.slice(0, 8)}
                           </span>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
+                          <Button
+                            variant="ghost"
+                            size="icon"
                             className="h-6 w-6"
                             onClick={handleCopyOrderId}
                           >
-                            <HugeiconsIcon 
-                              icon={copiedId ? Check : Copy} 
-                              className={cn("h-3.5 w-3.5", copiedId && "text-green-600")} 
+                            <HugeiconsIcon
+                              icon={copiedId ? Check : Copy}
+                              className={cn("h-3.5 w-3.5", copiedId && "text-green-600")}
                             />
                           </Button>
                         </SheetDescription>
                       </div>
                     </div>
-                    <Badge 
-                      variant="secondary" 
-                      className={cn("rounded-full border px-3 py-1.5 font-normal", statusConfig[selectedOrder.status].className)}
-                    >
-                      <span className="mr-1.5">{statusConfig[selectedOrder.status].icon}</span>
-                      {statusConfig[selectedOrder.status].label}
-                    </Badge>
                   </div>
+                  {/* Status badge - moved below on mobile to avoid overlapping close button */}
+                  <Badge
+                    variant="secondary"
+                    className={cn("rounded-full border px-3 py-1.5 font-normal w-fit mt-2 sm:mt-0 sm:absolute sm:top-6 sm:right-16", statusConfig[selectedOrder.status].className)}
+                  >
+                    <span className="mr-1.5">{statusConfig[selectedOrder.status].icon}</span>
+                    {statusConfig[selectedOrder.status].label}
+                  </Badge>
                 </SheetHeader>
               </div>
 

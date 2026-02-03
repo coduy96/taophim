@@ -65,9 +65,13 @@ function SheetContent({
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close data-slot="sheet-close" asChild>
-            <Button variant="ghost" className="absolute top-4 right-4" size="icon-sm">
-              <HugeiconsIcon icon={XIcon} />
-              <span className="sr-only">Close</span>
+            <Button
+              variant="ghost"
+              className="absolute top-3 right-3 z-50 h-10 w-10 sm:h-8 sm:w-8 rounded-full bg-muted/80 hover:bg-muted touch-manipulation"
+              size="icon"
+            >
+              <HugeiconsIcon icon={XIcon} className="h-5 w-5 sm:h-4 sm:w-4" />
+              <span className="sr-only">Đóng</span>
             </Button>
           </SheetPrimitive.Close>
         )}
