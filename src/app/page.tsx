@@ -112,12 +112,12 @@ export default async function LandingPage() {
 
               {/* Headings */}
               <div className="space-y-6">
-                <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
                   <span className="block">Biến Ý Tưởng</span>
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
                     Thành Video AI
                   </span>
-                  <span className="block text-4xl md:text-6xl text-foreground/80">Trong Vài Phút</span>
+                  <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-6xl text-foreground/80">Trong Vài Phút</span>
                 </h1>
 
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
@@ -132,13 +132,13 @@ export default async function LandingPage() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-                <Button size="lg" className="h-14 px-8 text-lg rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 bg-primary hover:bg-primary/90 font-bold" asChild>
+                <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-lg rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 bg-primary hover:bg-primary/90 font-bold" asChild>
                   <Link href={isLoggedIn ? "/dashboard/services" : "/register"}>
                     <Wand2Icon className="mr-2 h-6 w-6" />
                     Bắt Đầu Ngay
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full border-2 hover:bg-muted/50 transition-all duration-300 backdrop-blur-sm" asChild>
+                <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 text-lg rounded-full border-2 hover:bg-muted/50 transition-all duration-300 backdrop-blur-sm" asChild>
                   <Link href="#services">
                     <FilmIcon className="mr-2 h-6 w-6" />
                     Khám Phá Dịch Vụ
@@ -223,27 +223,27 @@ export default async function LandingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-9 h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                  className="w-11 h-11 sm:w-9 sm:h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
                 >
-                  <FacebookIcon className="w-4 h-4" />
+                  <FacebookIcon className="w-5 h-5 sm:w-4 sm:h-4" />
                 </a>
                 <a
                   href="https://www.tiktok.com/@taophimaichonguoiviet"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="TikTok"
-                  className="w-9 h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                  className="w-11 h-11 sm:w-9 sm:h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
                 >
-                  <TiktokIcon className="w-4 h-4" />
+                  <TiktokIcon className="w-5 h-5 sm:w-4 sm:h-4" />
                 </a>
                 <a
                   href="https://www.youtube.com/@T%E1%BA%A1oPhimAI"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube"
-                  className="w-9 h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                  className="w-11 h-11 sm:w-9 sm:h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
                 >
-                  <YoutubeIcon className="w-4 h-4" />
+                  <YoutubeIcon className="w-5 h-5 sm:w-4 sm:h-4" />
                 </a>
               </div>
             </div>
@@ -298,7 +298,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
 
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 tracking-tight">
               Vì sao <span className="text-primary">1,500+ khách hàng</span> chọn Taophim?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -308,7 +308,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
 
           <div className="grid gap-8 md:grid-cols-3 relative z-10">
             {/* Feature 1 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+            <div className="group relative p-5 sm:p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -322,7 +322,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
 
             {/* Feature 2 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+            <div className="group relative p-5 sm:p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -336,7 +336,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
 
             {/* Feature 3 */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+            <div className="group relative p-5 sm:p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -350,7 +350,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
 
             {/* Feature 4: QR */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+            <div className="group relative p-5 sm:p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -364,7 +364,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
 
             {/* Feature 5: Xu Never Expires */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+            <div className="group relative p-5 sm:p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -378,7 +378,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
 
             {/* Feature 6: No Monthly Sub */}
-            <div className="group relative p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
+            <div className="group relative p-5 sm:p-8 rounded-3xl bg-background border border-border/50 overflow-hidden hover:border-primary/50 transition-colors duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -401,7 +401,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 tracking-tight">
               Dịch Vụ Video AI <span className="text-primary">Hot Nhất</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -424,7 +424,7 @@ async function BelowFoldContent({ isLoggedIn }: { isLoggedIn: boolean }) {
 
         <div className="container mx-auto px-4">
           <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 tracking-tight">
               Có Video Đẹp <br /> Chỉ Sau <span className="text-primary">3 Bước Đơn Giản</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

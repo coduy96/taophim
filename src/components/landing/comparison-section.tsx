@@ -147,7 +147,7 @@ export function ComparisonSection() {
             <CompareIcon className="w-4 h-4" />
             So sánh chi tiết
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 tracking-tight">
             Taophim vs. <span className="text-primary">Mua Tài Khoản Premium</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -159,20 +159,20 @@ export function ComparisonSection() {
         <div className="max-w-4xl mx-auto">
           <div className="rounded-2xl border border-border/50 bg-background overflow-hidden shadow-xl shadow-primary/5">
             {/* Table Header */}
-            <div className="grid grid-cols-3 border-b border-border/50">
-              <div className="p-4 md:p-6 bg-muted/30">
+            <div className="grid grid-cols-2 sm:grid-cols-3 border-b border-border/50">
+              <div className="hidden sm:block p-4 md:p-6 bg-muted/30">
                 <span className="text-sm font-medium text-muted-foreground">Tính năng</span>
               </div>
-              <div className="p-4 md:p-6 text-center bg-primary/5 border-x border-primary/20">
+              <div className="p-4 md:p-6 text-center bg-primary/5 border-r sm:border-x border-primary/20">
                 <div className="flex flex-col items-center gap-1">
-                  <span className="text-lg font-bold text-primary">Taophim</span>
+                  <span className="text-base sm:text-lg font-bold text-primary">Taophim</span>
                   <span className="text-xs text-primary/70 bg-primary/10 px-2 py-0.5 rounded-full">Khuyến nghị</span>
                 </div>
               </div>
               <div className="p-4 md:p-6 text-center bg-muted/30">
                 <div className="flex flex-col items-center gap-1">
-                  <span className="text-lg font-bold text-muted-foreground">Tài khoản Premium</span>
-                  <span className="text-xs text-muted-foreground">Runway, Pika, Kling...</span>
+                  <span className="text-base sm:text-lg font-bold text-muted-foreground">Premium</span>
+                  <span className="text-xs text-muted-foreground">Runway, Pika...</span>
                 </div>
               </div>
             </div>
@@ -182,23 +182,34 @@ export function ComparisonSection() {
               <div
                 key={index}
                 className={cn(
-                  "grid grid-cols-3 border-b border-border/50 last:border-b-0",
+                  "border-b border-border/50 last:border-b-0",
                   row.highlight && "bg-primary/5"
                 )}
               >
-                <div className="p-4 md:p-5 flex items-center">
+                {/* Feature name - full width on mobile, inline on sm+ */}
+                <div className="sm:hidden px-4 pt-3 pb-1">
                   <span className={cn(
-                    "text-sm",
-                    row.highlight ? "font-semibold text-foreground" : "text-foreground/80"
+                    "text-xs font-medium",
+                    row.highlight ? "text-foreground" : "text-muted-foreground"
                   )}>
                     {row.feature}
                   </span>
                 </div>
-                <div className="p-4 md:p-5 flex items-center justify-center border-x border-primary/10 bg-primary/[0.02]">
-                  <ComparisonCell value={row.taophim} isTaophim={true} />
-                </div>
-                <div className="p-4 md:p-5 flex items-center justify-center">
-                  <ComparisonCell value={row.premium} isTaophim={false} />
+                <div className="grid grid-cols-2 sm:grid-cols-3">
+                  <div className="hidden sm:flex p-4 md:p-5 items-center">
+                    <span className={cn(
+                      "text-sm",
+                      row.highlight ? "font-semibold text-foreground" : "text-foreground/80"
+                    )}>
+                      {row.feature}
+                    </span>
+                  </div>
+                  <div className="p-3 sm:p-4 md:p-5 flex items-center justify-center border-r sm:border-x border-primary/10 bg-primary/[0.02]">
+                    <ComparisonCell value={row.taophim} isTaophim={true} />
+                  </div>
+                  <div className="p-3 sm:p-4 md:p-5 flex items-center justify-center">
+                    <ComparisonCell value={row.premium} isTaophim={false} />
+                  </div>
                 </div>
               </div>
             ))}

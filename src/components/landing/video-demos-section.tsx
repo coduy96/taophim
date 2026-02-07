@@ -254,7 +254,7 @@ export function VideoDemosSection({ variant = "default" }: VideoDemosSectionProp
             <YoutubeIcon className="w-4 h-4" />
             Video Demo Thực Tế
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 tracking-tight">
             Xem <span className="text-primary">Kết Quả Thực Tế</span> Từ Taophim
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

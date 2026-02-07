@@ -114,7 +114,7 @@ export function FAQSection() {
             <QuestionIcon className="w-4 h-4" />
             Câu hỏi thường gặp
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 tracking-tight">
             Bạn Có <span className="text-primary">Thắc Mắc?</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

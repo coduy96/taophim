@@ -129,7 +129,7 @@ export function TestimonialsSection() {
             <StarIcon className="w-4 h-4 text-yellow-400" />
             Được tin dùng bởi 1,500+ khách hàng
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 tracking-tight">
             Khách Hàng <span className="text-primary">Nói Gì</span> Về Taophim?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

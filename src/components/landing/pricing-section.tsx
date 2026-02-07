@@ -106,7 +106,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
             Xu bảo lưu vĩnh viễn
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 tracking-tight">
             Nạp Xu <span className="text-primary">Theo Nhu Cầu</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -125,7 +125,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
                 "relative flex flex-col rounded-2xl border-2 bg-background p-6 lg:p-8 transition-all duration-300",
                 "hover:shadow-lg hover:-translate-y-1",
                 pkg.popular
-                  ? "border-primary shadow-xl shadow-primary/10 scale-[1.02] md:scale-105"
+                  ? "border-primary shadow-xl shadow-primary/10 md:scale-105"
                   : "border-border/50 hover:border-primary/50"
               )}
             >

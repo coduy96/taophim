@@ -160,7 +160,7 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
               <span className="sr-only">Menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[300px] border-l-border/50 backdrop-blur-xl bg-background/95">
+          <SheetContent side="right" className="w-[85vw] max-w-[300px] border-l-border/50 backdrop-blur-xl bg-background/95">
             <SheetHeader className="text-left mb-6">
               <SheetTitle className="flex items-center gap-2">
                 <Logo className="w-8 h-8" />
