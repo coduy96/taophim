@@ -70,6 +70,13 @@ const YoutubeIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
+const MailIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </svg>
+)
+
 // User avatars for social proof - optimized WebP images
 const userAvatars = [
   { src: "/images/avatars/avatar-3.webp", name: "Thu Hà" },
@@ -200,60 +207,137 @@ export default async function LandingPage() {
         <BelowFoldContent isLoggedIn={isLoggedIn} />
       </Suspense>
 
+      {/* Footer CTA Band */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-purple-500/10 py-20 mt-auto">
+        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+        <div className="absolute top-0 left-1/3 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4">
+            Sẵn sàng tạo video AI <span className="text-primary">đầu tiên</span>?
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto mb-8 text-base sm:text-lg">
+            Đăng ký miễn phí, nạp Xu qua QR ngân hàng, và nhận video chất lượng điện ảnh trong vài phút.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button size="lg" className="rounded-full px-8 h-13 text-base shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 font-bold" asChild>
+              <Link href={isLoggedIn ? "/dashboard/services" : "/register"}>
+                <Wand2Icon className="mr-2 h-5 w-5" />
+                Bắt Đầu Ngay
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="rounded-full px-8 h-13 text-base border-2 hover:bg-muted/50 transition-all duration-300 backdrop-blur-sm" asChild>
+              <Link href="#services">
+                Xem Bảng Giá
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="border-t bg-slate-50 dark:bg-black/20 pt-16 pb-8 mt-auto">
+      <footer className="border-t bg-muted/30 dark:bg-black/30 pt-16 pb-8">
         <div className="container mx-auto px-4">
-          <div className="mb-12 max-w-md">
-            {/* Brand */}
-            <div className="space-y-6">
-              <Link href="/" className="flex items-center gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-14">
+            {/* Brand Column */}
+            <div className="sm:col-span-2 lg:col-span-1 space-y-5">
+              <Link href="/" className="inline-flex items-center gap-2.5">
                 <Logo className="w-9 h-9" width={36} height={36} />
                 <span className="font-bold text-xl tracking-tight">Taophim</span>
               </Link>
-              <p className="text-muted-foreground leading-relaxed text-sm">
-                Dịch vụ tạo video AI chất lượng điện ảnh hàng đầu Việt Nam.
-                Thanh toán QR, không cần thẻ quốc tế. Nhận video trong vài phút.
+              <p className="text-muted-foreground leading-relaxed text-sm max-w-xs">
+                Nền tảng tạo video AI chất lượng điện ảnh hàng đầu Việt Nam. Thanh toán QR nội địa, không cần thẻ quốc tế.
               </p>
-              <p className="text-muted-foreground text-sm">
-                Hỗ trợ: <a href="mailto:hotro@taophim.com" className="hover:text-foreground transition-colors">hotro@taophim.com</a>
-              </p>
-              <div className="flex gap-3">
+              <div className="flex gap-2.5">
                 <a
                   href="https://www.facebook.com/profile.php?id=61573590554545"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-11 h-11 sm:w-9 sm:h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                  className="w-10 h-10 rounded-xl bg-background border border-border/50 flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200"
                 >
-                  <FacebookIcon className="w-5 h-5 sm:w-4 sm:h-4" />
+                  <FacebookIcon className="w-4 h-4" />
                 </a>
                 <a
                   href="https://www.tiktok.com/@taophimaichonguoiviet"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="TikTok"
-                  className="w-11 h-11 sm:w-9 sm:h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                  className="w-10 h-10 rounded-xl bg-background border border-border/50 flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200"
                 >
-                  <TiktokIcon className="w-5 h-5 sm:w-4 sm:h-4" />
+                  <TiktokIcon className="w-4 h-4" />
                 </a>
                 <a
                   href="https://www.youtube.com/@T%E1%BA%A1oPhimAI"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube"
-                  className="w-11 h-11 sm:w-9 sm:h-9 rounded-full bg-background border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                  className="w-10 h-10 rounded-xl bg-background border border-border/50 flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200"
                 >
-                  <YoutubeIcon className="w-5 h-5 sm:w-4 sm:h-4" />
+                  <YoutubeIcon className="w-4 h-4" />
                 </a>
+              </div>
+            </div>
+
+            {/* Services Column */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-sm tracking-wide uppercase text-foreground/80">Dịch vụ</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="#services" className="text-muted-foreground hover:text-primary transition-colors">Ảnh thành Video</Link></li>
+                <li><Link href="#services" className="text-muted-foreground hover:text-primary transition-colors">Thay đổi nhân vật</Link></li>
+                <li><Link href="#services" className="text-muted-foreground hover:text-primary transition-colors">Video từ Văn bản</Link></li>
+                <li><Link href="#pricing" className="text-muted-foreground hover:text-primary transition-colors">Bảng giá</Link></li>
+              </ul>
+            </div>
+
+            {/* Company Column */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-sm tracking-wide uppercase text-foreground/80">Công ty</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="#features" className="text-muted-foreground hover:text-primary transition-colors">Về chúng tôi</Link></li>
+                <li><Link href="#faq" className="text-muted-foreground hover:text-primary transition-colors">Câu hỏi thường gặp</Link></li>
+                <li><Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Chính sách bảo mật</Link></li>
+                <li><Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors">Điều khoản sử dụng</Link></li>
+              </ul>
+            </div>
+
+            {/* Support Column */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-sm tracking-wide uppercase text-foreground/80">Hỗ trợ</h3>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a href="mailto:hotro@taophim.com" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                    <MailIcon className="w-3.5 h-3.5" />
+                    hotro@taophim.com
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.facebook.com/profile.php?id=61573590554545"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
+                  >
+                    <FacebookIcon className="w-3.5 h-3.5" />
+                    Chat Facebook
+                  </a>
+                </li>
+              </ul>
+              <div className="pt-2">
+                <p className="text-xs text-muted-foreground/60">Thời gian hỗ trợ</p>
+                <p className="text-sm text-muted-foreground">8:00 - 22:00 hàng ngày</p>
               </div>
             </div>
           </div>
 
-          <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-border/40 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
             <p>© {new Date().getFullYear()} Taophim. Tạo phim AI chất lượng cao tại Việt Nam.</p>
-            <div className="flex gap-6">
-              <Link href="/privacy" className="hover:text-foreground transition-colors">Chính sách bảo mật</Link>
-              <Link href="/terms" className="hover:text-foreground transition-colors">Điều khoản sử dụng</Link>
+            <div className="flex items-center gap-6">
+              <Link href="/privacy" className="hover:text-foreground transition-colors">Bảo mật</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Điều khoản</Link>
+              <span className="text-muted-foreground/40">|</span>
+              <span className="text-muted-foreground/60">Tiếng Việt 🇻🇳</span>
             </div>
           </div>
         </div>
