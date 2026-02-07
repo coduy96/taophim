@@ -37,7 +37,8 @@ import {
   ArrowUp01Icon as ChevronUp,
   Film01Icon as Film,
   Mail01Icon as Mail,
-  TextIcon as Text
+  TextIcon as Text,
+  AnalyticsUpIcon as Analytics
 } from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
@@ -67,6 +68,11 @@ const menuItems = [
     title: "Email Marketing",
     href: "/admin/marketing",
     icon: Mail,
+  },
+  {
+    title: "Phân tích",
+    href: "/admin/analytics",
+    icon: Analytics,
   },
   {
     title: "Blog",
