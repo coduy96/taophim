@@ -15,6 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { useNavigation } from "@/contexts/navigation-context"
 
 interface MobileMenuProps {
   isLoggedIn?: boolean
@@ -32,6 +33,7 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
   const [activeSection, setActiveSection] = React.useState<string>("")
   const pathname = usePathname()
   const isHome = pathname === "/"
+  const { startNavigation } = useNavigation()
 
   // Scroll effect - enhance the static navbar
   React.useEffect(() => {
@@ -202,7 +204,7 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
                       ? "text-primary bg-primary/10 border-primary/30"
                       : "text-primary border-primary/20 hover:bg-primary/5 hover:border-primary/40"
                   )}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => { startNavigation("/blog"); setIsMobileMenuOpen(false) }}
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -216,7 +218,7 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
               <div className="border-t border-border/50 pt-4 flex flex-col gap-3">
                 {isLoggedIn ? (
                   <Button asChild size="lg" className="w-full rounded-full shadow-lg shadow-primary/20 bg-gradient-to-r from-primary to-primary/90">
-                    <Link href="/dashboard">
+                    <Link href="/dashboard" onClick={() => startNavigation("/dashboard")}>
                       Vào Dashboard
                       <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
                     </Link>
@@ -224,10 +226,10 @@ export function NavbarClientEnhancements({ isLoggedIn = false }: MobileMenuProps
                 ) : (
                   <>
                     <Button variant="outline" size="lg" className="w-full rounded-full border-muted-foreground/30" asChild>
-                      <Link href="/login">Đăng nhập</Link>
+                      <Link href="/login" onClick={() => startNavigation("/login")}>Đăng nhập</Link>
                     </Button>
                     <Button size="lg" className="w-full rounded-full shadow-lg shadow-primary/30 bg-gradient-to-r from-primary to-primary/90" asChild>
-                      <Link href="/register">
+                      <Link href="/register" onClick={() => startNavigation("/register")}>
                         Bắt đầu miễn phí
                         <HugeiconsIcon icon={ArrowRight} className="ml-2 h-4 w-4" />
                       </Link>

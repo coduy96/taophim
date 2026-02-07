@@ -10,6 +10,8 @@ import {
   Wallet01Icon as Wallet,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
+import { useNavigation } from "@/contexts/navigation-context"
+import { Spinner } from "@/components/ui/spinner"
 
 const navItems = [
   { href: "/dashboard", label: "Tổng quan", icon: Home, exact: true },
@@ -20,6 +22,7 @@ const navItems = [
 
 export function BottomNav() {
   const pathname = usePathname()
+  const { navigatingTo, startNavigation } = useNavigation()
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-xl md:hidden">
@@ -28,11 +31,13 @@ export function BottomNav() {
           const isActive = item.exact
             ? pathname === item.href
             : pathname.startsWith(item.href)
+          const isNavigating = navigatingTo === item.href
 
           return (
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => startNavigation(item.href)}
               className={cn(
                 "flex flex-1 flex-col items-center justify-center gap-0.5 text-xs transition-colors",
                 isActive
@@ -40,10 +45,14 @@ export function BottomNav() {
                   : "text-muted-foreground"
               )}
             >
-              <HugeiconsIcon
-                icon={item.icon}
-                className="h-5 w-5"
-              />
+              {isNavigating ? (
+                <Spinner className="h-5 w-5" />
+              ) : (
+                <HugeiconsIcon
+                  icon={item.icon}
+                  className="h-5 w-5"
+                />
+              )}
               <span>{item.label}</span>
             </Link>
           )

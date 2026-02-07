@@ -22,6 +22,7 @@ import {
 import { createClient } from "@/lib/supabase/client"
 import { Service, FormConfig, FormField, DurationConfig, FixedDurationConfig, RangeDurationConfig, VideoBasedDurationConfig } from "@/types/database.types"
 import { triggerProfileRefresh } from "@/hooks/use-profile"
+import { useNavigation } from "@/contexts/navigation-context"
 
 interface ServiceOrderFormProps {
   service: Service
@@ -371,6 +372,7 @@ function LegacyDurationInput({ value, onChange, costPerSecond, minDuration, disa
 
 export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: ServiceOrderFormProps) {
   const router = useRouter()
+  const { startNavigation } = useNavigation()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<Record<string, string | boolean | File | null>>({})
 
@@ -580,6 +582,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
         toast.success("Đơn hàng đã được tạo. Đang chờ xử lý...")
       }
 
+      startNavigation('/dashboard/orders')
       router.push('/dashboard/orders')
       router.refresh()
     } catch (error) {

@@ -42,6 +42,8 @@ import {
 } from "@hugeicons/core-free-icons"
 import { logout } from "@/app/(auth)/actions"
 import { useProfile } from "@/hooks/use-profile"
+import { useNavigation } from "@/contexts/navigation-context"
+import { Spinner } from "@/components/ui/spinner"
 
 const menuItems = [
   {
@@ -84,6 +86,7 @@ const menuItems = [
 function AdminSidebar() {
   const pathname = usePathname()
   const { profile } = useProfile()
+  const { navigatingTo, startNavigation } = useNavigation()
 
   return (
     <Sidebar variant="inset">
@@ -113,8 +116,12 @@ function AdminSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton asChild isActive={pathname === item.href}>
-                    <Link href={item.href}>
-                      <HugeiconsIcon icon={item.icon} className="h-4 w-4" />
+                    <Link href={item.href} onClick={() => startNavigation(item.href)}>
+                      {navigatingTo === item.href ? (
+                        <Spinner className="h-4 w-4" />
+                      ) : (
+                        <HugeiconsIcon icon={item.icon} className="h-4 w-4" />
+                      )}
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>

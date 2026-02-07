@@ -11,6 +11,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
 import { Button } from "./button"
+import { useNavigation } from "@/contexts/navigation-context"
 
 interface PaginationProps {
   totalItems: number
@@ -33,6 +34,7 @@ function Pagination({
 }: PaginationProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { startNavigation } = useNavigation()
   const totalPages = Math.ceil(totalItems / itemsPerPage)
 
   // Don't show pagination if there's only one page or less
@@ -117,7 +119,7 @@ function Pagination({
         disabled={!hasPrevious}
       >
         {hasPrevious ? (
-          <Link href={createPageUrl(currentPage - 1)} aria-label="Trang trước">
+          <Link href={createPageUrl(currentPage - 1)} aria-label="Trang trước" onClick={() => startNavigation(createPageUrl(currentPage - 1))}>
             <HugeiconsIcon icon={ChevronLeft} className="h-4 w-4" />
           </Link>
         ) : (
@@ -151,7 +153,7 @@ function Pagination({
               {currentPage === page ? (
                 <span>{page}</span>
               ) : (
-                <Link href={createPageUrl(page)} aria-label={`Trang ${page}`}>
+                <Link href={createPageUrl(page)} aria-label={`Trang ${page}`} onClick={() => startNavigation(createPageUrl(page as number))}>
                   {page}
                 </Link>
               )}
@@ -172,7 +174,7 @@ function Pagination({
         disabled={!hasNext}
       >
         {hasNext ? (
-          <Link href={createPageUrl(currentPage + 1)} aria-label="Trang sau">
+          <Link href={createPageUrl(currentPage + 1)} aria-label="Trang sau" onClick={() => startNavigation(createPageUrl(currentPage + 1))}>
             <HugeiconsIcon icon={ChevronRight} className="h-4 w-4" />
           </Link>
         ) : (

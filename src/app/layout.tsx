@@ -4,6 +4,8 @@ import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 import { Analytics } from "@/components/analytics"
+import { NavigationProvider } from "@/contexts/navigation-context"
+import { NavigationProgress } from "@/components/navigation-progress"
 
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
@@ -328,7 +330,10 @@ export default function RootLayout({
           forcedTheme="dark"
           disableTransitionOnChange
         >
-          {children}
+          <NavigationProvider>
+            <NavigationProgress />
+            {children}
+          </NavigationProvider>
           <Toaster richColors position="top-center" />
           <Analytics />
         </ThemeProvider>

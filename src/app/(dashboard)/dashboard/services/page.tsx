@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Card } from "@/components/ui/card"
-import Link from "next/link"
+import { NavLink } from "@/components/nav-link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { 
   SparklesIcon as Sparkles, 
@@ -105,8 +105,8 @@ export default async function ServicesPage({
         <>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {services.map((service: Service) => (
-              <Link 
-                href={`/dashboard/services/${service.slug}`} 
+              <NavLink
+                href={`/dashboard/services/${service.slug}`}
                 key={service.id}
                 className="group block h-full"
               >
@@ -147,7 +147,7 @@ export default async function ServicesPage({
                     </div>
                   </div>
                 </Card>
-              </Link>
+              </NavLink>
             ))}
           </div>
 

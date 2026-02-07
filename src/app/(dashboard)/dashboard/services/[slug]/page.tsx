@@ -5,6 +5,7 @@ import { ServiceOrderForm } from "@/components/service-order-form"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { NavLink } from "@/components/nav-link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   ArrowLeft01Icon as ArrowLeft,
@@ -102,10 +103,10 @@ export default async function ServiceDetailPage({
             </p>
           </div>
           <Button variant="outline" size="sm" asChild className="hidden md:flex">
-            <Link href="/dashboard/services">
+            <NavLink href="/dashboard/services">
               <HugeiconsIcon icon={ArrowLeft} className="mr-2 h-4 w-4" />
               Quay lại
-            </Link>
+            </NavLink>
           </Button>
         </div>
       </div>
@@ -156,7 +157,7 @@ export default async function ServiceDetailPage({
                       Cần tối thiểu {formatXu(service.cost_per_second)} Xu cho 1 giây video.
                     </p>
                     <Button size="sm" variant="destructive" className="w-full mt-2" asChild>
-                      <Link href="/dashboard/wallet">Nạp Xu ngay</Link>
+                      <NavLink href="/dashboard/wallet">Nạp Xu ngay</NavLink>
                     </Button>
                   </div>
                 ) : (

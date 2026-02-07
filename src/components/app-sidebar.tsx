@@ -43,6 +43,8 @@ import { useProfile } from "@/hooks/use-profile"
 import { cn } from "@/lib/utils"
 import { Profile } from "@/types/database.types"
 import { User } from "@supabase/supabase-js"
+import { useNavigation } from "@/contexts/navigation-context"
+import { Spinner } from "@/components/ui/spinner"
 
 // Menu items configuration
 const mainNavItems = [
@@ -75,6 +77,7 @@ function formatXu(amount: number): string {
 export function AppSidebar({ user, profile: initialProfile, ...props }: React.ComponentProps<typeof Sidebar> & { user?: User | null, profile?: Profile | null }) {
   const pathname = usePathname()
   const { profile, isLoading } = useProfile(initialProfile)
+  const { navigatingTo, startNavigation } = useNavigation()
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -108,8 +111,12 @@ export function AppSidebar({ user, profile: initialProfile, ...props }: React.Co
                     isActive={pathname === item.href}
                     tooltip={item.title}
                   >
-                    <Link href={item.href}>
-                      <HugeiconsIcon icon={item.icon} />
+                    <Link href={item.href} onClick={() => startNavigation(item.href)}>
+                      {navigatingTo === item.href ? (
+                        <Spinner className="size-5" />
+                      ) : (
+                        <HugeiconsIcon icon={item.icon} />
+                      )}
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
