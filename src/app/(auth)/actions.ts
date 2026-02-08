@@ -2,7 +2,28 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
+import { parseUserAgent } from '@/lib/user-agent'
+
+async function logDeviceInfo(userId: string) {
+  try {
+    const headersList = await headers()
+    const ua = headersList.get('user-agent')
+    const parsed = parseUserAgent(ua)
+    const supabase = await createClient()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase as any).from('login_logs').insert({
+      user_id: userId,
+      device_type: parsed.device_type,
+      browser_name: parsed.browser_name,
+      os_name: parsed.os_name,
+      user_agent: ua,
+    })
+  } catch {
+    // Never block auth flow
+  }
+}
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -12,10 +33,14 @@ export async function login(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { data: authData, error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
     return { error: error.message }
+  }
+
+  if (authData.user) {
+    await logDeviceInfo(authData.user.id)
   }
 
   revalidatePath('/', 'layout')
@@ -29,7 +54,7 @@ export async function register(formData: FormData) {
   const password = formData.get('password') as string
   const fullName = formData.get('fullName') as string
 
-  const { error } = await supabase.auth.signUp({
+  const { data: authData, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -41,6 +66,10 @@ export async function register(formData: FormData) {
 
   if (error) {
     return { error: error.message }
+  }
+
+  if (authData.user) {
+    await logDeviceInfo(authData.user.id)
   }
 
   revalidatePath('/', 'layout')

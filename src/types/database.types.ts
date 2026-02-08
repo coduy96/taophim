@@ -109,6 +109,44 @@ export type Database = {
           }
         ]
       }
+      login_logs: {
+        Row: {
+          id: string
+          user_id: string
+          device_type: 'mobile' | 'tablet' | 'desktop'
+          browser_name: string | null
+          os_name: string | null
+          user_agent: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          device_type: 'mobile' | 'tablet' | 'desktop'
+          browser_name?: string | null
+          os_name?: string | null
+          user_agent?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          device_type?: 'mobile' | 'tablet' | 'desktop'
+          browser_name?: string | null
+          os_name?: string | null
+          user_agent?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "login_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       fal_jobs: {
         Row: {
           id: string
@@ -379,6 +417,7 @@ export type Service = Tables<'services'>
 export type Order = Tables<'orders'>
 export type Transaction = Tables<'transactions'>
 export type FalJob = Tables<'fal_jobs'>
+export type LoginLog = Tables<'login_logs'>
 export type BlogPost = Tables<'blog_posts'>
 export type OrderStatus = Enums<'order_status'>
 export type TransactionType = Enums<'transaction_type'>

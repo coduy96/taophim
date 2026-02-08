@@ -40,6 +40,15 @@ export interface PaymentRequestData {
   updated_at: string
 }
 
+export interface LoginLogData {
+  id: string
+  user_id: string
+  device_type: 'mobile' | 'tablet' | 'desktop'
+  browser_name: string | null
+  os_name: string | null
+  created_at: string
+}
+
 // --- KPIs ---
 
 export interface KPIs {
@@ -481,5 +490,59 @@ export function computePaymentAnalysis(
     totalRevenueVnd,
     avgPaymentXu,
   }
+}
+
+// --- Device Analytics ---
+
+export interface BreakdownItem {
+  name: string
+  count: number
+  percentage: number
+}
+
+export interface DeviceAnalytics {
+  totalLogins: number
+  deviceBreakdown: BreakdownItem[]
+  browserBreakdown: BreakdownItem[]
+  osBreakdown: BreakdownItem[]
+  uniqueUsersByDevice: { device: string; users: number }[]
+}
+
+export function computeDeviceAnalytics(
+  loginLogs: LoginLogData[]
+): DeviceAnalytics {
+  const totalLogins = loginLogs.length
+
+  function buildBreakdown(values: (string | null)[]): BreakdownItem[] {
+    const counts = new Map<string, number>()
+    for (const v of values) {
+      const key = v || 'Không xác định'
+      counts.set(key, (counts.get(key) || 0) + 1)
+    }
+    return [...counts.entries()]
+      .map(([name, count]) => ({
+        name,
+        count,
+        percentage: totalLogins > 0 ? (count / totalLogins) * 100 : 0,
+      }))
+      .sort((a, b) => b.count - a.count)
+  }
+
+  const deviceBreakdown = buildBreakdown(loginLogs.map(l => l.device_type))
+  const browserBreakdown = buildBreakdown(loginLogs.map(l => l.browser_name))
+  const osBreakdown = buildBreakdown(loginLogs.map(l => l.os_name))
+
+  // Unique users per device type
+  const deviceUserSets = new Map<string, Set<string>>()
+  for (const log of loginLogs) {
+    const key = log.device_type
+    if (!deviceUserSets.has(key)) deviceUserSets.set(key, new Set())
+    deviceUserSets.get(key)!.add(log.user_id)
+  }
+  const uniqueUsersByDevice = [...deviceUserSets.entries()]
+    .map(([device, users]) => ({ device, users: users.size }))
+    .sort((a, b) => b.users - a.users)
+
+  return { totalLogins, deviceBreakdown, browserBreakdown, osBreakdown, uniqueUsersByDevice }
 }
 

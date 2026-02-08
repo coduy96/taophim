@@ -8,10 +8,12 @@ import {
   segmentUsers,
   computeWeeklyTimeline,
   computePaymentAnalysis,
+  computeDeviceAnalytics,
   type ProfileData,
   type OrderData,
   type TransactionData,
   type PaymentRequestData,
+  type LoginLogData,
 } from "@/lib/analytics"
 import { KPICards } from "@/components/admin/analytics/kpi-cards"
 import { ConversionFunnel } from "@/components/admin/analytics/conversion-funnel"
@@ -19,6 +21,7 @@ import { UserSegmentsTable } from "@/components/admin/analytics/user-segments-ta
 import { RegistrationTimelineChart } from "@/components/admin/analytics/registration-timeline-chart"
 import { UserJourneyInspector } from "@/components/admin/analytics/user-journey-inspector"
 import { PaymentAnalysis } from "@/components/admin/analytics/payment-analysis"
+import { DeviceBreakdown } from "@/components/admin/analytics/device-breakdown"
 
 export default async function AdminAnalyticsPage() {
   const supabase = await createClient()
@@ -38,7 +41,7 @@ export default async function AdminAnalyticsPage() {
   }
 
   // Parallel data fetch
-  const [profilesRes, ordersRes, transactionsRes, paymentRequestsRes] = await Promise.all([
+  const [profilesRes, ordersRes, transactionsRes, paymentRequestsRes, loginLogsRes] = await Promise.all([
     supabase
       .from('profiles')
       .select('id, email, full_name, xu_balance, frozen_xu, created_at, role'),
@@ -53,12 +56,16 @@ export default async function AdminAnalyticsPage() {
     (supabase as any)
       .from('payment_requests')
       .select('id, user_id, amount, amount_vnd, status, created_at, updated_at'),
+    supabase
+      .from('login_logs')
+      .select('id, user_id, device_type, browser_name, os_name, created_at'),
   ])
 
   const profiles: ProfileData[] = profilesRes.data || []
   const orders: OrderData[] = ordersRes.data || []
   const transactions: TransactionData[] = transactionsRes.data || []
   const paymentRequests: PaymentRequestData[] = paymentRequestsRes.data || []
+  const loginLogs: LoginLogData[] = loginLogsRes.data || []
 
   // Compute all analytics server-side
   const kpis = computeKPIs(profiles, orders, transactions, paymentRequests)
@@ -66,6 +73,7 @@ export default async function AdminAnalyticsPage() {
   const segments = segmentUsers(profiles, orders, transactions, paymentRequests)
   const timeline = computeWeeklyTimeline(profiles, paymentRequests, transactions)
   const paymentAnalysis = computePaymentAnalysis(paymentRequests)
+  const deviceAnalytics = computeDeviceAnalytics(loginLogs)
 
   return (
     <div className="space-y-6">
@@ -90,6 +98,9 @@ export default async function AdminAnalyticsPage() {
         <ConversionFunnel funnel={funnel} />
         <PaymentAnalysis analysis={paymentAnalysis} />
       </div>
+
+      {/* Device Breakdown */}
+      <DeviceBreakdown analytics={deviceAnalytics} />
 
       {/* User Segments */}
       <UserSegmentsTable segments={segments} />
