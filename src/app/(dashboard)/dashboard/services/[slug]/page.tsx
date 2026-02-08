@@ -90,14 +90,14 @@ export default async function ServiceDetailPage({
   const hasEnoughBalance = (profile?.xu_balance || 0) >= service.cost_per_second
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-10">
+    <div className="max-w-6xl mx-auto space-y-6 md:space-y-8 pb-10">
       {/* Header Section */}
       <div className="space-y-4">
 
 
         <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">{service.name}</h1>
+          <div className="min-w-0">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{service.name}</h1>
             <p className="text-muted-foreground mt-2 max-w-2xl text-lg">
               {service.description || "Dịch vụ tạo video AI chuyên nghiệp"}
             </p>
@@ -111,7 +111,7 @@ export default async function ServiceDetailPage({
         </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid min-w-0 gap-6 md:gap-8 lg:grid-cols-3">
         {/* Left Column: Service Info & Cost */}
         <div className="lg:col-span-1 space-y-6">
           <Card className="overflow-hidden border-border/50 shadow-sm">
@@ -133,9 +133,9 @@ export default async function ServiceDetailPage({
               <CardTitle className="text-lg">Chi phí dịch vụ</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-primary/5 border border-primary/10">
+              <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg bg-primary/5 border border-primary/10">
                 <span className="text-sm font-medium text-muted-foreground">Giá mỗi giây</span>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 min-w-0">
                   <HugeiconsIcon icon={Coins} className="h-4 w-4 text-primary" />
                   <span className="font-bold text-lg text-foreground">{formatXu(service.cost_per_second)} Xu/giây</span>
                 </div>

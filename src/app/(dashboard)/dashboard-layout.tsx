@@ -136,7 +136,7 @@ export default function DashboardLayout({
             <NotificationBell />
           </div>
         </header>
-        <main className="flex-1 p-4 pt-0 pb-20 md:p-6 md:pt-0 md:pb-6">
+        <main className="flex-1 overflow-x-hidden p-4 pt-0 pb-20 md:p-6 md:pt-0 md:pb-6">
           <div className="mt-4 md:mt-6">
              {children}
           </div>

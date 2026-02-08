@@ -181,7 +181,7 @@ function FixedDurationSelector({ config, value, onChange, costPerSecond, minDura
               size="sm"
               onClick={() => onChange(opt)}
               disabled={disabled || isBelowMin}
-              className={`min-w-[100px] ${isBelowMin ? 'opacity-50 line-through' : ''}`}
+              className={isBelowMin ? 'opacity-50 line-through' : ''}
               title={isBelowMin ? `Tối thiểu ${minDuration} giây` : undefined}
             >
               {opt}s - {formatXu(cost)} Xu
