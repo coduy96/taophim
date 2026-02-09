@@ -49,7 +49,7 @@ export default function DashboardLayout({
   profile: Profile | null
 }) {
   const pathname = usePathname()
-  
+
   // Simple breadcrumb logic
   const segments = pathname.split('/').filter(Boolean)
   const isDashboardRoot = segments.length === 1 && segments[0] === 'dashboard'

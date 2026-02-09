@@ -113,7 +113,7 @@ export default async function ServiceDetailPage({
 
       <div className="grid min-w-0 gap-6 md:gap-8 lg:grid-cols-3">
         {/* Left Column: Service Info & Cost */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="lg:col-span-1 space-y-6 min-w-0">
           <Card className="overflow-hidden border-border/50 shadow-sm">
             <div className="aspect-video relative bg-muted/30">
               {service.cover_image ? (
@@ -182,7 +182,7 @@ export default async function ServiceDetailPage({
         </div>
 
         {/* Right Column: Order Form */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 min-w-0">
           <Card className="border-border/50 shadow-sm">
             <CardHeader>
               <CardTitle>Thông tin yêu cầu</CardTitle>

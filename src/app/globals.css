@@ -130,6 +130,17 @@
   }
 }
 
+/* Prevent horizontal overflow on mobile - outside @layer for highest priority */
+html {
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-20px); }
