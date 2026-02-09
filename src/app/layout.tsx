@@ -324,19 +324,21 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased min-h-screen bg-background font-sans`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
-          disableTransitionOnChange
-        >
-          <NavigationProvider>
-            <NavigationProgress />
-            {children}
-          </NavigationProvider>
-          <Toaster richColors position="top-center" />
-          <Analytics />
-        </ThemeProvider>
+        <div className="relative w-full overflow-x-hidden">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            forcedTheme="dark"
+            disableTransitionOnChange
+          >
+            <NavigationProvider>
+              <NavigationProgress />
+              {children}
+            </NavigationProvider>
+            <Toaster richColors position="top-center" />
+            <Analytics />
+          </ThemeProvider>
+        </div>
       </body>
     </html>
   )
