@@ -81,35 +81,36 @@ export default async function OrdersPage({
   const typedOrders = (orders || []) as OrderWithService[]
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-5 md:space-y-8 pb-4">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            Lịch sử đơn hàng
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
+            Đơn hàng
           </h1>
-          <p className="text-muted-foreground mt-2">
-            Quản lý và theo dõi trạng thái các video AI của bạn.
+          <p className="text-muted-foreground text-sm md:text-base mt-0.5 md:mt-1">
+            Theo dõi trạng thái video AI của bạn.
           </p>
         </div>
-        <Button asChild className="rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
+        <Button asChild size="default" className="rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 flex-shrink-0">
           <Link href="/dashboard/services">
             <HugeiconsIcon icon={ShoppingBag} className="mr-2 h-4 w-4" />
-            Tạo đơn mới
+            <span className="hidden sm:inline">Tạo đơn mới</span>
+            <span className="sm:hidden">Tạo mới</span>
           </Link>
         </Button>
       </div>
 
       {/* Main Content */}
-      <OrderList 
-        orders={typedOrders} 
+      <OrderList
+        orders={typedOrders}
         initialOrderId={selectedOrderId}
         currentFilter={statusFilter}
       />
 
       {/* Pagination */}
       {totalItems > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-2 sm:pt-4">
           <PaginationInfo
             currentPage={validPage}
             itemsPerPage={ITEMS_PER_PAGE}

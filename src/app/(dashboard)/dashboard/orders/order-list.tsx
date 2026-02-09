@@ -383,15 +383,15 @@ function OrderTimeline({ status, createdAt, updatedAt }: {
 
   if (isCancelled) {
     return (
-      <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200/50 dark:border-red-800/30">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-            <HugeiconsIcon icon={XCircle} className="h-5 w-5 text-red-600 dark:text-red-400" />
+      <div className="p-3 sm:p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200/50 dark:border-red-800/30">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+            <HugeiconsIcon icon={XCircle} className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 dark:text-red-400" />
           </div>
           <div>
-            <p className="font-medium text-red-700 dark:text-red-300">Đơn hàng đã bị hủy</p>
-            <p className="text-sm text-red-600/70 dark:text-red-400/70">
-              Xu đã được hoàn lại vào ví của bạn
+            <p className="font-medium text-sm sm:text-base text-red-700 dark:text-red-300">Đơn hàng đã bị hủy</p>
+            <p className="text-xs sm:text-sm text-red-600/70 dark:text-red-400/70">
+              Xu đã được hoàn lại vào ví
             </p>
           </div>
         </div>
@@ -411,32 +411,32 @@ function OrderTimeline({ status, createdAt, updatedAt }: {
             <div key={step.step} className="flex-1 relative">
               <div className="flex flex-col items-center">
                 {/* Step indicator */}
-                <div 
+                <div
                   className={cn(
-                    "h-10 w-10 rounded-full flex items-center justify-center z-10 transition-all duration-300",
-                    isCompleted 
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
+                    "h-8 w-8 sm:h-10 sm:w-10 rounded-full flex items-center justify-center z-10 transition-all duration-300",
+                    isCompleted
+                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30"
                       : "bg-muted border-2 border-muted-foreground/20 text-muted-foreground",
                     isCurrent && "ring-4 ring-primary/20"
                   )}
                 >
                   {isCompleted && !isCurrent ? (
-                    <HugeiconsIcon icon={Check} className="h-5 w-5" />
+                    <HugeiconsIcon icon={Check} className="h-4 w-4 sm:h-5 sm:w-5" />
                   ) : (
-                    <HugeiconsIcon icon={step.icon} className="h-4 w-4" />
+                    <HugeiconsIcon icon={step.icon} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   )}
                 </div>
 
                 {/* Label */}
-                <div className="mt-3 text-center">
+                <div className="mt-2 sm:mt-3 text-center">
                   <p className={cn(
-                    "text-xs font-medium",
+                    "text-[10px] sm:text-xs font-medium",
                     isCompleted ? "text-foreground" : "text-muted-foreground"
                   )}>
                     {step.label}
                   </p>
                   {isCurrent && (
-                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                    <p className="text-[9px] sm:text-[10px] text-muted-foreground mt-0.5">
                       {step.step === 1 ? formatRelativeTime(createdAt) : formatRelativeTime(updatedAt)}
                     </p>
                   )}
@@ -445,12 +445,12 @@ function OrderTimeline({ status, createdAt, updatedAt }: {
 
               {/* Connector line */}
               {!isLast && (
-                <div className="absolute top-5 left-1/2 w-full h-0.5 -translate-y-1/2">
-                  <div 
+                <div className="absolute top-4 sm:top-5 left-1/2 w-full h-0.5 -translate-y-1/2">
+                  <div
                     className={cn(
                       "h-full transition-all duration-500",
-                      currentStep > step.step 
-                        ? "bg-primary" 
+                      currentStep > step.step
+                        ? "bg-primary"
                         : "bg-muted-foreground/20"
                     )}
                   />
@@ -657,13 +657,13 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <Tabs value={activeFilter} className="w-full sm:w-auto">
-          <TabsList className="grid w-full grid-cols-4 sm:w-auto sm:inline-flex bg-muted/50 p-1 rounded-xl">
+          <TabsList className="w-full overflow-x-auto flex sm:inline-flex bg-muted/50 p-1 rounded-xl">
             <TabsTrigger
               value="all"
-              className="rounded-lg"
+              className="rounded-lg flex-1 sm:flex-none text-xs sm:text-sm"
               onClick={() => handleFilterChange("all")}
               disabled={isPending}
             >
@@ -671,7 +671,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
             </TabsTrigger>
             <TabsTrigger
               value="in_progress"
-              className="rounded-lg"
+              className="rounded-lg flex-1 sm:flex-none text-xs sm:text-sm"
               onClick={() => handleFilterChange("in_progress")}
               disabled={isPending}
             >
@@ -679,7 +679,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
             </TabsTrigger>
             <TabsTrigger
               value="completed"
-              className="rounded-lg"
+              className="rounded-lg flex-1 sm:flex-none text-xs sm:text-sm"
               onClick={() => handleFilterChange("completed")}
               disabled={isPending}
             >
@@ -687,7 +687,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
             </TabsTrigger>
             <TabsTrigger
               value="cancelled"
-              className="rounded-lg"
+              className="rounded-lg flex-1 sm:flex-none text-xs sm:text-sm"
               onClick={() => handleFilterChange("cancelled")}
               disabled={isPending}
             >
@@ -696,14 +696,77 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
           </TabsList>
         </Tabs>
         {isPending && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
             <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
             <span>Đang tải...</span>
           </div>
         )}
       </div>
 
-      <div className="rounded-2xl border bg-card shadow-sm overflow-hidden relative">
+      {/* Mobile: Card-based list */}
+      <div className="space-y-2 sm:hidden relative">
+        {isPending && (
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-2xl">
+            <div className="h-6 w-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+        {filteredOrders.length > 0 ? (
+          filteredOrders.map((order) => {
+            const status = statusConfig[order.status]
+            const preview = getOrderPreview(order)
+
+            return (
+              <div
+                key={order.id}
+                className="flex items-center gap-3 p-3 rounded-2xl border bg-card active:scale-[0.98] transition-all cursor-pointer"
+                onClick={() => handleViewOrder(order)}
+              >
+                {/* Thumbnail */}
+                <div className="h-12 w-12 shrink-0 rounded-xl bg-muted border overflow-hidden relative">
+                  {preview ? (
+                    preview.type === 'video' ? (
+                      <video src={preview.url} className="h-full w-full object-cover" muted playsInline />
+                    ) : (
+                      <Image src={preview.url} alt={order.services.name} fill className="object-cover" unoptimized />
+                    )
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center">
+                      <HugeiconsIcon icon={Film} className="h-5 w-5 text-muted-foreground/20" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-medium text-sm truncate">{order.services.name}</span>
+                    <Badge
+                      variant="secondary"
+                      className={cn("rounded-full border px-1.5 py-0 text-[10px] font-normal whitespace-nowrap flex-shrink-0", status.className)}
+                    >
+                      <span className="mr-1">{status.icon}</span>
+                      {status.label}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-xs text-muted-foreground">{formatRelativeTime(order.created_at)}</span>
+                    <span className="text-xs text-muted-foreground">&middot; {formatXu(order.total_cost)} Xu</span>
+                  </div>
+                </div>
+
+                <HugeiconsIcon icon={ArrowRight} className="h-4 w-4 text-muted-foreground/40 flex-shrink-0" />
+              </div>
+            )
+          })
+        ) : (
+          <div className="py-12 text-center text-sm text-muted-foreground rounded-2xl border border-dashed">
+            Không tìm thấy đơn hàng nào
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: Table layout */}
+      <div className="rounded-2xl border bg-card shadow-sm overflow-hidden relative hidden sm:block">
         {/* Loading overlay */}
         {isPending && (
           <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] z-10 flex items-center justify-center">
@@ -716,7 +779,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
         <Table>
           <TableHeader className="bg-muted/30">
             <TableRow className="hover:bg-muted/30">
-              <TableHead className="w-[100px] hidden sm:table-cell">Mã đơn</TableHead>
+              <TableHead className="w-[100px]">Mã đơn</TableHead>
               <TableHead>Thông tin dịch vụ</TableHead>
               <TableHead>Trạng thái</TableHead>
               <TableHead className="text-right">Chi phí</TableHead>
@@ -731,12 +794,12 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                 const summary = getOrderSummary(order)
 
                 return (
-                  <TableRow 
-                    key={order.id} 
+                  <TableRow
+                    key={order.id}
                     className="cursor-pointer hover:bg-muted/40 transition-colors"
                     onClick={() => handleViewOrder(order)}
                   >
-                    <TableCell className="font-medium font-mono text-xs text-muted-foreground hidden sm:table-cell">
+                    <TableCell className="font-medium font-mono text-xs text-muted-foreground">
                       #{order.id.slice(0, 8)}
                     </TableCell>
                     <TableCell>
@@ -745,16 +808,16 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                         <div className="h-12 w-12 shrink-0 rounded-lg bg-muted border overflow-hidden relative">
                           {preview ? (
                             preview.type === 'video' ? (
-                              <video 
-                                src={preview.url} 
-                                className="h-full w-full object-cover" 
-                                muted 
-                                loop 
+                              <video
+                                src={preview.url}
+                                className="h-full w-full object-cover"
+                                muted
+                                loop
                                 playsInline
                               />
                             ) : (
-                              <Image 
-                                src={preview.url} 
+                              <Image
+                                src={preview.url}
                                 alt={order.services.name}
                                 fill
                                 className="object-cover"
@@ -767,7 +830,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Content */}
                         <div className="flex flex-col gap-0.5 min-w-0">
                           <span className="font-medium truncate">{order.services.name}</span>
@@ -776,23 +839,15 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                               &ldquo;{summary}&rdquo;
                             </p>
                           )}
-                          <div className="flex items-center gap-2 mt-0.5 sm:hidden">
-                            <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1 rounded">
-                              #{order.id.slice(0, 8)}
-                            </span>
-                            <span className="text-[10px] text-muted-foreground">
-                              {formatDate(order.created_at)}
-                            </span>
-                          </div>
-                          <span className="text-[10px] text-muted-foreground hidden sm:inline-block">
+                          <span className="text-[10px] text-muted-foreground">
                             {formatDate(order.created_at)}
                           </span>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge 
-                        variant="secondary" 
+                      <Badge
+                        variant="secondary"
                         className={cn("rounded-full border px-2.5 py-0.5 font-normal whitespace-nowrap", status.className)}
                       >
                         <span className="mr-1.5">{status.icon}</span>
@@ -822,21 +877,21 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
       </div>
 
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-0">
+        <SheetContent className="w-full sm:max-w-lg p-0 flex flex-col overflow-hidden">
           {selectedOrder && (
             <>
-              {/* Header Section */}
-              <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
-                <SheetHeader className="p-6 pb-4 pr-16">
+              {/* Header Section - fixed at top */}
+              <div className="flex-shrink-0 bg-background border-b">
+                <SheetHeader className="p-4 sm:p-6 pb-3 sm:pb-4 pr-14 sm:pr-16">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary shadow-inner">
-                        <HugeiconsIcon icon={Film} className="h-6 w-6" />
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary shadow-inner flex-shrink-0">
+                        <HugeiconsIcon icon={Film} className="h-5 w-5 sm:h-6 sm:w-6" />
                       </div>
-                      <div>
-                        <SheetTitle className="text-lg">{selectedOrder.services.name}</SheetTitle>
-                        <SheetDescription className="flex items-center gap-2 mt-1">
-                          <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded-md">
+                      <div className="min-w-0">
+                        <SheetTitle className="text-base sm:text-lg truncate">{selectedOrder.services.name}</SheetTitle>
+                        <SheetDescription className="flex items-center gap-2 mt-0.5 sm:mt-1">
+                          <span className="font-mono text-xs bg-muted px-1.5 sm:px-2 py-0.5 rounded-md">
                             #{selectedOrder.id.slice(0, 8)}
                           </span>
                           <Button
@@ -854,18 +909,19 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                       </div>
                     </div>
                   </div>
-                  {/* Status badge - moved below on mobile to avoid overlapping close button */}
+                  {/* Status badge */}
                   <Badge
                     variant="secondary"
-                    className={cn("rounded-full border px-3 py-1.5 font-normal w-fit mt-2 sm:mt-0 sm:absolute sm:top-6 sm:right-16", statusConfig[selectedOrder.status].className)}
+                    className={cn("rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 font-normal w-fit mt-1.5 sm:mt-0 sm:absolute sm:top-6 sm:right-16 text-xs sm:text-sm", statusConfig[selectedOrder.status].className)}
                   >
-                    <span className="mr-1.5">{statusConfig[selectedOrder.status].icon}</span>
+                    <span className="mr-1 sm:mr-1.5">{statusConfig[selectedOrder.status].icon}</span>
                     {statusConfig[selectedOrder.status].label}
                   </Badge>
                 </SheetHeader>
               </div>
 
-              <div className="p-6 space-y-6">
+              {/* Scrollable content area */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
                 {/* Result Preview - Show first for completed orders */}
                 {selectedOrder.status === 'completed' && selectedOrder.admin_output?.result_url && (
                   <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -881,9 +937,9 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                     </div>
                     Tiến độ đơn hàng
                   </h4>
-                  <div className="p-4 rounded-xl border bg-card">
-                    <OrderTimeline 
-                      status={selectedOrder.status} 
+                  <div className="p-3 sm:p-4 rounded-xl border bg-card">
+                    <OrderTimeline
+                      status={selectedOrder.status}
                       createdAt={selectedOrder.created_at}
                       updatedAt={selectedOrder.updated_at}
                     />
@@ -893,22 +949,22 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                 <Separator />
 
                 {/* Cost & Date Info */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
-                    <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                      <HugeiconsIcon icon={ShoppingBag} className="h-4 w-4" />
-                      <span className="text-xs font-medium">Chi phí</span>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                  <div className="p-3 sm:p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground mb-0.5 sm:mb-1">
+                      <HugeiconsIcon icon={ShoppingBag} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      <span className="text-[11px] sm:text-xs font-medium">Chi phí</span>
                     </div>
-                    <span className="text-xl font-bold text-primary">
+                    <span className="text-lg sm:text-xl font-bold text-primary">
                       {formatXu(selectedOrder.total_cost)} Xu
                     </span>
                   </div>
-                  <div className="p-4 rounded-xl bg-muted/30 border">
-                    <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                      <HugeiconsIcon icon={Calendar} className="h-4 w-4" />
-                      <span className="text-xs font-medium">Ngày tạo</span>
+                  <div className="p-3 sm:p-4 rounded-xl bg-muted/30 border">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground mb-0.5 sm:mb-1">
+                      <HugeiconsIcon icon={Calendar} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      <span className="text-[11px] sm:text-xs font-medium">Ngày tạo</span>
                     </div>
-                    <span className="text-sm font-medium">
+                    <span className="text-xs sm:text-sm font-medium">
                       {formatDate(selectedOrder.created_at)}
                     </span>
                   </div>
@@ -917,7 +973,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                 {/* User Inputs Section */}
                 {(() => {
                   const { files, texts } = getInputsByType(selectedOrder.user_inputs, selectedOrder.services.form_config)
-                  
+
                   if (files.length === 0 && texts.length === 0) return null
 
                   return (
@@ -928,12 +984,12 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                         </div>
                         Thông tin yêu cầu
                       </h4>
-                      
+
                       {/* Text inputs */}
                       {texts.length > 0 && (
                         <div className="rounded-xl border bg-card overflow-hidden">
                           {texts.map(({ key, label, value }, index) => (
-                            <div key={key} className={cn("p-4", index !== 0 && "border-t")}>
+                            <div key={key} className={cn("p-3 sm:p-4", index !== 0 && "border-t")}>
                               <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider opacity-70 block mb-1">
                                 {label}
                               </span>
@@ -966,7 +1022,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                       </div>
                       Ghi chú từ Hệ thống
                     </h4>
-                    <div className="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/10 text-sm border border-yellow-200/50 dark:border-yellow-800/30">
+                    <div className="p-3 sm:p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/10 text-sm border border-yellow-200/50 dark:border-yellow-800/30">
                       <p className="text-yellow-800 dark:text-yellow-200 whitespace-pre-wrap">
                         {selectedOrder.admin_note}
                       </p>
@@ -976,20 +1032,20 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
 
                 {/* Processing Message */}
                 {(selectedOrder.status === 'pending' || selectedOrder.status === 'processing') && (
-                  <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 text-sm border border-blue-200/50 dark:border-blue-800/30">
-                    <div className="flex items-start gap-3">
+                  <div className="p-3 sm:p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 text-sm border border-blue-200/50 dark:border-blue-800/30">
+                    <div className="flex items-start gap-2.5 sm:gap-3">
                       <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
                         <HugeiconsIcon icon={Clock} className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                       </div>
                       <div>
                         <p className="font-medium text-blue-800 dark:text-blue-200">
-                          {selectedOrder.status === 'pending' 
-                            ? "Đơn hàng đang chờ xử lý" 
+                          {selectedOrder.status === 'pending'
+                            ? "Đơn hàng đang chờ xử lý"
                             : "AI đang tạo video của bạn"}
                         </p>
                         <p className="text-blue-700/70 dark:text-blue-300/70 mt-1">
-                          {selectedOrder.status === 'pending' 
-                            ? "Hệ thống AI đang xếp hàng yêu cầu của bạn. Thời gian xử lý thường từ 1-24 giờ." 
+                          {selectedOrder.status === 'pending'
+                            ? "Hệ thống AI đang xếp hàng yêu cầu của bạn. Thời gian xử lý thường từ 1-24 giờ."
                             : "Hệ thống AI đang xử lý video của bạn. Bạn sẽ nhận được thông báo khi hoàn tất."}
                         </p>
                       </div>
@@ -998,18 +1054,18 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                 )}
               </div>
 
-              {/* Footer */}
-              <SheetFooter className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t p-6">
+              {/* Footer - fixed at bottom */}
+              <SheetFooter className="flex-shrink-0 bg-background border-t p-4 sm:p-6">
                 {selectedOrder.status === 'completed' && selectedOrder.admin_output?.result_url ? (
                   <Button
-                    className="w-full rounded-full shadow-lg shadow-primary/20 h-12 text-base"
+                    className="w-full rounded-full shadow-lg shadow-primary/20 h-11 sm:h-12 text-sm sm:text-base"
                     onClick={() => downloadFile(selectedOrder.admin_output!.result_url!)}
                   >
                     <HugeiconsIcon icon={Download} className="mr-2 h-5 w-5" />
                     Tải Video Kết Quả
                   </Button>
                 ) : (
-                  <Button variant="outline" className="w-full rounded-full h-12" onClick={() => setIsSheetOpen(false)}>
+                  <Button variant="outline" className="w-full rounded-full h-11 sm:h-12" onClick={() => setIsSheetOpen(false)}>
                     Đóng
                   </Button>
                 )}

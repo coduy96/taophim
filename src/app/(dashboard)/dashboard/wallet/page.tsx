@@ -70,9 +70,9 @@ export default async function WalletPage() {
     .reduce((sum, t) => sum + t.amount, 0) || 0
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 pb-10">
+    <div className="max-w-5xl mx-auto space-y-5 md:space-y-6 pb-4">
       {/* Hero Balance Card */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 p-6 md:p-8 shadow-xl">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 p-5 sm:p-6 md:p-8 shadow-xl">
         {/* Animated gradient orbs */}
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/30 rounded-full blur-3xl animate-pulse-slow" />
         <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse-slow [animation-delay:3s]" />
@@ -85,52 +85,52 @@ export default async function WalletPage() {
           <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/5 to-transparent" />
         </div>
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
           {/* Balance Info */}
-          <div className="space-y-1">
-            <p className="text-zinc-400 text-sm font-medium flex items-center gap-2">
-              <HugeiconsIcon icon={Wallet} className="h-4 w-4" />
+          <div className="space-y-0.5 sm:space-y-1">
+            <p className="text-zinc-400 text-xs sm:text-sm font-medium flex items-center gap-1.5 sm:gap-2">
+              <HugeiconsIcon icon={Wallet} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Số dư khả dụng
             </p>
-            <div className="flex items-baseline gap-2">
-              <span className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-orange-400 to-primary bg-clip-text text-transparent animate-gradient-x">
+            <div className="flex items-baseline gap-1.5 sm:gap-2">
+              <span className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-orange-400 to-primary bg-clip-text text-transparent animate-gradient-x">
                 {formatXu(profile?.xu_balance || 0)}
               </span>
-              <span className="text-2xl font-semibold text-white/80">Xu</span>
+              <span className="text-xl sm:text-2xl font-semibold text-white/80">Xu</span>
             </div>
             {profile && profile.frozen_xu > 0 && (
-              <p className="text-sm text-zinc-500 flex items-center gap-1.5 mt-1">
-                <HugeiconsIcon icon={Clock} className="h-3.5 w-3.5" />
+              <p className="text-xs sm:text-sm text-zinc-500 flex items-center gap-1.5 mt-0.5 sm:mt-1">
+                <HugeiconsIcon icon={Clock} className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                 Đang giữ: {formatXu(profile.frozen_xu)} Xu
               </p>
             )}
           </div>
 
           {/* Quick Stats */}
-          <div className="flex gap-4 md:gap-6">
-            <div className="text-center">
-              <p className="text-2xl md:text-3xl font-bold text-emerald-400">
-                {totalDeposited > 0 && '+'}{formatXu(totalDeposited)} <span className="text-lg">Xu</span>
+          <div className="flex gap-4 sm:gap-6">
+            <div className="text-center sm:text-right">
+              <p className="text-lg sm:text-2xl md:text-3xl font-bold text-emerald-400">
+                {totalDeposited > 0 && '+'}{formatXu(totalDeposited)} <span className="text-sm sm:text-lg">Xu</span>
               </p>
-              <p className="text-xs text-zinc-500">Đã nạp</p>
+              <p className="text-[11px] sm:text-xs text-zinc-500">Đã nạp</p>
             </div>
             <div className="w-px bg-zinc-700" />
-            <div className="text-center">
-              <p className="text-2xl md:text-3xl font-bold text-red-400">
-                {totalSpent > 0 && '-'}{formatXu(totalSpent)} <span className="text-lg">Xu</span>
+            <div className="text-center sm:text-right">
+              <p className="text-lg sm:text-2xl md:text-3xl font-bold text-red-400">
+                {totalSpent > 0 && '-'}{formatXu(totalSpent)} <span className="text-sm sm:text-lg">Xu</span>
               </p>
-              <p className="text-xs text-zinc-500">Đã chi</p>
+              <p className="text-[11px] sm:text-xs text-zinc-500">Đã chi</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Grid: Top-up + History */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
         {/* Top-up Section - Takes 2/3 */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold tracking-tight">Nạp Xu nhanh</h2>
+            <h2 className="text-base sm:text-lg font-semibold tracking-tight">Nạp Xu nhanh</h2>
             {/* Trust Badge */}
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/50 px-2.5 py-1 rounded-full">
               <HugeiconsIcon icon={Shield} className="h-3.5 w-3.5 text-green-600" />
@@ -141,9 +141,9 @@ export default async function WalletPage() {
         </div>
 
         {/* Recent Transactions Sidebar - Takes 1/3 */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold tracking-tight">Giao dịch gần đây</h2>
+            <h2 className="text-base sm:text-lg font-semibold tracking-tight">Giao dịch gần đây</h2>
             <TransactionHistorySheet
               totalDeposited={totalDeposited}
               totalSpent={totalSpent}
@@ -155,28 +155,28 @@ export default async function WalletPage() {
               recentTransactions.map((tx) => {
                 const config = transactionTypeConfig[tx.type] || transactionTypeConfig.expense
                 return (
-                  <div key={tx.id} className="flex items-center justify-between p-3 first:rounded-t-lg last:rounded-b-lg">
-                    <div className="flex items-center gap-3">
-                      <div className={`h-8 w-8 rounded-full bg-muted/50 flex items-center justify-center ${config.colorClass}`}>
-                        <HugeiconsIcon icon={config.icon} className="h-4 w-4" />
+                  <div key={tx.id} className="flex items-center justify-between p-2.5 sm:p-3 first:rounded-t-lg last:rounded-b-lg">
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <div className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-muted/50 flex items-center justify-center ${config.colorClass}`}>
+                        <HugeiconsIcon icon={config.icon} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium">{config.label}</p>
-                        <p className="text-xs text-muted-foreground">{formatDate(tx.created_at)}</p>
+                        <p className="text-xs sm:text-sm font-medium">{config.label}</p>
+                        <p className="text-[11px] sm:text-xs text-muted-foreground">{formatDate(tx.created_at)}</p>
                       </div>
                     </div>
-                    <span className={`text-sm font-semibold ${config.colorClass}`}>
+                    <span className={`text-xs sm:text-sm font-semibold ${config.colorClass}`}>
                       {tx.amount > 0 ? '+' : ''}{formatXu(tx.amount)} Xu
                     </span>
                   </div>
                 )
               })
             ) : (
-              <div className="flex flex-col items-center justify-center py-8 text-center">
-                <div className="h-10 w-10 rounded-full bg-muted/50 flex items-center justify-center mb-2">
-                  <HugeiconsIcon icon={Clock} className="h-5 w-5 text-muted-foreground" />
+              <div className="flex flex-col items-center justify-center py-6 sm:py-8 text-center">
+                <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-muted/50 flex items-center justify-center mb-2">
+                  <HugeiconsIcon icon={Clock} className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
                 </div>
-                <p className="text-sm text-muted-foreground">Chưa có giao dịch</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Chưa có giao dịch</p>
               </div>
             )}
           </Card>

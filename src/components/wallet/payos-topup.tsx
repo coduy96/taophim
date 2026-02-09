@@ -179,9 +179,9 @@ export function PayOSTopup() {
       />
 
       <Card className="border-border/50 shadow-sm overflow-hidden">
-        <div className="p-5 md:p-6 space-y-5">
-          {/* Package Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-5">
+          {/* Package Grid - always 3 columns */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
             {XU_PACKAGES.map((pkg) => {
               const isSelected = selectedPackage.slug === pkg.slug
               return (
@@ -190,8 +190,8 @@ export function PayOSTopup() {
                   onClick={() => handleSelectPackage(pkg)}
                   disabled={loading}
                   className={cn(
-                    "relative flex flex-col items-center text-center p-5 rounded-xl border-2 transition-all duration-200",
-                    "hover:border-primary/50 hover:bg-primary/5",
+                    "relative flex flex-col items-center text-center p-2.5 sm:p-5 rounded-xl border-2 transition-all duration-200",
+                    "hover:border-primary/50 hover:bg-primary/5 active:scale-[0.97]",
                     "focus:outline-none focus:ring-2 focus:ring-primary/20",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
                     isSelected
@@ -202,57 +202,57 @@ export function PayOSTopup() {
                 >
                   {/* Popular Badge */}
                   {pkg.popular && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold text-white rounded-full bg-orange-500 whitespace-nowrap">
-                      🔥 Phổ biến nhất
+                    <span className="absolute -top-2.5 sm:-top-3 left-1/2 -translate-x-1/2 px-1.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold text-white rounded-full bg-orange-500 whitespace-nowrap">
+                      <span className="hidden sm:inline">🔥 </span>Phổ biến
                     </span>
                   )}
 
                   {/* Selected Check */}
                   {isSelected && (
-                    <div className="absolute top-3 right-3">
-                      <div className="h-5 w-5 rounded-full bg-primary flex items-center justify-center">
-                        <HugeiconsIcon icon={Check} className="h-3 w-3 text-primary-foreground" />
+                    <div className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3">
+                      <div className="h-4 w-4 sm:h-5 sm:w-5 rounded-full bg-primary flex items-center justify-center">
+                        <HugeiconsIcon icon={Check} className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-primary-foreground" />
                       </div>
                     </div>
                   )}
 
                   {/* Label */}
                   <h3 className={cn(
-                    "text-base font-bold mb-1",
+                    "text-xs sm:text-base font-bold mb-0.5 sm:mb-1",
                     isSelected ? "text-primary" : "text-foreground",
-                    pkg.popular && "mt-2"
+                    pkg.popular && "mt-1.5 sm:mt-2"
                   )}>
                     {pkg.label}
                   </h3>
 
-                  {/* Tagline */}
-                  <p className="text-sm text-muted-foreground mb-4">
+                  {/* Tagline - hidden on mobile */}
+                  <p className="hidden sm:block text-sm text-muted-foreground mb-4">
                     {pkg.tagline}
                   </p>
 
-                  {/* Xu Amount - Main focus */}
-                  <div className="mb-1">
+                  {/* Xu Amount */}
+                  <div className="mb-0.5 sm:mb-1">
                     <span className={cn(
-                      "text-3xl font-bold tracking-tight",
+                      "text-xl sm:text-3xl font-bold tracking-tight",
                       isSelected ? "text-primary" : "text-foreground"
                     )}>
                       {pkg.total_xu.toLocaleString('vi-VN')}
                     </span>
-                    <span className="text-lg font-semibold text-muted-foreground ml-1">Xu</span>
+                    <span className="text-xs sm:text-lg font-semibold text-muted-foreground ml-0.5 sm:ml-1">Xu</span>
                   </div>
 
                   {/* Price */}
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {pkg.price_vnd.toLocaleString('vi-VN')}đ
+                  <p className="text-[11px] sm:text-sm text-muted-foreground mb-1 sm:mb-3">
+                    {(pkg.price_vnd / 1000).toLocaleString('vi-VN')}k
                   </p>
 
                   {/* Bonus Badge */}
                   {pkg.bonus_xu > 0 ? (
-                    <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30 rounded-full">
-                      🎁 Tặng thêm {pkg.bonus_xu} Xu
+                    <span className="px-1.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30 rounded-full">
+                      +{pkg.bonus_xu} Xu
                     </span>
                   ) : (
-                    <span className="h-6" />
+                    <span className="h-4 sm:h-6" />
                   )}
                 </button>
               )
@@ -264,7 +264,7 @@ export function PayOSTopup() {
             onClick={() => handleCreatePayment()}
             disabled={loading || !payosLoaded}
             size="lg"
-            className="w-full h-12 rounded-xl text-base font-semibold shadow-md hover:shadow-lg transition-all"
+            className="w-full h-11 sm:h-12 rounded-xl text-sm sm:text-base font-semibold shadow-md hover:shadow-lg transition-all"
           >
             {loading ? (
               <>
@@ -279,20 +279,20 @@ export function PayOSTopup() {
           </Button>
 
           {/* Trust Signals */}
-          <div className="flex flex-col items-center gap-2 pt-1">
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+          <div className="flex flex-col items-center gap-1.5 sm:gap-2 pt-0.5 sm:pt-1">
+            <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
-                <HugeiconsIcon icon={Shield} className="h-4 w-4 text-green-600" />
+                <HugeiconsIcon icon={Shield} className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-600" />
                 Bảo mật 100%
               </span>
               <span>•</span>
-              <span>Xu về tài khoản ngay</span>
+              <span>Xu về ngay</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground/70">
-              <HugeiconsIcon icon={QrCode} className="h-3.5 w-3.5" />
-              <HugeiconsIcon icon={CreditCard} className="h-3.5 w-3.5" />
-              <HugeiconsIcon icon={Bank} className="h-3.5 w-3.5" />
-              <span>QR · VNPAY · MoMo · Chuyển khoản</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-muted-foreground/70">
+              <HugeiconsIcon icon={QrCode} className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+              <HugeiconsIcon icon={CreditCard} className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+              <HugeiconsIcon icon={Bank} className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+              <span>QR · VNPAY · MoMo · CK</span>
             </div>
           </div>
         </div>

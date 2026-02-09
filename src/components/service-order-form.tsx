@@ -97,7 +97,7 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
 
   return (
     <div
-      className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-colors
+      className={`relative border-2 border-dashed rounded-lg p-4 sm:p-6 text-center transition-colors
         ${dragActive ? 'border-primary bg-primary/5' : 'border-border'}
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-primary/50'}`}
       onDragEnter={handleDrag}
@@ -683,10 +683,10 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
   // If no form config, show default file upload
   if (fields.length === 0) {
     return (
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {renderDurationSelector()}
 
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <Label>Tải lên file nguồn</Label>
           <FileUploadField
             field={{ id: 'source_file', type: 'file', label: 'File nguồn', required: true }}
@@ -696,7 +696,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <Label htmlFor="notes">Ghi chú thêm (tùy chọn)</Label>
           <Textarea
             id="notes"
@@ -730,11 +730,11 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
       {renderDurationSelector()}
 
       {fields.map((field) => (
-        <div key={field.id} className="space-y-2">
+        <div key={field.id} className="space-y-1.5 sm:space-y-2">
           <Label htmlFor={field.id}>
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}

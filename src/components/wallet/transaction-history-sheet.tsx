@@ -147,109 +147,115 @@ export function TransactionHistorySheet({ totalDeposited, totalSpent }: Transact
           <HugeiconsIcon icon={History} className="h-3.5 w-3.5" />
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-6">
-        <SheetHeader className="pb-4">
-          <SheetTitle>Lịch sử giao dịch</SheetTitle>
-        </SheetHeader>
-
-        {/* Stats Summary */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          <div className="p-3 rounded-xl bg-green-500/10 border border-green-500/20">
-            <div className="flex items-center gap-2 mb-1">
-              <HugeiconsIcon icon={ArrowUpCircle} className="h-4 w-4 text-green-600" />
-              <span className="text-sm text-muted-foreground">Tổng đã nạp</span>
-            </div>
-            <p className="text-lg font-bold text-green-600">
-              {totalDeposited > 0 && '+'}{formatXu(totalDeposited)} Xu
-            </p>
-          </div>
-          <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
-            <div className="flex items-center gap-2 mb-1">
-              <HugeiconsIcon icon={ArrowDownCircle} className="h-4 w-4 text-red-600" />
-              <span className="text-sm text-muted-foreground">Tổng đã chi</span>
-            </div>
-            <p className="text-lg font-bold text-red-600">
-              {totalSpent > 0 && '-'}{formatXu(totalSpent)} Xu
-            </p>
-          </div>
+      <SheetContent className="w-full sm:max-w-lg p-0 flex flex-col overflow-hidden">
+        {/* Header - fixed */}
+        <div className="flex-shrink-0 border-b">
+          <SheetHeader className="p-4 sm:p-6 pb-3 sm:pb-4 pr-14">
+            <SheetTitle className="text-base sm:text-lg">Lịch sử giao dịch</SheetTitle>
+          </SheetHeader>
         </div>
 
-        {/* Transaction List */}
-        <div className="space-y-3">
-          {transactions.length > 0 ? (
-            <>
-              {transactions.map((transaction) => {
-                const typeInfo = transactionTypeLabels[transaction.type]
-                return (
-                  <div
-                    key={transaction.id}
-                    className="flex items-center justify-between p-3 rounded-xl border bg-card"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`h-9 w-9 rounded-full flex items-center justify-center ${typeInfo.className}`}>
-                        {typeInfo.icon}
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+          {/* Stats Summary */}
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                <HugeiconsIcon icon={ArrowUpCircle} className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-600" />
+                <span className="text-xs sm:text-sm text-muted-foreground">Đã nạp</span>
+              </div>
+              <p className="text-base sm:text-lg font-bold text-green-600">
+                {totalDeposited > 0 && '+'}{formatXu(totalDeposited)} Xu
+              </p>
+            </div>
+            <div className="p-2.5 sm:p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                <HugeiconsIcon icon={ArrowDownCircle} className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-red-600" />
+                <span className="text-xs sm:text-sm text-muted-foreground">Đã chi</span>
+              </div>
+              <p className="text-base sm:text-lg font-bold text-red-600">
+                {totalSpent > 0 && '-'}{formatXu(totalSpent)} Xu
+              </p>
+            </div>
+          </div>
+
+          {/* Transaction List */}
+          <div className="space-y-2 sm:space-y-3">
+            {transactions.length > 0 ? (
+              <>
+                {transactions.map((transaction) => {
+                  const typeInfo = transactionTypeLabels[transaction.type]
+                  return (
+                    <div
+                      key={transaction.id}
+                      className="flex items-center justify-between p-2.5 sm:p-3 rounded-xl border bg-card"
+                    >
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div className={`h-8 w-8 sm:h-9 sm:w-9 rounded-full flex items-center justify-center flex-shrink-0 ${typeInfo.className}`}>
+                          {typeInfo.icon}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium">{typeInfo.label}</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground truncate">
+                            {transaction.orders
+                              ? `${transaction.orders.services?.name || 'N/A'}`
+                              : formatDate(transaction.created_at)
+                            }
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium">{typeInfo.label}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {transaction.orders
-                            ? `Đơn: ${transaction.orders.services?.name || 'N/A'}`
-                            : formatDate(transaction.created_at)
-                          }
+                      <div className="text-right flex-shrink-0 ml-2">
+                        <p className={`text-sm font-bold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {transaction.amount > 0 ? '+' : ''}{formatXu(transaction.amount)}
+                        </p>
+                        <p className="text-[11px] sm:text-xs text-muted-foreground">
+                          {new Date(transaction.created_at).toLocaleTimeString('vi-VN', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZone: 'Asia/Ho_Chi_Minh'
+                          })}
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className={`font-bold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {transaction.amount > 0 ? '+' : ''}{formatXu(transaction.amount)} Xu
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date(transaction.created_at).toLocaleTimeString('vi-VN', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          timeZone: 'Asia/Ho_Chi_Minh'
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
 
-              {/* Load More Button */}
-              {hasMore && (
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={handleLoadMore}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <HugeiconsIcon icon={Loader2} className="mr-2 h-4 w-4 animate-spin" />
-                      Đang tải...
-                    </>
-                  ) : (
-                    'Tải thêm'
-                  )}
-                </Button>
-              )}
-            </>
-          ) : loading ? (
-            <div className="flex flex-col items-center justify-center py-12">
-              <HugeiconsIcon icon={Loader2} className="h-8 w-8 animate-spin text-muted-foreground" />
-              <p className="text-sm text-muted-foreground mt-2">Đang tải...</p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-12 text-center rounded-xl border border-dashed">
-              <div className="h-12 w-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
-                <HugeiconsIcon icon={Clock} className="h-6 w-6 text-muted-foreground" />
+                {/* Load More Button */}
+                {hasMore && (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={handleLoadMore}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <HugeiconsIcon icon={Loader2} className="mr-2 h-4 w-4 animate-spin" />
+                        Đang tải...
+                      </>
+                    ) : (
+                      'Tải thêm'
+                    )}
+                  </Button>
+                )}
+              </>
+            ) : loading ? (
+              <div className="flex flex-col items-center justify-center py-10 sm:py-12">
+                <HugeiconsIcon icon={Loader2} className="h-7 w-7 sm:h-8 sm:w-8 animate-spin text-muted-foreground" />
+                <p className="text-xs sm:text-sm text-muted-foreground mt-2">Đang tải...</p>
               </div>
-              <h3 className="font-medium">Chưa có giao dịch</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Lịch sử nạp và chi tiêu sẽ xuất hiện tại đây.
-              </p>
-            </div>
-          )}
+            ) : (
+              <div className="flex flex-col items-center justify-center py-10 sm:py-12 text-center rounded-xl border border-dashed">
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-muted/50 flex items-center justify-center mb-2 sm:mb-3">
+                  <HugeiconsIcon icon={Clock} className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
+                </div>
+                <h3 className="font-medium text-sm sm:text-base">Chưa có giao dịch</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                  Lịch sử nạp và chi tiêu sẽ xuất hiện tại đây.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </SheetContent>
     </Sheet>

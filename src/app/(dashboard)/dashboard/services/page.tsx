@@ -76,26 +76,26 @@ export default async function ServicesPage({
 
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-10">
-      {/* Header Section - Matches Dashboard Style */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="max-w-6xl mx-auto space-y-5 md:space-y-8 pb-4">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dịch vụ AI Video</h1>
-          <p className="text-muted-foreground mt-1">
-            Khám phá các công cụ tạo video mạnh mẽ được hỗ trợ bởi AI.
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Dịch vụ AI Video</h1>
+          <p className="text-muted-foreground text-sm md:text-base mt-0.5 md:mt-1">
+            Khám phá các công cụ tạo video AI mạnh mẽ.
           </p>
         </div>
-        
-        {/* Optional Search/Filter placeholder - Keeps it minimal but functional-looking */}
-        <div className="relative w-full md:w-auto md:min-w-[300px]">
+
+        {/* Search - hidden on mobile (disabled anyway) */}
+        <div className="relative hidden md:block md:min-w-[300px]">
            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
              <HugeiconsIcon icon={Search} className="h-4 w-4 text-muted-foreground" />
            </div>
-           <Input 
-             type="text" 
-             placeholder="Tìm kiếm dịch vụ..." 
+           <Input
+             type="text"
+             placeholder="Tìm kiếm dịch vụ..."
              className="pl-10 bg-background/50 backdrop-blur-sm border-muted-foreground/20 focus-visible:ring-primary/20"
-             disabled // Disabled for now as it's client-side logic we might add later or just a UI placeholder
+             disabled
            />
         </div>
       </div>
@@ -103,14 +103,14 @@ export default async function ServicesPage({
       {/* Services Grid */}
       {services && services.length > 0 ? (
         <>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {services.map((service: Service) => (
               <NavLink
                 href={`/dashboard/services/${service.slug}`}
                 key={service.id}
                 className="group block h-full"
               >
-                <Card className="h-full overflow-hidden p-0 gap-0 border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-card/50 backdrop-blur-sm">
+                <Card className="h-full overflow-hidden p-0 gap-0 border-border/50 hover:border-primary/50 active:scale-[0.98] transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-card/50 backdrop-blur-sm">
                   {/* Cover Image Area */}
                   <div className="aspect-video relative overflow-hidden bg-muted/20">
                     {service.cover_image ? (
@@ -125,23 +125,23 @@ export default async function ServicesPage({
                         <HugeiconsIcon icon={Film} className="w-12 h-12 text-primary/20" />
                       </div>
                     )}
-                    
+
                     {/* Badge Overlay */}
-                    <div className="absolute top-3 right-3">
-                      <div className="flex items-center gap-1.5 bg-background/90 backdrop-blur text-foreground px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm border border-border/50">
-                        <HugeiconsIcon icon={Coins} className="w-3.5 h-3.5 text-yellow-500" />
-                        <span>{formatXu(service.cost_per_second)} Xu/giây</span>
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
+                      <div className="flex items-center gap-1 sm:gap-1.5 bg-background/90 backdrop-blur text-foreground px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[11px] sm:text-xs font-semibold shadow-sm border border-border/50">
+                        <HugeiconsIcon icon={Coins} className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-500" />
+                        <span>{formatXu(service.cost_per_second)} Xu/s</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-5 flex flex-col">
+                  <div className="p-3 sm:p-5 flex flex-col">
                     <div>
-                      <h3 className="font-semibold text-lg group-hover:text-primary transition-colors flex items-center gap-2">
+                      <h3 className="font-semibold text-base sm:text-lg group-hover:text-primary transition-colors flex items-center gap-2">
                         {service.name}
-                        <HugeiconsIcon icon={ArrowRight} className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
+                        <HugeiconsIcon icon={ArrowRight} className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary hidden sm:block" />
                       </h3>
-                      <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 sm:mt-3 leading-relaxed line-clamp-2">
                         {service.description || "Tạo video chất lượng cao với công nghệ AI tiên tiến."}
                       </p>
                     </div>
@@ -152,7 +152,7 @@ export default async function ServicesPage({
           </div>
 
           {/* Pagination */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-2 sm:pt-4">
             <PaginationInfo
               currentPage={validPage}
               itemsPerPage={ITEMS_PER_PAGE}
@@ -166,12 +166,12 @@ export default async function ServicesPage({
           </div>
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center py-24 text-center bg-muted/20 rounded-3xl border border-dashed border-border/60">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted/50 mb-4">
-            <HugeiconsIcon icon={Sparkles} className="w-8 h-8 text-muted-foreground/60" />
+        <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center bg-muted/20 rounded-3xl border border-dashed border-border/60">
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-muted/50 mb-3 sm:mb-4">
+            <HugeiconsIcon icon={Sparkles} className="w-7 h-7 sm:w-8 sm:h-8 text-muted-foreground/60" />
           </div>
-          <h3 className="text-lg font-semibold mb-1">Chưa có dịch vụ nào</h3>
-          <p className="text-muted-foreground max-w-sm">
+          <h3 className="text-base sm:text-lg font-semibold mb-1">Chưa có dịch vụ nào</h3>
+          <p className="text-sm text-muted-foreground max-w-sm">
             Hệ thống đang được cập nhật. Vui lòng quay lại sau!
           </p>
         </div>
