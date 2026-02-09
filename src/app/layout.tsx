@@ -322,7 +322,7 @@ export default function RootLayout({
         ))}
       </head>
       <body
-        className={`${inter.variable} antialiased min-h-screen overflow-x-hidden bg-background font-sans`}
+        className={`${inter.variable} antialiased min-h-screen bg-background font-sans`}
       >
         <ThemeProvider
           attribute="class"
