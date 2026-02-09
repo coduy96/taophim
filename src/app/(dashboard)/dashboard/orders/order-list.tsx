@@ -883,40 +883,39 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
               {/* Header Section - fixed at top */}
               <div className="flex-shrink-0 bg-background border-b">
                 <SheetHeader className="p-4 sm:p-6 pb-3 sm:pb-4 pr-14 sm:pr-16">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-2.5 sm:gap-3">
-                      <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary shadow-inner flex-shrink-0">
-                        <HugeiconsIcon icon={Film} className="h-5 w-5 sm:h-6 sm:w-6" />
-                      </div>
-                      <div className="min-w-0">
+                  <div className="flex items-start gap-2.5 sm:gap-3">
+                    <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary shadow-inner flex-shrink-0">
+                      <HugeiconsIcon icon={Film} className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
                         <SheetTitle className="text-base sm:text-lg truncate">{selectedOrder.services.name}</SheetTitle>
-                        <SheetDescription className="flex items-center gap-2 mt-0.5 sm:mt-1">
-                          <span className="font-mono text-xs bg-muted px-1.5 sm:px-2 py-0.5 rounded-md">
-                            #{selectedOrder.id.slice(0, 8)}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6"
-                            onClick={handleCopyOrderId}
-                          >
-                            <HugeiconsIcon
-                              icon={copiedId ? Check : Copy}
-                              className={cn("h-3.5 w-3.5", copiedId && "text-green-600")}
-                            />
-                          </Button>
-                        </SheetDescription>
+                        <Badge
+                          variant="secondary"
+                          className={cn("rounded-full border px-2 sm:px-3 py-0.5 sm:py-1 font-normal text-[10px] sm:text-xs whitespace-nowrap flex-shrink-0", statusConfig[selectedOrder.status].className)}
+                        >
+                          <span className="mr-1">{statusConfig[selectedOrder.status].icon}</span>
+                          {statusConfig[selectedOrder.status].label}
+                        </Badge>
                       </div>
+                      <SheetDescription className="flex items-center gap-2 mt-0.5 sm:mt-1">
+                        <span className="font-mono text-xs bg-muted px-1.5 sm:px-2 py-0.5 rounded-md">
+                          #{selectedOrder.id.slice(0, 8)}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6"
+                          onClick={handleCopyOrderId}
+                        >
+                          <HugeiconsIcon
+                            icon={copiedId ? Check : Copy}
+                            className={cn("h-3.5 w-3.5", copiedId && "text-green-600")}
+                          />
+                        </Button>
+                      </SheetDescription>
                     </div>
                   </div>
-                  {/* Status badge */}
-                  <Badge
-                    variant="secondary"
-                    className={cn("rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 font-normal w-fit mt-1.5 sm:mt-0 sm:absolute sm:top-6 sm:right-16 text-xs sm:text-sm", statusConfig[selectedOrder.status].className)}
-                  >
-                    <span className="mr-1 sm:mr-1.5">{statusConfig[selectedOrder.status].icon}</span>
-                    {statusConfig[selectedOrder.status].label}
-                  </Badge>
                 </SheetHeader>
               </div>
 
