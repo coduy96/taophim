@@ -19,6 +19,7 @@ import {
   Video01Icon as FileVideo,
   File01Icon as FileIcon
 } from "@hugeicons/core-free-icons"
+import { compressImageFile, type CompressionResult } from "@/lib/image-compression"
 import { createClient } from "@/lib/supabase/client"
 import { Service, FormConfig, FormField, DurationConfig, FixedDurationConfig, RangeDurationConfig, VideoBasedDurationConfig } from "@/types/database.types"
 import { triggerProfileRefresh } from "@/hooks/use-profile"
@@ -51,6 +52,29 @@ async function createStableFileCopy(file: File): Promise<File> {
 
 function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) {
   const [dragActive, setDragActive] = useState(false)
+  const [isCompressing, setIsCompressing] = useState(false)
+  const [compressionInfo, setCompressionInfo] = useState<CompressionResult | null>(null)
+
+  const processFile = useCallback(async (rawFile: File) => {
+    const stableFile = await createStableFileCopy(rawFile)
+
+    if (field.type === 'image') {
+      setIsCompressing(true)
+      setCompressionInfo(null)
+      try {
+        const result = await compressImageFile(stableFile)
+        setCompressionInfo(result)
+        onChange(result.file)
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Lỗi xử lý ảnh')
+        onChange(null)
+      } finally {
+        setIsCompressing(false)
+      }
+    } else {
+      onChange(stableFile)
+    }
+  }, [field.type, onChange])
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -67,16 +91,20 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
     e.stopPropagation()
     setDragActive(false)
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const stableFile = await createStableFileCopy(e.dataTransfer.files[0])
-      onChange(stableFile)
+      await processFile(e.dataTransfer.files[0])
     }
-  }, [onChange])
+  }, [processFile])
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const stableFile = await createStableFileCopy(e.target.files[0])
-      onChange(stableFile)
+      await processFile(e.target.files[0])
     }
+  }
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setCompressionInfo(null)
+    onChange(null)
   }
 
   const getAccept = () => {
@@ -95,61 +123,79 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
     }
   }
 
+  const isDisabled = disabled || isCompressing
+
   return (
-    <div
-      className={`relative border-2 border-dashed rounded-lg p-4 sm:p-6 text-center transition-colors
-        ${dragActive ? 'border-primary bg-primary/5' : 'border-border'}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-primary/50'}`}
-      onDragEnter={handleDrag}
-      onDragLeave={handleDrag}
-      onDragOver={handleDrag}
-      onDrop={handleDrop}
-    >
-      <input
-        type="file"
-        id={field.id}
-        accept={getAccept()}
-        onChange={handleChange}
-        disabled={disabled}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-      />
-      
-      {value ? (
-        <div className="flex items-center gap-3 min-w-0 overflow-hidden">
-          <div className="shrink-0">
-            {getIcon()}
+    <div>
+      <div
+        className={`relative border-2 border-dashed rounded-lg p-4 sm:p-6 text-center transition-colors
+          ${dragActive ? 'border-primary bg-primary/5' : 'border-border'}
+          ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-primary/50'}`}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+      >
+        <input
+          type="file"
+          id={field.id}
+          accept={getAccept()}
+          onChange={handleChange}
+          disabled={isDisabled}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
+
+        {isCompressing ? (
+          <div className="flex items-center justify-center gap-2 py-2">
+            <Spinner className="h-5 w-5" />
+            <span className="text-sm text-muted-foreground">Đang tối ưu ảnh...</span>
           </div>
-          <div className="text-left flex-1 min-w-0 overflow-hidden">
-            <p className="font-medium truncate max-w-full">{value.name}</p>
-            <p className="text-sm text-muted-foreground">
-              {(value.size / 1024 / 1024).toFixed(2)} MB
-            </p>
+        ) : value ? (
+          <div className="flex items-center gap-3 min-w-0 overflow-hidden">
+            <div className="shrink-0">
+              {getIcon()}
+            </div>
+            <div className="text-left flex-1 min-w-0 overflow-hidden">
+              <p className="font-medium truncate max-w-full">{value.name}</p>
+              <p className="text-sm text-muted-foreground">
+                {(value.size / 1024 / 1024).toFixed(2)} MB
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="shrink-0"
+              onClick={handleClear}
+              disabled={disabled}
+            >
+              <HugeiconsIcon icon={X} className="h-4 w-4" />
+            </Button>
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="shrink-0"
-            onClick={(e) => {
-              e.preventDefault()
-              onChange(null)
-            }}
-            disabled={disabled}
-          >
-            <HugeiconsIcon icon={X} className="h-4 w-4" />
-          </Button>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          <HugeiconsIcon icon={Upload} className="h-8 w-8 mx-auto text-muted-foreground" />
-          <div>
-            <p className="font-medium">Kéo thả hoặc click để tải lên</p>
-            <p className="text-sm text-muted-foreground">
-              {field.type === 'image' ? 'PNG, JPG, GIF' : 
-               field.type === 'video' ? 'MP4, MOV, AVI' : 'Tất cả định dạng'}
-            </p>
+        ) : (
+          <div className="space-y-2">
+            <HugeiconsIcon icon={Upload} className="h-8 w-8 mx-auto text-muted-foreground" />
+            <div>
+              <p className="font-medium">Kéo thả hoặc click để tải lên</p>
+              <p className="text-sm text-muted-foreground">
+                {field.type === 'image' ? 'PNG, JPG, GIF' :
+                 field.type === 'video' ? 'MP4, MOV, AVI' : 'Tất cả định dạng'}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
+      </div>
+
+      {compressionInfo?.wasCompressed && (
+        <p className="mt-1.5 text-xs text-green-600">
+          Đã tối ưu: {(compressionInfo.originalSize / 1024 / 1024).toFixed(1)}MB → {(compressionInfo.compressedSize / 1024 / 1024).toFixed(1)}MB
+          {(compressionInfo.originalDimensions.width !== compressionInfo.finalDimensions.width ||
+            compressionInfo.originalDimensions.height !== compressionInfo.finalDimensions.height) && (
+            <span>
+              {' '}· {compressionInfo.originalDimensions.width}×{compressionInfo.originalDimensions.height} → {compressionInfo.finalDimensions.width}×{compressionInfo.finalDimensions.height}
+            </span>
+          )}
+        </p>
       )}
     </div>
   )
