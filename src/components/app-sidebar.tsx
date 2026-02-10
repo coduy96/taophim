@@ -15,6 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { Logo } from "@/components/logo"
 import {
@@ -78,6 +79,14 @@ export function AppSidebar({ user, profile: initialProfile, ...props }: React.Co
   const pathname = usePathname()
   const { profile, isLoading } = useProfile(initialProfile)
   const { navigatingTo, startNavigation } = useNavigation()
+  const { setOpenMobile, isMobile } = useSidebar()
+
+  // Close mobile sidebar when navigating to a new page
+  React.useEffect(() => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }, [pathname, isMobile, setOpenMobile])
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -153,6 +162,7 @@ export function AppSidebar({ user, profile: initialProfile, ...props }: React.Co
         <div className="px-2 py-2 mt-auto">
           <Link
             href="/dashboard/wallet"
+            onClick={() => startNavigation('/dashboard/wallet')}
             className={cn(
               "relative block overflow-hidden rounded-xl border bg-background p-4 shadow-sm transition-all hover:shadow-md hover:border-primary/30 group/wallet",
               "group-data-[collapsible=icon]:hidden" // Hide when collapsed
@@ -180,8 +190,14 @@ export function AppSidebar({ user, profile: initialProfile, ...props }: React.Co
 
             {/* CTA Button */}
             <div className="mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 py-1.5 px-3 rounded-lg transition-colors group-hover/wallet:bg-primary/20">
-              <span>Nạp Xu</span>
-              <HugeiconsIcon icon={History} className="size-3" />
+              {navigatingTo === '/dashboard/wallet' ? (
+                <Spinner className="size-3" />
+              ) : (
+                <>
+                  <span>Nạp Xu</span>
+                  <HugeiconsIcon icon={History} className="size-3" />
+                </>
+              )}
             </div>
 
             {/* Decorative background element */}
