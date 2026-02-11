@@ -1,5 +1,5 @@
 // Image to Video (anh-thanh-video) mapper
-// Maps form inputs to FAL kling-video/v2.6/pro/image-to-video parameters
+// Maps form inputs to FAL veo3.1/fast/image-to-video parameters
 
 import { ImageToVideoInput, OrderUserInputs } from '../types'
 
@@ -15,20 +15,21 @@ export function mapImageToVideoInputs(userInputs: OrderUserInputs): ImageToVideo
     throw new Error('Missing or invalid duration_seconds')
   }
 
-  // FAL expects duration as "5" or "10" string
-  const falDuration: '5' | '10' = duration >= 10 ? '10' : '5'
+  // Veo expects duration as "4s", "6s", or "8s"
+  const veoDuration: '4s' | '6s' | '8s' = duration <= 4 ? '4s' : duration <= 6 ? '6s' : '8s'
 
   const result: ImageToVideoInput = {
     prompt: (userInputs.prompt as string) || '',
-    start_image_url: startImage,
-    duration: falDuration,
+    image_url: startImage,
+    duration: veoDuration,
+    resolution: '1080p',
+    auto_fix: false,
     generate_audio: userInputs.generate_audio !== false, // default true
   }
 
   // Optional fields
-  const endImage = userInputs.end_image as string | undefined
-  if (endImage && typeof endImage === 'string' && endImage.startsWith('http')) {
-    result.end_image_url = endImage
+  if (userInputs.aspect_ratio && typeof userInputs.aspect_ratio === 'string') {
+    result.aspect_ratio = userInputs.aspect_ratio
   }
 
   if (userInputs.negative_prompt && typeof userInputs.negative_prompt === 'string') {

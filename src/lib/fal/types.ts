@@ -2,9 +2,9 @@
 
 // Service slug to FAL model mapping
 export const SERVICE_MODEL_MAP: Record<string, string> = {
-  'anh-thanh-video': 'fal-ai/kling-video/v2.6/pro/image-to-video',
+  'anh-thanh-video': 'fal-ai/veo3.1/fast/image-to-video',
   'thay-doi-nhan-vat': 'fal-ai/kling-video/v2.6/pro/motion-control',
-  'tao-video-tu-van-ban': 'fal-ai/kling-video/v2.6/pro/text-to-video',
+  'tao-video-tu-van-ban': 'fal-ai/veo3.1/fast',
 }
 
 // FAL Queue Response
@@ -52,9 +52,11 @@ export interface FalVideoResult {
 // Input types for each FAL model
 export interface ImageToVideoInput {
   prompt: string
-  start_image_url: string
-  end_image_url?: string
-  duration: '5' | '10'
+  image_url: string
+  duration: '4s' | '6s' | '8s'
+  resolution?: string
+  aspect_ratio?: string
+  auto_fix?: boolean
   generate_audio?: boolean
   negative_prompt?: string
 }
@@ -70,7 +72,9 @@ export interface MotionControlInput {
 export interface TextToVideoInput {
   prompt: string
   aspect_ratio?: string
-  duration: '5' | '10'
+  duration: '4s' | '6s' | '8s'
+  resolution?: string
+  auto_fix?: boolean
   generate_audio?: boolean
   negative_prompt?: string
 }

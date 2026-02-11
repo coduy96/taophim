@@ -1,5 +1,5 @@
 // Text to Video (tao-video-tu-van-ban) mapper
-// Maps form inputs to FAL kling-video/v2.6/pro/text-to-video parameters
+// Maps form inputs to FAL veo3.1/fast parameters
 
 import { TextToVideoInput, OrderUserInputs } from '../types'
 
@@ -15,12 +15,14 @@ export function mapTextToVideoInputs(userInputs: OrderUserInputs): TextToVideoIn
     throw new Error('Missing or invalid duration_seconds')
   }
 
-  // FAL expects duration as "5" or "10" string
-  const falDuration: '5' | '10' = duration >= 10 ? '10' : '5'
+  // Veo expects duration as "4s", "6s", or "8s"
+  const veoDuration: '4s' | '6s' | '8s' = duration <= 4 ? '4s' : duration <= 6 ? '6s' : '8s'
 
   const result: TextToVideoInput = {
     prompt: prompt.trim(),
-    duration: falDuration,
+    duration: veoDuration,
+    resolution: '1080p',
+    auto_fix: true,
     generate_audio: userInputs.generate_audio !== false, // default true
   }
 
