@@ -4,8 +4,102 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { verifyWebhookSignature, isTimestampValid } from '@/lib/fal/verify-webhook'
-import { FalWebhookPayload } from '@/lib/fal/types'
+import { FalWebhookPayload, FalErrorDetail } from '@/lib/fal/types'
 import { createOrderCompletedNotification, createOrderCancelledNotification } from '@/lib/notifications/in-app'
+
+// Map FAL error types to user-friendly Vietnamese messages
+const FAL_ERROR_MESSAGES: Record<string, string> = {
+  content_policy_violation:
+    'Nội dung không phù hợp với chính sách sử dụng. Vui lòng kiểm tra lại hình ảnh/video đầu vào.',
+  image_too_small:
+    'Hình ảnh quá nhỏ. Vui lòng sử dụng hình ảnh có kích thước lớn hơn.',
+  image_too_large:
+    'Hình ảnh quá lớn. Vui lòng sử dụng hình ảnh có kích thước nhỏ hơn.',
+  image_load_error:
+    'Không thể đọc hình ảnh. Hình ảnh có thể bị lỗi hoặc không đúng định dạng.',
+  file_download_error:
+    'Không thể tải file đầu vào. Vui lòng kiểm tra lại file và thử lại.',
+  face_detection_error:
+    'Không phát hiện khuôn mặt trong hình ảnh. Vui lòng sử dụng hình ảnh có khuôn mặt rõ ràng.',
+  file_too_large:
+    'File quá lớn. Vui lòng sử dụng file có kích thước nhỏ hơn.',
+  generation_timeout:
+    'Quá trình tạo video bị hết thời gian chờ. Vui lòng thử lại.',
+  internal_server_error:
+    'Hệ thống xử lý video gặp lỗi. Vui lòng thử lại sau.',
+  downstream_service_error:
+    'Dịch vụ xử lý video tạm thời gặp sự cố. Vui lòng thử lại sau.',
+  downstream_service_unavailable:
+    'Dịch vụ xử lý video tạm thời không khả dụng. Vui lòng thử lại sau.',
+  unsupported_image_format:
+    'Định dạng hình ảnh không được hỗ trợ. Vui lòng sử dụng JPG, PNG hoặc WebP.',
+  unsupported_video_format:
+    'Định dạng video không được hỗ trợ. Vui lòng sử dụng MP4, MOV hoặc WebM.',
+  unsupported_audio_format:
+    'Định dạng âm thanh không được hỗ trợ.',
+  video_duration_too_long:
+    'Video đầu vào quá dài. Vui lòng sử dụng video ngắn hơn.',
+  video_duration_too_short:
+    'Video đầu vào quá ngắn. Vui lòng sử dụng video dài hơn.',
+  audio_duration_too_long:
+    'File âm thanh quá dài. Vui lòng sử dụng file ngắn hơn.',
+  audio_duration_too_short:
+    'File âm thanh quá ngắn. Vui lòng sử dụng file dài hơn.',
+}
+
+const DEFAULT_ERROR_MESSAGE = 'Xử lý video không thành công.'
+
+/**
+ * Extract structured error details from the FAL webhook payload.
+ * FAL may include error info in `detail` array or in `error` string field.
+ */
+function parseFalError(payload: FalWebhookPayload): {
+  errorType: string | null
+  details: FalErrorDetail[]
+  rawError: string
+} {
+  // Check for structured detail array in the payload
+  if (payload.detail && Array.isArray(payload.detail) && payload.detail.length > 0) {
+    const first = payload.detail[0]
+    return {
+      errorType: first.type || null,
+      details: payload.detail,
+      rawError: payload.detail.map(d => `[${d.type}] ${d.msg}`).join('; '),
+    }
+  }
+
+  // Try to parse error string as JSON (FAL sometimes sends JSON in error field)
+  if (payload.error && typeof payload.error === 'string') {
+    try {
+      const parsed = JSON.parse(payload.error)
+      if (parsed.detail && Array.isArray(parsed.detail) && parsed.detail.length > 0) {
+        const first = parsed.detail[0]
+        return {
+          errorType: first.type || null,
+          details: parsed.detail,
+          rawError: parsed.detail.map((d: FalErrorDetail) => `[${d.type}] ${d.msg}`).join('; '),
+        }
+      }
+    } catch {
+      // Not JSON, treat as plain string
+    }
+  }
+
+  return {
+    errorType: null,
+    details: [],
+    rawError: payload.error || 'Processing failed',
+  }
+}
+
+/**
+ * Get a meaningful Vietnamese error message based on FAL error type.
+ * Always appends the Xu refund notice.
+ */
+function getVietnameseErrorMessage(errorType: string | null): string {
+  const message = (errorType && FAL_ERROR_MESSAGES[errorType]) || DEFAULT_ERROR_MESSAGE
+  return `${message} Xu đã được hoàn trả.`
+}
 
 // Create admin client for database operations
 function getSupabaseAdmin() {
@@ -185,16 +279,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true })
     } else {
       // Error: Cancel the order and refund
-      // Store original error for logs but show generic message to user
-      const internalError = error || 'Processing failed'
-      const userFacingMessage = 'Xử lý video không thành công. Xu đã được hoàn trả.'
+      // Parse structured error for meaningful Vietnamese message
+      const { errorType, rawError } = parseFalError(payload)
+      const userFacingMessage = getVietnameseErrorMessage(errorType)
+
+      console.log('FAL error details:', { errorType, rawError, orderId: falJob.order_id })
 
       // Update fal_job with internal error (for admin debugging)
       await supabase
         .from('fal_jobs')
         .update({
           status: 'failed',
-          error_message: internalError,
+          error_message: rawError,
           completed_at: new Date().toISOString(),
         })
         .eq('id', falJob.id)
@@ -225,7 +321,7 @@ export async function POST(request: Request) {
         }
       }
 
-      console.log('Order cancelled due to processing error:', falJob.order_id, internalError)
+      console.log('Order cancelled due to processing error:', falJob.order_id, rawError)
       return NextResponse.json({ success: true, error_handled: true })
     }
   } catch (error) {

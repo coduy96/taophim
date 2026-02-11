@@ -56,7 +56,15 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
   const [compressionInfo, setCompressionInfo] = useState<CompressionResult | null>(null)
 
   const processFile = useCallback(async (rawFile: File) => {
-    const stableFile = await createStableFileCopy(rawFile)
+    // Try to create a stable copy to prevent ERR_UPLOAD_FILE_CHANGED,
+    // but fall back to the raw file if it fails (e.g. on Android browsers
+    // where arrayBuffer() can fail with content URIs)
+    let stableFile: File
+    try {
+      stableFile = await createStableFileCopy(rawFile)
+    } catch {
+      stableFile = rawFile
+    }
 
     if (field.type === 'image') {
       setIsCompressing(true)
@@ -96,8 +104,12 @@ function FileUploadField({ field, value, onChange, disabled }: FileUploadProps) 
   }, [processFile])
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      await processFile(e.target.files[0])
+    const file = e.target.files?.[0]
+    // Reset input value so selecting the same file again triggers onChange
+    // (important on Android where re-selecting the same file is common)
+    e.target.value = ''
+    if (file) {
+      await processFile(file)
     }
   }
 

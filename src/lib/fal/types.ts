@@ -19,6 +19,16 @@ export interface FalQueueError {
   detail: string
 }
 
+// FAL Error Detail (structured error from FAL API)
+export interface FalErrorDetail {
+  loc: string[]
+  msg: string
+  type: string
+  url?: string
+  ctx?: Record<string, unknown>
+  input?: unknown
+}
+
 // FAL Webhook Payload
 export interface FalWebhookPayload {
   request_id: string
@@ -26,6 +36,7 @@ export interface FalWebhookPayload {
   status: 'OK' | 'ERROR'
   error?: string
   payload?: FalVideoResult
+  detail?: FalErrorDetail[]
 }
 
 // FAL Video Result
