@@ -2,6 +2,7 @@
 // Maps service slugs to their input transformation functions
 
 import { FalInput, OrderUserInputs, SERVICE_MODEL_MAP } from '../types'
+import { mapBackgroundRemovalInputs } from './background-removal'
 import { mapImageToVideoInputs } from './image-to-video'
 import { mapMotionControlInputs } from './motion-control'
 import { mapTextToVideoInputs } from './text-to-video'
@@ -12,6 +13,7 @@ const mapperRegistry: Record<string, InputMapper> = {
   'anh-thanh-video': mapImageToVideoInputs,
   'thay-doi-nhan-vat': mapMotionControlInputs,
   'tao-video-tu-van-ban': mapTextToVideoInputs,
+  'xoa-nen-video': mapBackgroundRemovalInputs,
 }
 
 /**
@@ -39,6 +41,7 @@ export function isFalSupportedService(serviceSlug: string): boolean {
   return serviceSlug in SERVICE_MODEL_MAP
 }
 
+export { mapBackgroundRemovalInputs } from './background-removal'
 export { mapImageToVideoInputs } from './image-to-video'
 export { mapMotionControlInputs } from './motion-control'
 export { mapTextToVideoInputs } from './text-to-video'

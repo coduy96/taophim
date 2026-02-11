@@ -5,6 +5,7 @@ export const SERVICE_MODEL_MAP: Record<string, string> = {
   'anh-thanh-video': 'fal-ai/veo3.1/fast/image-to-video',
   'thay-doi-nhan-vat': 'fal-ai/kling-video/v2.6/pro/motion-control',
   'tao-video-tu-van-ban': 'fal-ai/veo3.1/fast',
+  'xoa-nen-video': 'bria/video/background-removal',
 }
 
 // FAL Queue Response
@@ -79,8 +80,14 @@ export interface TextToVideoInput {
   negative_prompt?: string
 }
 
+export interface BackgroundRemovalInput {
+  video_url: string
+  background_color?: 'Transparent' | 'Black' | 'White' | 'Gray' | 'Red' | 'Green' | 'Blue' | 'Yellow' | 'Cyan' | 'Magenta' | 'Orange'
+  output_container_and_codec?: 'mp4_h265' | 'mp4_h264' | 'webm_vp9' | 'mov_h265' | 'mov_proresks' | 'mkv_h265' | 'mkv_h264' | 'mkv_vp9' | 'gif'
+}
+
 // Combined FAL input type
-export type FalInput = ImageToVideoInput | MotionControlInput | TextToVideoInput
+export type FalInput = ImageToVideoInput | MotionControlInput | TextToVideoInput | BackgroundRemovalInput
 
 // FAL Job Status
 export type FalJobStatus = 'pending' | 'processing' | 'completed' | 'failed'
