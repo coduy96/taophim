@@ -49,6 +49,27 @@ const FAL_ERROR_MESSAGES: Record<string, string> = {
 
 const DEFAULT_ERROR_MESSAGE = 'Xử lý video không thành công.'
 
+// Pattern-based matching for FAL 422 validation errors where `type` is generic (e.g. "value_error")
+// but the `msg` field contains actionable information
+const FAL_ERROR_MESSAGE_PATTERNS: { pattern: RegExp; message: string }[] = [
+  {
+    pattern: /too many subjects/i,
+    message: 'Video có quá nhiều người/đối tượng. Vui lòng sử dụng video chỉ có 1 người hoặc đối tượng rõ ràng.',
+  },
+  {
+    pattern: /duration.*(?:cannot|can ?not|must not).*(?:longer|exceed)/i,
+    message: 'Video đầu vào vượt quá thời lượng cho phép. Vui lòng sử dụng video ngắn hơn.',
+  },
+  {
+    pattern: /character orientation.*image.*duration/i,
+    message: 'Khi sử dụng ảnh làm nhân vật, video không được dài quá 10 giây. Vui lòng rút ngắn video.',
+  },
+  {
+    pattern: /validat/i,
+    message: 'Dữ liệu đầu vào không hợp lệ. Vui lòng kiểm tra lại file và thông tin đã nhập.',
+  },
+]
+
 /**
  * Extract structured error details from the FAL webhook payload.
  * FAL may include error info in `detail` array or in `error` string field.
@@ -96,9 +117,19 @@ function parseFalError(payload: FalWebhookPayload): {
  * Get a meaningful Vietnamese error message based on FAL error type.
  * Always appends the Xu refund notice.
  */
-function getVietnameseErrorMessage(errorType: string | null): string {
-  const message = (errorType && FAL_ERROR_MESSAGES[errorType]) || DEFAULT_ERROR_MESSAGE
-  return `${message} Xu đã được hoàn trả.`
+function getVietnameseErrorMessage(errorType: string | null, rawError: string): string {
+  // 1. Try exact type match first
+  if (errorType && FAL_ERROR_MESSAGES[errorType]) {
+    return `${FAL_ERROR_MESSAGES[errorType]} Xu đã được hoàn trả.`
+  }
+  // 2. Try pattern matching on raw error message
+  for (const { pattern, message } of FAL_ERROR_MESSAGE_PATTERNS) {
+    if (pattern.test(rawError)) {
+      return `${message} Xu đã được hoàn trả.`
+    }
+  }
+  // 3. Default fallback
+  return `${DEFAULT_ERROR_MESSAGE} Xu đã được hoàn trả.`
 }
 
 // Create admin client for database operations
@@ -281,7 +312,7 @@ export async function POST(request: Request) {
       // Error: Cancel the order and refund
       // Parse structured error for meaningful Vietnamese message
       const { errorType, rawError } = parseFalError(payload)
-      const userFacingMessage = getVietnameseErrorMessage(errorType)
+      const userFacingMessage = getVietnameseErrorMessage(errorType, rawError)
 
       console.log('FAL error details:', { errorType, rawError, orderId: falJob.order_id })
 
