@@ -49,9 +49,10 @@ const FAL_ERROR_MESSAGES: Record<string, string> = {
 
 const DEFAULT_ERROR_MESSAGE = 'Xử lý video không thành công.'
 
-// Pattern-based matching for FAL 422 validation errors where `type` is generic (e.g. "value_error")
-// but the `msg` field contains actionable information
+// Pattern-based matching on raw error strings.
+// Order matters: specific patterns first, broad catch-alls last.
 const FAL_ERROR_MESSAGE_PATTERNS: { pattern: RegExp; message: string }[] = [
+  // Specific patterns first (for when FAL forwards detailed error messages)
   {
     pattern: /too many subjects/i,
     message: 'Video có quá nhiều người/đối tượng. Vui lòng sử dụng video chỉ có 1 người hoặc đối tượng rõ ràng.',
@@ -67,6 +68,16 @@ const FAL_ERROR_MESSAGE_PATTERNS: { pattern: RegExp; message: string }[] = [
   {
     pattern: /validat/i,
     message: 'Dữ liệu đầu vào không hợp lệ. Vui lòng kiểm tra lại file và thông tin đã nhập.',
+  },
+  // Broad catch-alls last — FAL wraps upstream 422s as "Unexpected status code: 422" without detail
+  {
+    pattern: /(?:status code.*422|422.*unprocessable)/i,
+    message: 'File đầu vào không đạt yêu cầu xử lý. Vui lòng kiểm tra: video không quá dài, hình ảnh rõ nét, đúng định dạng (MP4, JPG, PNG), và chỉ có 1 người/đối tượng chính trong khung hình.',
+  },
+  // Catch other unexpected status codes from FAL (500, 503, etc.)
+  {
+    pattern: /unexpected status code/i,
+    message: 'Hệ thống xử lý video gặp lỗi. Vui lòng thử lại sau.',
   },
 ]
 
@@ -314,7 +325,9 @@ export async function POST(request: Request) {
       const { errorType, rawError } = parseFalError(payload)
       const userFacingMessage = getVietnameseErrorMessage(errorType, rawError)
 
-      console.log('FAL error details:', { errorType, rawError, orderId: falJob.order_id })
+      // Log full payload for ERROR webhooks to help improve error parsing
+      console.log('FAL error payload:', JSON.stringify({ error: payload.error, detail: payload.detail, status: payload.status }))
+      console.log('FAL error details:', { errorType, rawError, userFacingMessage, orderId: falJob.order_id })
 
       // Update fal_job with internal error (for admin debugging)
       await supabase

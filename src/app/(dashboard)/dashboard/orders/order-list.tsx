@@ -352,10 +352,11 @@ function FilePreview({ url, label }: { url: string; label: string }) {
 }
 
 // Order Progress Timeline
-function OrderTimeline({ status, createdAt, updatedAt }: { 
+function OrderTimeline({ status, createdAt, updatedAt, adminNote }: {
   status: string
   createdAt: string
   updatedAt: string
+  adminNote?: string | null
 }) {
   const currentStep = statusConfig[status]?.step ?? 0
   const isCancelled = status === 'cancelled'
@@ -384,14 +385,14 @@ function OrderTimeline({ status, createdAt, updatedAt }: {
   if (isCancelled) {
     return (
       <div className="p-3 sm:p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200/50 dark:border-red-800/30">
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+        <div className="flex items-start gap-2.5 sm:gap-3">
+          <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
             <HugeiconsIcon icon={XCircle} className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 dark:text-red-400" />
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="font-medium text-sm sm:text-base text-red-700 dark:text-red-300">Đơn hàng đã bị hủy</p>
-            <p className="text-xs sm:text-sm text-red-600/70 dark:text-red-400/70">
-              Xu đã được hoàn lại vào ví
+            <p className="text-xs sm:text-sm text-red-600/80 dark:text-red-400/80 mt-1 whitespace-pre-wrap">
+              {adminNote || 'Xu đã được hoàn lại vào ví'}
             </p>
           </div>
         </div>
@@ -928,6 +929,23 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                   </div>
                 )}
 
+                {/* Admin Note - only for non-cancelled orders (cancelled orders show note in timeline) */}
+                {selectedOrder.admin_note && selectedOrder.status !== 'cancelled' && (
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-semibold flex items-center gap-2">
+                      <div className="h-6 w-6 rounded-lg bg-yellow-500/10 flex items-center justify-center">
+                        <HugeiconsIcon icon={AlertCircle} className="h-3.5 w-3.5 text-yellow-600" />
+                      </div>
+                      Ghi chú từ Hệ thống
+                    </h4>
+                    <div className="p-3 sm:p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/10 text-sm border border-yellow-200/50 dark:border-yellow-800/30">
+                      <p className="text-yellow-800 dark:text-yellow-200 whitespace-pre-wrap">
+                        {selectedOrder.admin_note}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Order Timeline */}
                 <div className="space-y-3">
                   <h4 className="text-sm font-semibold flex items-center gap-2">
@@ -941,6 +959,7 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                       status={selectedOrder.status}
                       createdAt={selectedOrder.created_at}
                       updatedAt={selectedOrder.updated_at}
+                      adminNote={selectedOrder.admin_note}
                     />
                   </div>
                 </div>
@@ -1011,23 +1030,6 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                     </div>
                   )
                 })()}
-
-                {/* Admin Note */}
-                {selectedOrder.admin_note && (
-                  <div className="space-y-3">
-                    <h4 className="text-sm font-semibold flex items-center gap-2">
-                      <div className="h-6 w-6 rounded-lg bg-yellow-500/10 flex items-center justify-center">
-                        <HugeiconsIcon icon={AlertCircle} className="h-3.5 w-3.5 text-yellow-600" />
-                      </div>
-                      Ghi chú từ Hệ thống
-                    </h4>
-                    <div className="p-3 sm:p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/10 text-sm border border-yellow-200/50 dark:border-yellow-800/30">
-                      <p className="text-yellow-800 dark:text-yellow-200 whitespace-pre-wrap">
-                        {selectedOrder.admin_note}
-                      </p>
-                    </div>
-                  </div>
-                )}
 
                 {/* Processing Message */}
                 {(selectedOrder.status === 'pending' || selectedOrder.status === 'processing') && (
