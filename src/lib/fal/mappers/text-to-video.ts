@@ -18,8 +18,11 @@ export function mapTextToVideoInputs(userInputs: OrderUserInputs): TextToVideoIn
   // Veo expects duration as "4s", "6s", or "8s"
   const veoDuration: '4s' | '6s' | '8s' = duration <= 4 ? '4s' : duration <= 6 ? '6s' : '8s'
 
+  // Force Vietnamese voice/narration by appending language instruction
+  const vietnamesePrompt = `${prompt.trim()}. All dialogue, narration, and voice-over must be in Vietnamese (tiếng Việt).`
+
   const result: TextToVideoInput = {
-    prompt: prompt.trim(),
+    prompt: vietnamesePrompt,
     duration: veoDuration,
     resolution: '1080p',
     auto_fix: true,

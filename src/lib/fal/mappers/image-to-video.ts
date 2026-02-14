@@ -18,8 +18,14 @@ export function mapImageToVideoInputs(userInputs: OrderUserInputs): ImageToVideo
   // Veo expects duration as "4s", "6s", or "8s"
   const veoDuration: '4s' | '6s' | '8s' = duration <= 4 ? '4s' : duration <= 6 ? '6s' : '8s'
 
+  // Force Vietnamese voice/narration by appending language instruction
+  const rawPrompt = ((userInputs.prompt as string) || '').trim()
+  const vietnamesePrompt = rawPrompt
+    ? `${rawPrompt}. All dialogue, narration, and voice-over must be in Vietnamese (tiếng Việt).`
+    : 'All dialogue, narration, and voice-over must be in Vietnamese (tiếng Việt).'
+
   const result: ImageToVideoInput = {
-    prompt: (userInputs.prompt as string) || '',
+    prompt: vietnamesePrompt,
     image_url: startImage,
     duration: veoDuration,
     resolution: '1080p',
