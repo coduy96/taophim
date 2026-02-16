@@ -14,6 +14,9 @@ import {
 // YouTube channel: https://www.youtube.com/@TạoPhimAI
 // Video IDs extracted from YouTube Shorts URLs
 const demoVideos = [
+  { id: "ixKc3dR92Zo" },
+  { id: "jEmHPhGtsK4" },
+
   { id: "GTwlIakB0zE" },
   { id: "K4tM39_BgEc" },
   { id: "YN4ddGwGufY" },
@@ -28,7 +31,7 @@ const demoVideos = [
   { id: "0yD-XY84jFo" },
   { id: "cME6tehP9gA" },
   { id: "iZoOwOHMOU0" },
-  { id: "rcWm-yqs4aE" },
+  { id: "Llp14pYjyXQ" },
 ]
 
 // Play icon (triangle only)
@@ -65,14 +68,19 @@ function VideoCard({ videoId, isPlaying, onPlay, onStop, isActive = true }: Vide
   return (
     <div
       className={cn(
-        "relative rounded-xl overflow-hidden bg-zinc-900 transition-all duration-300",
+        "relative rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-border/50 transition-all duration-500",
         isActive
-          ? "ring-1 ring-border/50 shadow-lg"
-          : "ring-1 ring-border/20 opacity-50 scale-[0.97]"
+          ? "shadow-lg shadow-primary/10"
+          : "brightness-[0.65]"
       )}
     >
-      {/* Shorts Container - 9:16 aspect ratio, width derived from height */}
-      <div className="relative bg-zinc-900 h-[400px] sm:h-[380px] md:h-[360px] w-[225px] sm:w-[214px] md:w-[203px]">
+      {/* Shorts Container - 9:16 aspect ratio, shrinks when inactive */}
+      <div className={cn(
+        "relative bg-zinc-900 transition-all duration-500",
+        isActive
+          ? "h-[400px] sm:h-[380px] md:h-[360px] w-[225px] sm:w-[214px] md:w-[203px]"
+          : "h-[300px] sm:h-[285px] md:h-[270px] w-[169px] sm:w-[160px] md:w-[152px]"
+      )}>
         {isPlaying ? (
           <>
             <iframe
@@ -169,7 +177,7 @@ export function VideoDemosSection({ variant = "default" }: VideoDemosSectionProp
           }}
           className="w-full"
         >
-          <CarouselContent>
+          <CarouselContent className="items-center">
             {demoVideos.map((video, index) => (
               <CarouselItem
                 key={video.id}
@@ -190,51 +198,48 @@ export function VideoDemosSection({ variant = "default" }: VideoDemosSectionProp
           </CarouselContent>
         </Carousel>
 
-        {/* Bottom controls: Nav buttons + Dots */}
+        {/* Bottom controls: Pill container with arrows + segmented progress */}
         <div className="flex items-center justify-center gap-3">
-          {/* Previous button */}
-          <button
-            onClick={() => api?.scrollPrev()}
-            className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors"
-            aria-label="Video trước"
-          >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
+          <div className="inline-flex items-center gap-1 rounded-full border border-border/50 bg-background/80 backdrop-blur-sm px-1.5 py-1.5 shadow-sm">
+            {/* Previous button */}
+            <button
+              onClick={() => api?.scrollPrev()}
+              className="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200"
+              aria-label="Video trước"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
 
-          {/* Dots indicator */}
-          <div className="flex items-center gap-1">
-            {demoVideos.slice(0, 7).map((video, index) => (
-              <button
-                key={video.id}
-                onClick={() => api?.scrollTo(index)}
-                className={cn(
-                  "h-1.5 rounded-full transition-all duration-200",
-                  current === index
-                    ? "bg-primary w-4"
-                    : "bg-primary/20 hover:bg-primary/30 w-1.5"
-                )}
-                aria-label={`Đi đến video ${index + 1}`}
-              />
-            ))}
-            {demoVideos.length > 7 && (
-              <span className="text-[10px] text-primary/50 ml-1">
-                +{demoVideos.length - 7}
-              </span>
-            )}
+            {/* Segmented progress bar */}
+            <div className="flex items-center gap-[3px] px-1">
+              {demoVideos.map((video, index) => (
+                <button
+                  key={video.id}
+                  onClick={() => api?.scrollTo(index)}
+                  className={cn(
+                    "rounded-full transition-all duration-300",
+                    current === index
+                      ? "bg-primary w-5 h-1.5 shadow-[0_0_6px_rgba(var(--primary),0.4)]"
+                      : "bg-muted-foreground/20 hover:bg-muted-foreground/40 w-2 h-1.5"
+                  )}
+                  aria-label={`Đi đến video ${index + 1} / ${demoVideos.length}`}
+                />
+              ))}
+            </div>
+
+            {/* Next button */}
+            <button
+              onClick={() => api?.scrollNext()}
+              className="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200"
+              aria-label="Video tiếp"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
           </div>
-
-          {/* Next button */}
-          <button
-            onClick={() => api?.scrollNext()}
-            className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors"
-            aria-label="Video tiếp"
-          >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
         </div>
       </div>
     )
