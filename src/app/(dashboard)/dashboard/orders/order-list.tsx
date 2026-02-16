@@ -91,47 +91,49 @@ async function fetchFileBlob(url: string, filename?: string): Promise<{ blob: Bl
   return { blob, filename: downloadFilename }
 }
 
-// Download file helper - uses Web Share API on mobile for saving to Photos app
-async function downloadFile(url: string, filename?: string) {
-  const toastId = toast.loading("Đang tải xuống...")
+// Trigger download via server-side proxy (avoids CORS, forces Content-Disposition)
+function downloadViaProxy(url: string, filename?: string) {
+  const proxyUrl = `/api/download?url=${encodeURIComponent(url)}`
+  const link = document.createElement('a')
+  link.href = proxyUrl
+  link.download = filename || url.split('/').pop()?.split('?')[0] || 'download'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
 
-  try {
-    const { blob, filename: resolvedFilename } = await fetchFileBlob(url, filename)
+// Share pre-fetched file via Web Share API (call directly from click handler to preserve gesture)
+function shareFile(prefetchedFile: { blob: Blob; filename: string }, fallbackUrl: string) {
+  const file = new File([prefetchedFile.blob], prefetchedFile.filename, { type: prefetchedFile.blob.type })
 
-    // On mobile, use Web Share API to allow saving directly to Photos app
-    if (isMobileDevice() && navigator.share) {
-      const file = new File([blob], resolvedFilename, { type: blob.type })
-
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: resolvedFilename,
-        })
-        toast.success("Đã chia sẻ thành công!", { id: toastId })
-        return
-      }
-    }
-
-    // Fallback: blob URL download (works on desktop and older browsers)
-    const blobUrl = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = blobUrl
-    link.download = resolvedFilename
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    setTimeout(() => URL.revokeObjectURL(blobUrl), 1000)
-
-    toast.success("Tải xuống hoàn tất!", { id: toastId })
-  } catch (error) {
-    // User cancelled the share sheet — not an error
-    if (error instanceof Error && error.name === 'AbortError') {
-      toast.dismiss(toastId)
-      return
-    }
-    console.error('Download failed:', error)
-    toast.error("Không thể tải xuống. Vui lòng thử lại.", { id: toastId })
+  if (navigator.canShare?.({ files: [file] })) {
+    navigator.share({ files: [file], title: prefetchedFile.filename })
+      .then(() => toast.success("Đã lưu thành công!"))
+      .catch((error: Error) => {
+        if (error.name !== 'AbortError') {
+          downloadViaProxy(fallbackUrl)
+          toast.success("Tải xuống hoàn tất!")
+        }
+      })
+    return true
   }
+  return false
+}
+
+// Hook to pre-fetch a file blob in background (for mobile share)
+function usePrefetchedFile(url: string | undefined) {
+  const [data, setData] = React.useState<{ blob: Blob; filename: string } | null>(null)
+
+  React.useEffect(() => {
+    if (!url || !isMobileDevice()) { setData(null); return }
+    let cancelled = false
+    fetchFileBlob(url)
+      .then(d => { if (!cancelled) setData(d) })
+      .catch(() => { /* will fall back to proxy */ })
+    return () => { cancelled = true }
+  }, [url])
+
+  return data
 }
 
 // Reuse types from page or define shared types
@@ -302,7 +304,7 @@ function FilePreview({ url, label }: { url: string; label: string }) {
         <button
           onClick={(e) => {
             e.stopPropagation()
-            downloadFile(url)
+            downloadViaProxy(url)
           }}
           className="text-xs text-primary hover:underline flex items-center gap-1"
         >
@@ -338,7 +340,7 @@ function FilePreview({ url, label }: { url: string; label: string }) {
           </div>
         </div>
         <button
-          onClick={() => downloadFile(url)}
+          onClick={() => downloadViaProxy(url)}
           className="text-xs text-primary hover:underline flex items-center gap-1"
         >
           <HugeiconsIcon icon={Download} className="h-3 w-3" />
@@ -355,7 +357,7 @@ function FilePreview({ url, label }: { url: string; label: string }) {
         {label}
       </span>
       <button
-        onClick={() => downloadFile(url)}
+        onClick={() => downloadViaProxy(url)}
         className="flex items-center gap-3 p-3 rounded-xl border bg-muted/30 hover:bg-muted/50 transition-colors w-full text-left"
       >
         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -590,6 +592,10 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
   const [isPending, startTransition] = React.useTransition()
   const [pendingFilter, setPendingFilter] = React.useState<string | null>(null)
   const router = useRouter()
+
+  // Pre-fetch result file for mobile share (so navigator.share can be called synchronously from gesture)
+  const resultUrl = selectedOrder?.status === 'completed' ? selectedOrder?.admin_output?.result_url : undefined
+  const prefetchedFile = usePrefetchedFile(resultUrl)
 
   // Note: Real-time updates are handled by NotificationBell component
   // which triggers router.refresh() when new notifications arrive
@@ -1080,7 +1086,16 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                 {selectedOrder.status === 'completed' && selectedOrder.admin_output?.result_url ? (
                   <Button
                     className="w-full rounded-full shadow-lg shadow-primary/20 h-11 sm:h-12 text-sm sm:text-base"
-                    onClick={() => downloadFile(selectedOrder.admin_output!.result_url!)}
+                    onClick={() => {
+                      const url = selectedOrder.admin_output!.result_url!
+                      // On mobile with pre-fetched blob: call share() directly (preserves user gesture)
+                      if (isMobileDevice() && prefetchedFile && 'share' in navigator) {
+                        if (shareFile(prefetchedFile, url)) return
+                      }
+                      // Desktop or fallback: proxy download
+                      downloadViaProxy(url)
+                      toast.success("Tải xuống hoàn tất!")
+                    }}
                   >
                     <HugeiconsIcon icon={Download} className="mr-2 h-5 w-5" />
                     <span className="sm:hidden">Lưu Video Về Máy</span>
