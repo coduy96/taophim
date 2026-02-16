@@ -57,58 +57,78 @@ const mimeToExtension: Record<string, string> = {
   'image/webp': '.webp',
 }
 
-// Download file helper - fetches the file at full quality and triggers actual download
+// Check if running on mobile device
+function isMobileDevice() {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+}
+
+// Resolve filename and fetch blob for download
+async function fetchFileBlob(url: string, filename?: string): Promise<{ blob: Blob; filename: string }> {
+  const response = await fetch(url, {
+    cache: 'no-store',
+    headers: { 'Cache-Control': 'no-cache' },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch: ${response.status}`)
+  }
+
+  const contentType = response.headers.get('Content-Type') || 'application/octet-stream'
+  const arrayBuffer = await response.arrayBuffer()
+  const blob = new Blob([arrayBuffer], { type: contentType })
+
+  let downloadFilename = filename
+  if (!downloadFilename) {
+    const urlFilename = url.split('/').pop()?.split('?')[0] || 'download'
+    downloadFilename = urlFilename
+    const hasExtension = /\.[a-zA-Z0-9]+$/.test(downloadFilename)
+    if (!hasExtension) {
+      const extension = mimeToExtension[contentType] || ''
+      downloadFilename += extension
+    }
+  }
+
+  return { blob, filename: downloadFilename }
+}
+
+// Download file helper - uses Web Share API on mobile for saving to Photos app
 async function downloadFile(url: string, filename?: string) {
   const toastId = toast.loading("Đang tải xuống...")
 
   try {
-    // Fetch the file content with no-cache to ensure we get the original quality
-    const response = await fetch(url, {
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache',
-      },
-    })
+    const { blob, filename: resolvedFilename } = await fetchFileBlob(url, filename)
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch: ${response.status}`)
-    }
+    // On mobile, use Web Share API to allow saving directly to Photos app
+    if (isMobileDevice() && navigator.share) {
+      const file = new File([blob], resolvedFilename, { type: blob.type })
 
-    // Get the content type from response headers
-    const contentType = response.headers.get('Content-Type') || 'application/octet-stream'
-
-    // Create a blob from the raw response data, preserving the original MIME type
-    const arrayBuffer = await response.arrayBuffer()
-    const blob = new Blob([arrayBuffer], { type: contentType })
-
-    // Extract filename from URL if not provided
-    let downloadFilename = filename
-    if (!downloadFilename) {
-      const urlFilename = url.split('/').pop()?.split('?')[0] || 'download'
-      downloadFilename = urlFilename
-
-      // Ensure proper extension based on MIME type
-      const hasExtension = /\.[a-zA-Z0-9]+$/.test(downloadFilename)
-      if (!hasExtension) {
-        const extension = mimeToExtension[contentType] || ''
-        downloadFilename += extension
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: resolvedFilename,
+        })
+        toast.success("Đã chia sẻ thành công!", { id: toastId })
+        return
       }
     }
 
-    // Create a blob URL and trigger download
+    // Fallback: blob URL download (works on desktop and older browsers)
     const blobUrl = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = blobUrl
-    link.download = downloadFilename
+    link.download = resolvedFilename
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-
-    // Clean up the blob URL after a short delay to ensure download starts
     setTimeout(() => URL.revokeObjectURL(blobUrl), 1000)
 
     toast.success("Tải xuống hoàn tất!", { id: toastId })
   } catch (error) {
+    // User cancelled the share sheet — not an error
+    if (error instanceof Error && error.name === 'AbortError') {
+      toast.dismiss(toastId)
+      return
+    }
     console.error('Download failed:', error)
     toast.error("Không thể tải xuống. Vui lòng thử lại.", { id: toastId })
   }
@@ -1063,7 +1083,8 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                     onClick={() => downloadFile(selectedOrder.admin_output!.result_url!)}
                   >
                     <HugeiconsIcon icon={Download} className="mr-2 h-5 w-5" />
-                    Tải Video Kết Quả
+                    <span className="sm:hidden">Lưu Video Về Máy</span>
+                    <span className="hidden sm:inline">Tải Video Kết Quả</span>
                   </Button>
                 ) : (
                   <Button variant="outline" className="w-full rounded-full h-11 sm:h-12" onClick={() => setIsSheetOpen(false)}>
