@@ -12,6 +12,7 @@ import { ComparisonSection } from "@/components/landing/comparison-section"
 import { VideoDemosSection } from "@/components/landing/video-demos-section"
 import { PricingSection } from "@/components/landing/pricing-section"
 import { FacebookMessengerChat } from "@/components/facebook-messenger-chat"
+import { LunarFireworks } from "@/components/landing/lunar-fireworks"
 
 // Inline SVG icons for critical above-the-fold rendering (avoids hugeicons bundle)
 const ZapIcon = ({ className }: { className?: string }) => (
@@ -345,6 +346,9 @@ export default async function LandingPage() {
 
       {/* Facebook Messenger Chat - Only on landing page */}
       <FacebookMessengerChat />
+
+      {/* Lunar New Year Fireworks - Seasonal */}
+      <LunarFireworks />
     </div>
   )
 }
