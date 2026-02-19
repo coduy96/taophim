@@ -1,5 +1,5 @@
 // Image to Video (anh-thanh-video) mapper
-// Maps form inputs to FAL veo3.1/fast/image-to-video parameters
+// Maps form inputs to xAI Grok Imagine Video image-to-video parameters
 
 import { ImageToVideoInput, OrderUserInputs } from '../types'
 
@@ -15,10 +15,7 @@ export function mapImageToVideoInputs(userInputs: OrderUserInputs): ImageToVideo
     throw new Error('Missing or invalid duration_seconds')
   }
 
-  // Veo expects duration as "4s", "6s", or "8s"
-  const veoDuration: '4s' | '6s' | '8s' = duration <= 4 ? '4s' : duration <= 6 ? '6s' : '8s'
-
-  // Force Vietnamese voice/narration — prepend language directive so Veo
+  // Force Vietnamese voice/narration — prepend language directive so Grok
   // generates speech in Vietnamese instead of defaulting to English
   const rawPrompt = ((userInputs.prompt as string) || '').trim()
   const vietnamesePrefix = '[Language: Vietnamese] The characters speak Vietnamese. All spoken dialogue, narration, and voice-over are in Vietnamese.'
@@ -29,19 +26,13 @@ export function mapImageToVideoInputs(userInputs: OrderUserInputs): ImageToVideo
   const result: ImageToVideoInput = {
     prompt: vietnamesePrompt,
     image_url: startImage,
-    duration: veoDuration,
-    resolution: '1080p',
-    auto_fix: false,
-    generate_audio: userInputs.generate_audio !== false, // default true
+    duration: duration,
+    resolution: '720p',
   }
 
   // Optional fields
   if (userInputs.aspect_ratio && typeof userInputs.aspect_ratio === 'string') {
     result.aspect_ratio = userInputs.aspect_ratio
-  }
-
-  if (userInputs.negative_prompt && typeof userInputs.negative_prompt === 'string') {
-    result.negative_prompt = userInputs.negative_prompt
   }
 
   return result
