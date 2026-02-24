@@ -546,3 +546,88 @@ export function computeDeviceAnalytics(
   return { totalLogins, deviceBreakdown, browserBreakdown, osBreakdown, uniqueUsersByDevice }
 }
 
+
+// --- Platform Payment Breakdown ---
+
+export type PlatformKey = 'iOS' | 'Android' | 'Desktop'
+
+export interface PlatformPaymentStat {
+  platform: PlatformKey
+  user_count: number
+  percentage: number   // % of total paying users
+  total_xu: number
+}
+
+export function computePlatformPaymentBreakdown(
+  paymentRequests: PaymentRequestData[],
+  loginLogs: LoginLogData[]
+): PlatformPaymentStat[] {
+  // 1. Collect paying users and their total Xu
+  const payingUsers = new Map<string, number>() // user_id -> total_xu
+  for (const pr of paymentRequests) {
+    if (pr.status !== 'paid') continue
+    payingUsers.set(pr.user_id, (payingUsers.get(pr.user_id) || 0) + pr.amount)
+  }
+
+  if (payingUsers.size === 0) {
+    return [
+      { platform: 'iOS', user_count: 0, percentage: 0, total_xu: 0 },
+      { platform: 'Android', user_count: 0, percentage: 0, total_xu: 0 },
+      { platform: 'Desktop', user_count: 0, percentage: 0, total_xu: 0 },
+    ]
+  }
+
+  // 2. For each paying user, find their most frequent os_name from login_logs
+  const userLogs = new Map<string, LoginLogData[]>()
+  for (const log of loginLogs) {
+    if (!payingUsers.has(log.user_id)) continue
+    const list = userLogs.get(log.user_id) || []
+    list.push(log)
+    userLogs.set(log.user_id, list)
+  }
+
+  function getMostFrequentOs(logs: LoginLogData[]): string | null {
+    const counts = new Map<string, number>()
+    for (const log of logs) {
+      const key = log.os_name || 'Unknown'
+      counts.set(key, (counts.get(key) || 0) + 1)
+    }
+    let best: string | null = null
+    let bestCount = 0
+    for (const [os, count] of counts) {
+      if (count > bestCount) { best = os; bestCount = count }
+    }
+    return best
+  }
+
+  function classifyPlatform(logs: LoginLogData[]): PlatformKey {
+    if (logs.length === 0) return 'Desktop'
+    const os = getMostFrequentOs(logs)
+    if (os === 'iOS') return 'iOS'
+    if (os === 'Android') return 'Android'
+    return 'Desktop'
+  }
+
+  // 3. Aggregate per platform
+  const stats: Record<PlatformKey, { user_count: number; total_xu: number }> = {
+    iOS: { user_count: 0, total_xu: 0 },
+    Android: { user_count: 0, total_xu: 0 },
+    Desktop: { user_count: 0, total_xu: 0 },
+  }
+
+  for (const [userId, totalXu] of payingUsers) {
+    const logs = userLogs.get(userId) || []
+    const platform = classifyPlatform(logs)
+    stats[platform].user_count++
+    stats[platform].total_xu += totalXu
+  }
+
+  const total = payingUsers.size
+  const platforms: PlatformKey[] = ['iOS', 'Android', 'Desktop']
+  return platforms.map(p => ({
+    platform: p,
+    user_count: stats[p].user_count,
+    percentage: total > 0 ? (stats[p].user_count / total) * 100 : 0,
+    total_xu: stats[p].total_xu,
+  }))
+}
