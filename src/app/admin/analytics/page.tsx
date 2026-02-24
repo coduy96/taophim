@@ -76,7 +76,7 @@ export default async function AdminAnalyticsPage() {
   const timeline = computeWeeklyTimeline(profiles, paymentRequests, transactions)
   const paymentAnalysis = computePaymentAnalysis(paymentRequests)
   const deviceAnalytics = computeDeviceAnalytics(loginLogs)
-  const platformPayment = computePlatformPaymentBreakdown(paymentRequests, loginLogs)
+  const platformPayment = computePlatformPaymentBreakdown(paymentRequests, loginLogs, transactions)
 
   return (
     <div className="space-y-6">
