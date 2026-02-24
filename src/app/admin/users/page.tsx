@@ -3,13 +3,17 @@ import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  UserGroupIcon as Users, 
-  Coins01Icon as Coins, 
-  Mail01Icon as Mail, 
-  Calendar01Icon as Calendar 
+import {
+  UserGroupIcon as Users,
+  Coins01Icon as Coins,
+  Mail01Icon as Mail,
+  Calendar01Icon as Calendar
 } from "@hugeicons/core-free-icons"
 import { TopUpUserForm } from "@/components/admin/topup-user-form"
+import { Pagination, PaginationInfo } from "@/components/ui/pagination"
+import { UsersSearchInput } from "@/components/admin/users-search-input"
+
+const PAGE_SIZE = 20
 
 function formatXu(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount)
@@ -33,9 +37,13 @@ interface Profile {
   created_at: string
 }
 
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; search?: string }>
+}) {
   const supabase = await createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
@@ -50,14 +58,31 @@ export default async function AdminUsersPage() {
     redirect('/dashboard')
   }
 
-  // Fetch all users
-  const { data: users } = await supabase
+  const { page: pageParam, search } = await searchParams
+  const currentPage = Math.max(1, parseInt(pageParam || '1', 10))
+  const from = (currentPage - 1) * PAGE_SIZE
+  const to = from + PAGE_SIZE - 1
+
+  // Fetch paginated users with total count
+  let query = supabase
     .from('profiles')
-    .select('*')
+    .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
 
-  // Stats
-  const totalXu = users?.reduce((sum, u) => sum + u.xu_balance + u.frozen_xu, 0) || 0
+  if (search?.trim()) {
+    query = query.or(`email.ilike.%${search.trim()}%,full_name.ilike.%${search.trim()}%`)
+  }
+
+  const { data: users, count: totalCount } = await query.range(from, to)
+
+  const totalUsers = totalCount ?? 0
+
+  // Stats: aggregate over all users (separate lightweight query)
+  const { data: xuStats } = await supabase
+    .from('profiles')
+    .select('xu_balance, frozen_xu')
+
+  const totalXu = xuStats?.reduce((sum, u) => sum + u.xu_balance + u.frozen_xu, 0) ?? 0
 
   return (
     <div className="space-y-6">
@@ -85,7 +110,7 @@ export default async function AdminUsersPage() {
             </div>
           </CardHeader>
           <CardContent className="relative">
-            <div className="text-2xl font-bold">{users?.length || 0}</div>
+            <div className="text-2xl font-bold">{totalUsers}</div>
           </CardContent>
         </Card>
 
@@ -117,11 +142,22 @@ export default async function AdminUsersPage() {
       {/* Users List */}
       <Card className="group">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-        <CardHeader className="relative">
-          <CardTitle>Danh sách người dùng</CardTitle>
-          <CardDescription>
-            Tất cả người dùng đã đăng ký
-          </CardDescription>
+        <CardHeader className="relative flex flex-row items-center justify-between gap-4 flex-wrap">
+          <div>
+            <CardTitle>Danh sách người dùng</CardTitle>
+            <CardDescription>
+              Tất cả người dùng đã đăng ký
+            </CardDescription>
+          </div>
+          <div className="flex items-center gap-3">
+            <UsersSearchInput initialValue={search} />
+            <PaginationInfo
+              currentPage={currentPage}
+              itemsPerPage={PAGE_SIZE}
+              totalItems={totalUsers}
+              className="shrink-0"
+            />
+          </div>
         </CardHeader>
         <CardContent className="relative">
           {users && users.length > 0 ? (
@@ -174,9 +210,16 @@ export default async function AdminUsersPage() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
                 <HugeiconsIcon icon={Users} className="w-8 h-8 text-muted-foreground/50" />
               </div>
-              <p>Chưa có người dùng nào</p>
+              <p>{search?.trim() ? `Không tìm thấy người dùng nào khớp với "${search}"` : 'Chưa có người dùng nào'}</p>
             </div>
           )}
+          <Pagination
+            totalItems={totalUsers}
+            itemsPerPage={PAGE_SIZE}
+            currentPage={currentPage}
+            preserveParams={["search"]}
+            className="mt-6"
+          />
         </CardContent>
       </Card>
     </div>
