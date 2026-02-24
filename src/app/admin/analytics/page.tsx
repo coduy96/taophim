@@ -9,6 +9,7 @@ import {
   computeWeeklyTimeline,
   computePaymentAnalysis,
   computeDeviceAnalytics,
+  computePlatformPaymentBreakdown,
   type ProfileData,
   type OrderData,
   type TransactionData,
@@ -22,6 +23,7 @@ import { RegistrationTimelineChart } from "@/components/admin/analytics/registra
 import { UserJourneyInspector } from "@/components/admin/analytics/user-journey-inspector"
 import { PaymentAnalysis } from "@/components/admin/analytics/payment-analysis"
 import { DeviceBreakdown } from "@/components/admin/analytics/device-breakdown"
+import { PlatformPaymentBreakdown } from "@/components/admin/analytics/platform-payment-breakdown"
 
 export default async function AdminAnalyticsPage() {
   const supabase = await createClient()
@@ -74,6 +76,7 @@ export default async function AdminAnalyticsPage() {
   const timeline = computeWeeklyTimeline(profiles, paymentRequests, transactions)
   const paymentAnalysis = computePaymentAnalysis(paymentRequests)
   const deviceAnalytics = computeDeviceAnalytics(loginLogs)
+  const platformPayment = computePlatformPaymentBreakdown(paymentRequests, loginLogs)
 
   return (
     <div className="space-y-6">
@@ -99,8 +102,11 @@ export default async function AdminAnalyticsPage() {
         <PaymentAnalysis analysis={paymentAnalysis} />
       </div>
 
-      {/* Device Breakdown */}
-      <DeviceBreakdown analytics={deviceAnalytics} />
+      {/* Device Breakdown + Platform Payment */}
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+        <DeviceBreakdown analytics={deviceAnalytics} />
+        <PlatformPaymentBreakdown stats={platformPayment} />
+      </div>
 
       {/* User Segments */}
       <UserSegmentsTable segments={segments} />
