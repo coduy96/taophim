@@ -561,16 +561,16 @@ export interface PlatformPaymentStat {
 export function computePlatformPaymentBreakdown(
   paymentRequests: PaymentRequestData[],
   loginLogs: LoginLogData[],
-  transactions: TransactionData[]
+  transactions: TransactionData[] = []
 ): PlatformPaymentStat[] {
   // 1. Collect paying users and their total Xu
   // Mirrors computeKPIs: paid = payment_requests.status='paid' OR transactions.type='deposit' (manual top-ups)
   const payingUsers = new Map<string, number>() // user_id -> total_xu
-  for (const pr of paymentRequests) {
+  for (const pr of (Array.isArray(paymentRequests) ? paymentRequests : [])) {
     if (pr.status !== 'paid') continue
     payingUsers.set(pr.user_id, (payingUsers.get(pr.user_id) || 0) + pr.amount)
   }
-  for (const t of transactions) {
+  for (const t of (Array.isArray(transactions) ? transactions : [])) {
     if (t.type !== 'deposit') continue
     payingUsers.set(t.user_id, (payingUsers.get(t.user_id) || 0) + t.amount)
   }
