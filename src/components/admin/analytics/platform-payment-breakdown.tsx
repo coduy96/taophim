@@ -55,8 +55,8 @@ export function PlatformPaymentBreakdown({ stats }: { stats: PlatformPaymentStat
                   }
                   labelLine={false}
                 >
-                  {chartData.map((entry, index) => (
-                    <Cell key={index} fill={entry.fill} />
+                  {chartData.map((entry) => (
+                    <Cell key={entry.name} fill={entry.fill} />
                   ))}
                 </Pie>
                 <Tooltip

@@ -601,6 +601,8 @@ export function computePlatformPaymentBreakdown(
   }
 
   function classifyPlatform(logs: LoginLogData[]): PlatformKey {
+    // Users with no login history default to Desktop (intentional: we cannot determine
+    // their platform, so they are grouped with the catch-all Desktop bucket)
     if (logs.length === 0) return 'Desktop'
     const os = getMostFrequentOs(logs)
     if (os === 'iOS') return 'iOS'
