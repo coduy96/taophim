@@ -63,10 +63,10 @@ export async function sendOrderCompletedEmail(params: {
   email: string
   userName: string | null
   serviceName: string
-  videoUrl: string
+  resultUrl: string
   orderId: string
 }): Promise<boolean> {
-  const { email, userName, serviceName, videoUrl, orderId } = params
+  const { email, userName, serviceName, resultUrl, orderId } = params
   const displayName = userName || 'Quý khách'
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://taophim.com'
 
@@ -81,7 +81,7 @@ export async function sendOrderCompletedEmail(params: {
   <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
     <div style="background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
       <div style="text-align: center; margin-bottom: 32px;">
-        <h1 style="color: #18181b; font-size: 24px; margin: 0;">Video của bạn đã sẵn sàng!</h1>
+        <h1 style="color: #18181b; font-size: 24px; margin: 0;">Kết quả đã sẵn sàng!</h1>
       </div>
 
       <p style="color: #3f3f46; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
@@ -89,13 +89,13 @@ export async function sendOrderCompletedEmail(params: {
       </p>
 
       <p style="color: #3f3f46; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
-        Đơn hàng <strong>${serviceName}</strong> của bạn đã được xử lý thành công. Video đã sẵn sàng để tải xuống.
+        Đơn hàng <strong>${serviceName}</strong> của bạn đã được xử lý thành công. Kết quả đã sẵn sàng để tải xuống.
       </p>
 
       <div style="text-align: center; margin: 32px 0;">
-        <a href="${videoUrl}"
+        <a href="${resultUrl}"
            style="display: inline-block; background: #18181b; color: white; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 500; font-size: 16px;">
-          Tải video
+          Xem kết quả
         </a>
       </div>
 
@@ -118,7 +118,7 @@ export async function sendOrderCompletedEmail(params: {
 
   return sendEmail({
     to: email,
-    subject: `Video "${serviceName}" đã sẵn sàng - Taophim`,
+    subject: `Kết quả "${serviceName}" đã sẵn sàng - Taophim`,
     html,
   })
 }

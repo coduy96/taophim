@@ -6,6 +6,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Home01Icon as Home,
   Film01Icon as Film,
+  Image01Icon as ImageIcon,
   ShoppingBag01Icon as ShoppingBag,
   Wallet01Icon as Wallet,
 } from "@hugeicons/core-free-icons"
@@ -15,7 +16,8 @@ import { Spinner } from "@/components/ui/spinner"
 
 const navItems = [
   { href: "/dashboard", label: "Tổng quan", icon: Home, exact: true },
-  { href: "/dashboard/services", label: "Tạo phim", icon: Film, exact: false },
+  { href: "/dashboard/services", label: "Tạo video", icon: Film, exact: false },
+  { href: "/dashboard/image-services", label: "Tạo ảnh", icon: ImageIcon, exact: false },
   { href: "/dashboard/orders", label: "Đơn hàng", icon: ShoppingBag, exact: false },
   { href: "/dashboard/wallet", label: "Ví Xu", icon: Wallet, exact: false },
 ]

@@ -294,6 +294,7 @@ export type Database = {
           is_public_on_landing: boolean
           min_duration: number | null
           name: string
+          service_type: string
           slug: string
           updated_at: string
         }
@@ -309,6 +310,7 @@ export type Database = {
           is_public_on_landing?: boolean
           min_duration?: number | null
           name: string
+          service_type?: string
           slug: string
           updated_at?: string
         }
@@ -324,6 +326,7 @@ export type Database = {
           is_public_on_landing?: boolean
           min_duration?: number | null
           name?: string
+          service_type?: string
           slug?: string
           updated_at?: string
         }

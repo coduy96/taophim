@@ -21,9 +21,9 @@ interface OrderNotificationParams {
  * Send all notifications for a completed order
  */
 export async function notifyOrderCompleted(
-  params: OrderNotificationParams & { videoUrl: string }
+  params: OrderNotificationParams & { resultUrl: string }
 ): Promise<void> {
-  const { supabase, userId, userEmail, userName, orderId, serviceName, videoUrl } = params
+  const { supabase, userId, userEmail, userName, orderId, serviceName, resultUrl } = params
 
   // Send both notifications in parallel
   await Promise.all([
@@ -32,7 +32,7 @@ export async function notifyOrderCompleted(
       userId,
       orderId,
       serviceName,
-      videoUrl,
+      resultUrl,
     }),
 
     // Email notification
@@ -40,7 +40,7 @@ export async function notifyOrderCompleted(
       email: userEmail,
       userName,
       serviceName,
-      videoUrl,
+      resultUrl,
       orderId,
     }),
   ])

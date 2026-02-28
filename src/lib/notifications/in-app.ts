@@ -40,18 +40,18 @@ export async function createOrderCompletedNotification(
     userId: string
     orderId: string
     serviceName: string
-    videoUrl: string
+    resultUrl: string
   }
 ): Promise<boolean> {
   return createNotification(supabase, {
     userId: params.userId,
     type: 'order_completed',
-    title: 'Video đã sẵn sàng!',
-    message: `Đơn hàng ${params.serviceName} của bạn đã hoàn thành. Nhấn để tải video.`,
+    title: 'Kết quả đã sẵn sàng!',
+    message: `Đơn hàng ${params.serviceName} của bạn đã hoàn thành. Nhấn để xem kết quả.`,
     data: {
       orderId: params.orderId,
       serviceName: params.serviceName,
-      videoUrl: params.videoUrl,
+      resultUrl: params.resultUrl,
     },
   })
 }

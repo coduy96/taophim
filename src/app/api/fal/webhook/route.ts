@@ -4,7 +4,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { verifyWebhookSignature, isTimestampValid } from '@/lib/fal/verify-webhook'
-import { FalWebhookPayload, FalErrorDetail } from '@/lib/fal/types'
+import { FalWebhookPayload, FalErrorDetail, FalResult } from '@/lib/fal/types'
 import { createOrderCompletedNotification, createOrderCancelledNotification } from '@/lib/notifications/in-app'
 
 // Map FAL error types to user-friendly Vietnamese messages
@@ -275,16 +275,16 @@ export async function POST(request: Request) {
     const userName = userProfile?.full_name || null
     const userId = orderData?.user_id
 
-    if (status === 'OK' && resultPayload?.video?.url) {
+    const resultUrl = resultPayload?.video?.url || resultPayload?.images?.[0]?.url
+    if (status === 'OK' && resultUrl) {
       // Success: Complete the order
-      const videoUrl = resultPayload.video.url
 
       // Update fal_job
       await supabase
         .from('fal_jobs')
         .update({
           status: 'completed',
-          result_url: videoUrl,
+          result_url: resultUrl,
           completed_at: new Date().toISOString(),
         })
         .eq('id', falJob.id)
@@ -293,7 +293,7 @@ export async function POST(request: Request) {
       // This will deduct frozen_xu and set status to completed
       const { error: completeError } = await supabase.rpc('complete_order', {
         p_order_id: falJob.order_id,
-        p_admin_output: { result_url: videoUrl },
+        p_admin_output: { result_url: resultUrl },
       })
 
       if (completeError) {
@@ -309,7 +309,7 @@ export async function POST(request: Request) {
             userId,
             orderId: falJob.order_id,
             serviceName,
-            videoUrl,
+            resultUrl,
           })
         } catch (notifyError) {
           console.error('Failed to create notification:', notifyError)
@@ -317,7 +317,7 @@ export async function POST(request: Request) {
         }
       }
 
-      console.log('Order completed:', falJob.order_id, 'Video:', videoUrl)
+      console.log('Order completed:', falJob.order_id, 'Result:', resultUrl)
       return NextResponse.json({ success: true })
     } else {
       // Error: Cancel the order and refund

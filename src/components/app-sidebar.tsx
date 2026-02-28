@@ -34,6 +34,7 @@ import {
   Time02Icon as History,
   Logout01Icon as LogOut,
   Film01Icon as Film,
+  Image01Icon as ImageIcon,
   ArrowUp01Icon as ChevronUp,
   Home01Icon as Home,
   Settings01Icon as Settings,
@@ -55,9 +56,14 @@ const mainNavItems = [
     icon: Home,
   },
   {
-    title: "Tạo phim",
+    title: "Tạo video",
     href: "/dashboard/services",
     icon: Film,
+  },
+  {
+    title: "Tạo ảnh",
+    href: "/dashboard/image-services",
+    icon: ImageIcon,
   },
   {
     title: "Đơn hàng",

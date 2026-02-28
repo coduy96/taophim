@@ -6,6 +6,8 @@ import { mapBackgroundRemovalInputs } from './background-removal'
 import { mapImageToVideoInputs } from './image-to-video'
 import { mapMotionControlInputs } from './motion-control'
 import { mapTextToVideoInputs } from './text-to-video'
+import { mapTextToImageInputs } from './text-to-image'
+import { mapImageEditInputs } from './image-edit'
 
 type InputMapper = (userInputs: OrderUserInputs) => FalInput
 
@@ -14,6 +16,8 @@ const mapperRegistry: Record<string, InputMapper> = {
   'thay-doi-nhan-vat': mapMotionControlInputs,
   'tao-video-tu-van-ban': mapTextToVideoInputs,
   'xoa-nen-video': mapBackgroundRemovalInputs,
+  'tao-anh-ai': mapTextToImageInputs,
+  'chinh-sua-anh-ai': mapImageEditInputs,
 }
 
 /**
@@ -45,3 +49,5 @@ export { mapBackgroundRemovalInputs } from './background-removal'
 export { mapImageToVideoInputs } from './image-to-video'
 export { mapMotionControlInputs } from './motion-control'
 export { mapTextToVideoInputs } from './text-to-video'
+export { mapTextToImageInputs } from './text-to-image'
+export { mapImageEditInputs } from './image-edit'

@@ -57,6 +57,7 @@ export default async function ServicesPage({
         .select('*', { count: 'exact' })
         .is('deleted_at', null)
         .eq('is_active', true)
+        .eq('service_type', 'video')
         .order('created_at', { ascending: true })
         .range(offset, offset + ITEMS_PER_PAGE - 1)
     })()

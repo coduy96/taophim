@@ -86,8 +86,9 @@ export default async function ServiceDetailPage({
     .eq('id', user.id)
     .single()
 
-  // Check if user can afford at least 1 second of video
+  // Check if user can afford at least 1 unit
   const hasEnoughBalance = (profile?.xu_balance || 0) >= service.cost_per_second
+  const isImageService = service.service_type === 'image'
 
   return (
     <div className="max-w-6xl mx-auto space-y-4 md:space-y-8 pb-4">
@@ -96,7 +97,7 @@ export default async function ServiceDetailPage({
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-1 lg:hidden">
             <Button variant="ghost" size="icon" asChild className="h-8 w-8 -ml-2">
-              <NavLink href="/dashboard/services">
+              <NavLink href={isImageService ? "/dashboard/image-services" : "/dashboard/services"}>
                 <HugeiconsIcon icon={ArrowLeft} className="h-4 w-4" />
               </NavLink>
             </Button>
@@ -104,11 +105,11 @@ export default async function ServiceDetailPage({
           </div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">{service.name}</h1>
           <p className="text-muted-foreground text-sm md:text-base mt-0.5 md:mt-2 max-w-2xl">
-            {service.description || "Dịch vụ tạo video AI chuyên nghiệp"}
+            {service.description || (isImageService ? "Dịch vụ tạo ảnh AI chuyên nghiệp" : "Dịch vụ tạo video AI chuyên nghiệp")}
           </p>
         </div>
         <Button variant="outline" size="sm" asChild className="hidden lg:flex flex-shrink-0">
-          <NavLink href="/dashboard/services">
+          <NavLink href={isImageService ? "/dashboard/image-services" : "/dashboard/services"}>
             <HugeiconsIcon icon={ArrowLeft} className="mr-2 h-4 w-4" />
             Quay lại
           </NavLink>
@@ -119,7 +120,7 @@ export default async function ServiceDetailPage({
       <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-muted/40 border border-border/50 lg:hidden">
         <div className="flex items-center gap-2 min-w-0">
           <HugeiconsIcon icon={Coins} className="h-4 w-4 text-primary flex-shrink-0" />
-          <span className="text-sm font-semibold">{formatXu(service.cost_per_second)} Xu/giây</span>
+          <span className="text-sm font-semibold">{formatXu(service.cost_per_second)} {isImageService ? 'Xu/ảnh' : 'Xu/giây'}</span>
         </div>
         <div className="flex items-center gap-2 min-w-0">
           {hasEnoughBalance ? (
@@ -177,10 +178,10 @@ export default async function ServiceDetailPage({
             </CardHeader>
             <CardContent className="space-y-3 sm:space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 sm:p-3 rounded-lg bg-primary/5 border border-primary/10">
-                <span className="text-xs sm:text-sm font-medium text-muted-foreground">Giá mỗi giây</span>
+                <span className="text-xs sm:text-sm font-medium text-muted-foreground">{isImageService ? 'Giá mỗi ảnh' : 'Giá mỗi giây'}</span>
                 <div className="flex items-center gap-1.5 min-w-0">
                   <HugeiconsIcon icon={Coins} className="h-4 w-4 text-primary" />
-                  <span className="font-bold text-base sm:text-lg text-foreground">{formatXu(service.cost_per_second)} Xu/giây</span>
+                  <span className="font-bold text-base sm:text-lg text-foreground">{formatXu(service.cost_per_second)} {isImageService ? 'Xu/ảnh' : 'Xu/giây'}</span>
                 </div>
               </div>
 
@@ -197,7 +198,9 @@ export default async function ServiceDetailPage({
                       <p className="text-sm text-red-600 dark:text-red-400 font-medium">Số dư không đủ</p>
                     </div>
                     <p className="text-xs text-red-600/80 dark:text-red-400/80 pl-6">
-                      Cần tối thiểu {formatXu(service.cost_per_second)} Xu cho 1 giây video.
+                      {isImageService
+                        ? `Cần tối thiểu ${formatXu(service.cost_per_second)} Xu cho 1 ảnh.`
+                        : `Cần tối thiểu ${formatXu(service.cost_per_second)} Xu cho 1 giây video.`}
                     </p>
                     <Button size="sm" variant="destructive" className="w-full mt-2" asChild>
                       <NavLink href="/dashboard/wallet">Nạp Xu ngay</NavLink>
@@ -216,7 +219,7 @@ export default async function ServiceDetailPage({
           <div className="bg-muted/30 rounded-xl p-3 sm:p-4 text-xs sm:text-sm text-muted-foreground space-y-2">
             <p className="font-medium text-foreground">Lưu ý:</p>
             <ul className="list-disc list-inside space-y-1 pl-1">
-              <li>Kết quả sẽ được AI tạo trong vòng 3-30 phút.</li>
+              <li>{isImageService ? 'Kết quả sẽ được AI tạo trong vòng 1-5 phút.' : 'Kết quả sẽ được AI tạo trong vòng 3-30 phút.'}</li>
               <li>Bạn sẽ nhận được thông báo khi đơn hàng hoàn thành.</li>
               <li>Xu sẽ bị tạm giữ khi tạo đơn và trừ khi hoàn thành.</li>
               <li>Nếu đơn hàng bị hủy, Xu sẽ được hoàn trả 100%.</li>

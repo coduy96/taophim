@@ -24,7 +24,7 @@ export interface CreateNotificationParams {
 export interface OrderCompletedData {
   orderId: string
   serviceName: string
-  videoUrl: string
+  resultUrl: string
 }
 
 export interface OrderCancelledData {

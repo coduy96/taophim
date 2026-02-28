@@ -6,6 +6,8 @@ export const SERVICE_MODEL_MAP: Record<string, string> = {
   'thay-doi-nhan-vat': 'fal-ai/kling-video/v2.6/pro/motion-control',
   'tao-video-tu-van-ban': 'xai/grok-imagine-video/text-to-video',
   'xoa-nen-video': 'bria/video/background-removal',
+  'tao-anh-ai': 'fal-ai/nano-banana-2',
+  'chinh-sua-anh-ai': 'fal-ai/nano-banana-2/edit',
 }
 
 // FAL Queue Response
@@ -36,18 +38,24 @@ export interface FalWebhookPayload {
   gateway_request_id?: string
   status: 'OK' | 'ERROR'
   error?: string
-  payload?: FalVideoResult
+  payload?: FalResult
   detail?: FalErrorDetail[]
 }
 
-// FAL Video Result
-export interface FalVideoResult {
+// FAL Result (video or image)
+export interface FalResult {
   video?: {
     url: string
     content_type?: string
     file_name?: string
     file_size?: number
   }
+  images?: {
+    url: string
+    content_type?: string
+    file_name?: string
+    file_size?: number
+  }[]
 }
 
 // Input types for each FAL model
@@ -80,8 +88,28 @@ export interface BackgroundRemovalInput {
   output_container_and_codec?: 'mp4_h265' | 'mp4_h264' | 'webm_vp9' | 'mov_h265' | 'mov_proresks' | 'mkv_h265' | 'mkv_h264' | 'mkv_vp9' | 'gif'
 }
 
+export interface TextToImageInput {
+  prompt: string
+  num_images?: number
+  aspect_ratio?: string
+  resolution?: string
+  output_format?: string
+  safety_tolerance?: number
+}
+
+export interface ImageEditInput {
+  prompt: string
+  image_urls: string[]
+  num_images?: number
+  aspect_ratio?: string
+  resolution?: string
+  output_format?: string
+  safety_tolerance?: number
+  limit_generations?: boolean
+}
+
 // Combined FAL input type
-export type FalInput = ImageToVideoInput | MotionControlInput | TextToVideoInput | BackgroundRemovalInput
+export type FalInput = ImageToVideoInput | MotionControlInput | TextToVideoInput | BackgroundRemovalInput | TextToImageInput | ImageEditInput
 
 // FAL Job Status
 export type FalJobStatus = 'pending' | 'processing' | 'completed' | 'failed'
@@ -101,6 +129,6 @@ export interface FalJob {
 
 // User inputs from order (generic type)
 export interface OrderUserInputs {
-  duration_seconds: number
+  duration_seconds?: number
   [key: string]: string | boolean | number | undefined
 }

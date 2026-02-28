@@ -437,9 +437,11 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
   const formConfig = (service.form_config as unknown as FormConfig) || { fields: [] }
   const fields = formConfig.fields || []
   const durationConfig = service.duration_config as unknown as DurationConfig
+  const isImageService = service.service_type === 'image'
 
   // Initialize duration based on config
   const getInitialDuration = (): number => {
+    if (isImageService) return 1 // Flat cost: 1 × cost_per_second
     if (!durationConfig) return 5 // Legacy default
     switch (durationConfig.mode) {
       case 'fixed':
@@ -475,6 +477,16 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
   const minDuration = service.min_duration ?? 1
 
   const renderDurationSelector = () => {
+    if (isImageService) {
+      return (
+        <div className="p-3 rounded-lg bg-primary/5 border border-primary/10">
+          <p className="text-sm font-medium">
+            Chi phí: <span className="text-foreground">{formatXu(service.cost_per_second)} Xu/ảnh</span>
+          </p>
+        </div>
+      )
+    }
+
     if (!durationConfig) {
       // Legacy mode
       return (
@@ -544,10 +556,13 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
     }
 
     // Validate minimum duration (use service's min_duration or default to 1)
-    const minDuration = service.min_duration ?? 1
-    if (duration < minDuration) {
-      toast.error(`Thời lượng video không được nhỏ hơn ${minDuration} giây`)
-      return
+    // Skip for image services (flat cost, duration is always 1)
+    if (!isImageService) {
+      const minDuration = service.min_duration ?? 1
+      if (duration < minDuration) {
+        toast.error(`Thời lượng video không được nhỏ hơn ${minDuration} giây`)
+        return
+      }
     }
 
     // Validate required fields
@@ -779,7 +794,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
             </>
           ) : (
             <>
-              Tạo đơn hàng - {formatXu(totalCost)} Xu
+              {isImageService ? `Tạo ảnh - ${formatXu(totalCost)} Xu` : `Tạo đơn hàng - ${formatXu(totalCost)} Xu`}
             </>
           )}
         </Button>
@@ -814,7 +829,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
           </>
         ) : (
           <>
-            Tạo đơn hàng - {formatXu(totalCost)} Xu
+            {isImageService ? `Tạo ảnh - ${formatXu(totalCost)} Xu` : `Tạo đơn hàng - ${formatXu(totalCost)} Xu`}
           </>
         )}
       </Button>
