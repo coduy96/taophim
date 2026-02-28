@@ -24,10 +24,10 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  ShoppingBag01Icon as ShoppingBag, 
-  Time01Icon as Clock, 
-  CheckmarkCircle02Icon as CheckCircle2, 
+import {
+  ShoppingBag01Icon as ShoppingBag,
+  Time01Icon as Clock,
+  CheckmarkCircle02Icon as CheckCircle2,
   CancelCircleIcon as XCircle,
   Download01Icon as Download,
   AlertCircleIcon as AlertCircle,
@@ -192,36 +192,36 @@ function formatRelativeTime(dateString: string): string {
   return formatDate(dateString)
 }
 
-const statusConfig: Record<string, { 
+const statusConfig: Record<string, {
   label: string
   color: string
   className: string
   icon: React.ReactNode
   step: number
 }> = {
-  pending: { 
-    label: "Chờ xử lý", 
-    color: "text-yellow-600", 
+  pending: {
+    label: "Chờ xử lý",
+    color: "text-yellow-600",
     className: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-200/20",
     icon: <HugeiconsIcon icon={Clock} className="h-3.5 w-3.5" />,
     step: 1
   },
-  processing: { 
-    label: "Đang thực hiện", 
+  processing: {
+    label: "Đang thực hiện",
     color: "text-blue-600",
     className: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200/20",
     icon: <HugeiconsIcon icon={AlertCircle} className="h-3.5 w-3.5" />,
     step: 2
   },
-  completed: { 
-    label: "Hoàn thành", 
+  completed: {
+    label: "Hoàn thành",
     color: "text-green-600",
     className: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-200/20",
     icon: <HugeiconsIcon icon={CheckCircle2} className="h-3.5 w-3.5" />,
     step: 3
   },
-  cancelled: { 
-    label: "Đã hủy", 
+  cancelled: {
+    label: "Đã hủy",
     color: "text-red-600",
     className: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-200/20",
     icon: <HugeiconsIcon icon={XCircle} className="h-3.5 w-3.5" />,
@@ -384,20 +384,20 @@ function OrderTimeline({ status, createdAt, updatedAt, adminNote }: {
   const isCancelled = status === 'cancelled'
 
   const steps = [
-    { 
-      label: "Đã đặt hàng", 
+    {
+      label: "Đã đặt hàng",
       description: "Đơn hàng đã được tạo",
       step: 1,
       icon: ShoppingBag
     },
-    { 
-      label: "Đang xử lý", 
+    {
+      label: "Đang xử lý",
       description: "AI đang tạo video",
       step: 2,
       icon: Clock
     },
-    { 
-      label: "Hoàn thành", 
+    {
+      label: "Hoàn thành",
       description: "Video đã sẵn sàng",
       step: 3,
       icon: CheckCircle2
@@ -1098,8 +1098,8 @@ export function OrderList({ orders, initialOrderId, currentFilter = "all" }: Ord
                     }}
                   >
                     <HugeiconsIcon icon={Download} className="mr-2 h-5 w-5" />
-                    <span className="sm:hidden">Lưu Video Về Máy</span>
-                    <span className="hidden sm:inline">Tải Video Kết Quả</span>
+                    <span className="sm:hidden">Lưu Về Máy</span>
+                    <span className="hidden sm:inline">Tải Kết Quả</span>
                   </Button>
                 ) : (
                   <Button variant="outline" className="w-full rounded-full h-11 sm:h-12" onClick={() => setIsSheetOpen(false)}>

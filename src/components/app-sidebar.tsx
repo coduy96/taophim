@@ -56,7 +56,7 @@ const mainNavItems = [
     icon: Home,
   },
   {
-    title: "Tạo video",
+    title: "Tạo phim",
     href: "/dashboard/services",
     icon: Film,
   },

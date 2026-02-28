@@ -122,6 +122,7 @@ export default function DashboardLayout({
                     <BreadcrumbItem>
                       <BreadcrumbPage className="capitalize">
                         {segments[segments.length - 1] === 'services' ? 'Tạo phim' :
+                         segments[segments.length - 1] === 'image-services' ? 'Tạo ảnh' :
                          segments[segments.length - 1] === 'orders' ? 'Đơn hàng' :
                          segments[segments.length - 1] === 'wallet' ? 'Ví Xu' :
                          segments[segments.length - 1]}

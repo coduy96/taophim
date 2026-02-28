@@ -3,16 +3,15 @@ import { redirect } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { NavLink } from "@/components/nav-link"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  SparklesIcon as Sparkles, 
-  ArrowRight01Icon as ArrowRight, 
-  Coins01Icon as Coins, 
+import {
+  SparklesIcon as Sparkles,
+  ArrowRight01Icon as ArrowRight,
+  Coins01Icon as Coins,
   Film01Icon as Film,
-  Search01Icon as Search
 } from "@hugeicons/core-free-icons"
 import Image from "next/image"
-import { Input } from "@/components/ui/input"
 import { Pagination, PaginationInfo } from "@/components/ui/pagination"
+import { ServiceSearchInput } from "@/components/service-search-input"
 
 const ITEMS_PER_PAGE = 9
 
@@ -33,9 +32,9 @@ interface Service {
 export default async function ServicesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>
+  searchParams: Promise<{ page?: string; search?: string }>
 }) {
-  const { page } = await searchParams
+  const { page, search } = await searchParams
   const currentPage = Math.max(1, parseInt(page || "1", 10) || 1)
   const supabase = await createClient()
   
@@ -52,12 +51,18 @@ export default async function ServicesPage({
       // Calculate offset based on assumed page
       const offset = (currentPage - 1) * ITEMS_PER_PAGE
       
-      return supabase
+      let query = supabase
         .from('services')
         .select('*', { count: 'exact' })
         .is('deleted_at', null)
         .eq('is_active', true)
         .eq('service_type', 'video')
+
+      if (search?.trim()) {
+        query = query.or(`name.ilike.%${search.trim()}%,description.ilike.%${search.trim()}%`)
+      }
+
+      return query
         .order('created_at', { ascending: true })
         .range(offset, offset + ITEMS_PER_PAGE - 1)
     })()
@@ -87,17 +92,8 @@ export default async function ServicesPage({
           </p>
         </div>
 
-        {/* Search - hidden on mobile (disabled anyway) */}
-        <div className="relative hidden md:block md:min-w-[300px]">
-           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-             <HugeiconsIcon icon={Search} className="h-4 w-4 text-muted-foreground" />
-           </div>
-           <Input
-             type="text"
-             placeholder="Tìm kiếm dịch vụ..."
-             className="pl-10 bg-background/50 backdrop-blur-sm border-muted-foreground/20 focus-visible:ring-primary/20"
-             disabled
-           />
+        <div className="hidden md:block">
+          <ServiceSearchInput initialValue={search} />
         </div>
       </div>
 
@@ -163,6 +159,7 @@ export default async function ServicesPage({
               totalItems={totalItems}
               itemsPerPage={ITEMS_PER_PAGE}
               currentPage={validPage}
+              preserveParams={["search"]}
             />
           </div>
         </>
@@ -173,7 +170,9 @@ export default async function ServicesPage({
           </div>
           <h3 className="text-base sm:text-lg font-semibold mb-1">Chưa có dịch vụ nào</h3>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Hệ thống đang được cập nhật. Vui lòng quay lại sau!
+            {search?.trim()
+              ? "Không tìm thấy dịch vụ phù hợp. Thử từ khóa khác!"
+              : "Hệ thống đang được cập nhật. Vui lòng quay lại sau!"}
           </p>
         </div>
       )}
