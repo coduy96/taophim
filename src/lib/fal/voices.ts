@@ -14,7 +14,16 @@ export interface VoicePreset {
   prompt: string       // English voice description injected into Grok prompt
 }
 
+export const NO_VOICE_ID = 'none'
+
 export const VOICE_PRESETS: VoicePreset[] = [
+  {
+    id: NO_VOICE_ID,
+    label: 'Không có giọng nói',
+    description: 'Video không có lời thoại hay thuyết minh, chỉ có hình ảnh và âm thanh môi trường.',
+    prompt:
+      'No spoken dialogue, no narration, no voice-over, no singing. The video must be silent of any human speech. Only natural ambient sounds, music, or environmental audio are allowed. Characters do not talk.',
+  },
   {
     id: 'nam-bac-tram',
     label: 'Nam Bắc — trầm, trung niên',
@@ -97,5 +106,8 @@ export function isVoiceEnabledService(serviceSlug: string): boolean {
  */
 export function buildVoicePromptPrefix(voiceId: string | undefined | null): string {
   const preset = getVoicePreset(voiceId) ?? getVoicePreset(DEFAULT_VOICE_ID)!
+  if (preset.id === NO_VOICE_ID) {
+    return `[Audio: ${preset.id}] ${preset.prompt}`
+  }
   return `[Language: Vietnamese] The characters speak Vietnamese. All spoken dialogue, narration, and voice-over are in Vietnamese. [Voice: ${preset.id}] ${preset.prompt}`
 }
