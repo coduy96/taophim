@@ -24,6 +24,7 @@ import { createClient } from "@/lib/supabase/client"
 import { Service, FormConfig, FormField, DurationConfig, FixedDurationConfig, RangeDurationConfig, VideoBasedDurationConfig } from "@/types/database.types"
 import { triggerProfileRefresh } from "@/hooks/use-profile"
 import { useNavigation } from "@/contexts/navigation-context"
+import { VOICE_PRESETS, DEFAULT_VOICE_ID, getVoicePreset, isVoiceEnabledService } from "@/lib/fal/voices"
 
 interface ServiceOrderFormProps {
   service: Service
@@ -456,6 +457,9 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
   }
 
   const [duration, setDuration] = useState<number>(getInitialDuration)
+  const showVoiceSelector = isVoiceEnabledService(service.slug)
+  const [voiceId, setVoiceId] = useState<string>(DEFAULT_VOICE_ID)
+  const selectedVoice = getVoicePreset(voiceId)
 
   // Calculate total cost based on duration
   const totalCost = duration * service.cost_per_second
@@ -587,6 +591,10 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
       // Upload files first
       const userInputs: Record<string, string | boolean | number> = {
         duration_seconds: duration,
+      }
+
+      if (showVoiceSelector) {
+        userInputs.voice = voiceId
       }
 
       for (const field of fields) {
@@ -753,11 +761,37 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
     }
   }
 
+  const voiceSelector = showVoiceSelector ? (
+    <div className="space-y-1.5 sm:space-y-2">
+      <Label htmlFor="voice">Giọng đọc</Label>
+      <Select
+        value={voiceId}
+        onValueChange={setVoiceId}
+        disabled={isSubmitting || !canAfford}
+      >
+        <SelectTrigger id="voice">
+          <SelectValue placeholder="Chọn giọng đọc..." />
+        </SelectTrigger>
+        <SelectContent>
+          {VOICE_PRESETS.map((v) => (
+            <SelectItem key={v.id} value={v.id}>
+              {v.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {selectedVoice && (
+        <p className="text-xs text-muted-foreground">{selectedVoice.description}</p>
+      )}
+    </div>
+  ) : null
+
   // If no form config, show default file upload
   if (fields.length === 0) {
     return (
       <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {renderDurationSelector()}
+        {voiceSelector}
 
         <div className="space-y-1.5 sm:space-y-2">
           <Label>Tải lên file nguồn</Label>
@@ -805,6 +839,7 @@ export function ServiceOrderForm({ service, hasEnoughBalance, userBalance }: Ser
   return (
     <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
       {renderDurationSelector()}
+      {voiceSelector}
 
       {fields.map((field) => (
         <div key={field.id} className="space-y-1.5 sm:space-y-2">

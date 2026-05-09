@@ -2,6 +2,7 @@
 // Maps form inputs to xAI Grok Imagine Video image-to-video parameters
 
 import { ImageToVideoInput, OrderUserInputs } from '../types'
+import { buildVoicePromptPrefix } from '../voices'
 
 export function mapImageToVideoInputs(userInputs: OrderUserInputs): ImageToVideoInput {
   // Validate required fields
@@ -15,13 +16,11 @@ export function mapImageToVideoInputs(userInputs: OrderUserInputs): ImageToVideo
     throw new Error('Missing or invalid duration_seconds')
   }
 
-  // Force Vietnamese voice/narration — prepend language directive so Grok
-  // generates speech in Vietnamese instead of defaulting to English
+  // Inject Vietnamese-language directive plus a detailed voice description so
+  // the same selected voice produces consistent-sounding output across orders.
   const rawPrompt = ((userInputs.prompt as string) || '').trim()
-  const vietnamesePrefix = '[Language: Vietnamese] The characters speak Vietnamese. All spoken dialogue, narration, and voice-over are in Vietnamese.'
-  const vietnamesePrompt = rawPrompt
-    ? `${vietnamesePrefix} ${rawPrompt}`
-    : vietnamesePrefix
+  const prefix = buildVoicePromptPrefix(userInputs.voice as string | undefined)
+  const vietnamesePrompt = rawPrompt ? `${prefix} ${rawPrompt}` : prefix
 
   const result: ImageToVideoInput = {
     prompt: vietnamesePrompt,
